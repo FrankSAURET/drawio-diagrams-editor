@@ -559,10 +559,12 @@
 		"drawio/src/main/webapp/connect/**/*",
 		"drawio/src/main/webapp/images/**/*",
 		"drawio/src/main/webapp/img/**/*",
-		"drawio/src/main/webapp/math/**/*",
+		"drawio/src/main/webapp/math4/**/*",
 		"drawio/src/main/webapp/mxgraph/**/*",
 		"drawio/src/main/webapp/plugins/**/*",
 		"drawio/src/main/webapp/resources/**/*",
+		"drawio/src/main/webapp/shapes/**/*",
+		"drawio/src/main/webapp/stencils/**/*",
 		"drawio/src/main/webapp/styles/**/*",
 		"drawio/src/main/webapp/templates/**/*",
 		"LICENSE.md"
