@@ -1,12 +1,11 @@
 {
 	"name": "vscode-drawio-VFS",
-	"private": true,
 	"displayName": "%displayName%",
 	"description": "%description%",
 	"version": "1.9.1",
 	"preRelease": false,
 	"license": "GPL-3.0",
-	"publisher": "FrankSAURET",
+	"publisher": "electropol-fr",
 	"keywords": [
 		"drawio",
 		"diagram",
