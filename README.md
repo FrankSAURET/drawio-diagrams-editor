@@ -22,6 +22,7 @@ Mentioned in the official diagrams.net [blog](https://www.diagrams.net/blog/embe
 
 ## Demo
 
+![alt text](docs/RunIt.png)
 ![](./docs/demo.gif)
 
 ## Editing .drawio.svg/.drawio.png Files

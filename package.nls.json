@@ -1,4 +1,4 @@
-﻿{
+{
 	"displayName": "Draw.io Integration",
 	"description": "This unofficial extension integrates Draw.io into VS Code.",
 	"viewsContainers.activitybar.drawio-explorer.title": "Draw.io",
