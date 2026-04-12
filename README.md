@@ -1,9 +1,12 @@
 # Draw.io VS Code Integration
 
-[![](https://img.shields.io/twitter/follow/hediet_dev.svg?style=social)](https://twitter.com/intent/follow?screen_name=hediet_dev)
-
 This unofficial extension integrates [Draw.io](https://app.diagrams.net/) (also known as [diagrams.net](https://www.diagrams.net/)) into VS Code.  
 Mentioned in the official diagrams.net [blog](https://www.diagrams.net/blog/embed-diagrams-vscode).
+
+> **Note:** This is an actively maintained fork of the original extension by [Henning Dieterichs (hediet)](https://github.com/hediet/vscode-drawio), published under the same GPL-3.0 licence.  
+> The original project has not merged pull requests for over a year, which motivated this independently maintained fork.  
+> All credit for the original work goes to the original author.  
+> Original repository: <https://github.com/hediet/vscode-drawio>
 
 ## Features
 
@@ -20,7 +23,6 @@ Mentioned in the official diagrams.net [blog](https://www.diagrams.net/blog/embe
 ## Demo
 
 ![](./docs/demo.gif)
-
 
 ## Editing .drawio.svg/.drawio.png Files
 

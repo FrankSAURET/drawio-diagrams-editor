@@ -5,18 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.9.0]
+## [1.9.1] — Fork FrankSAURET
+
+This release marks the transition to an independently maintained fork.
+The original extension by [Henning Dieterichs (hediet)](https://github.com/hediet/vscode-drawio)
+has not merged pull requests for over a year. This fork continues development under the same GPL-3.0 licence.
+
+### Added
+
+-   Activity bar toggle with i18n support (`fr`, `en`)
+-   Internationalization of all new UI strings (French/English)
 
 ### Fixed
 
-- Reverts change to automatically follow VS Code dark/light theme [#457](https://github.com/hediet/vscode-drawio/issues/457)
+-   Updated file patterns for Draw.io v29 (`math` → `math4`, added `shapes/stencils`)
+-   SVG export fix
 
+### Fixed
+
+-   Reverts change to automatically follow VS Code dark/light theme [#457](https://github.com/hediet/vscode-drawio/issues/457)
 
 ## [1.8.0]
 
 ### Fixed
 
-- v1.7.0 breaks themes [#456](https://github.com/hediet/vscode-drawio/issues/456)
+-   v1.7.0 breaks themes [#456](https://github.com/hediet/vscode-drawio/issues/456)
 
 ## [1.7.0]
 

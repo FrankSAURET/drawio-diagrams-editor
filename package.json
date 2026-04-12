@@ -3,10 +3,10 @@
 	"private": true,
 	"displayName": "%displayName%",
 	"description": "%description%",
-	"version": "1.9.0",
+	"version": "1.9.1",
 	"preRelease": false,
 	"license": "GPL-3.0",
-	"publisher": "hediet",
+	"publisher": "FrankSAURET",
 	"keywords": [
 		"drawio",
 		"diagram",
@@ -17,8 +17,8 @@
 		"code link"
 	],
 	"author": {
-		"email": "henning.dieterichs@live.de",
-		"name": "Henning Dieterichs"
+		"name": "Frank Sauret",
+		"url": "https://github.com/FrankSAURET"
 	},
 	"readme": "./README.md",
 	"icon": "docs/logo.drawio.png",
@@ -34,7 +34,7 @@
 	],
 	"activationEvents": [],
 	"repository": {
-		"url": "https://github.com/hediet/vscode-drawio.git"
+		"url": "https://github.com/FrankSAURET/vscode-drawio.git"
 	},
 	"browser": "./dist/extension/index",
 	"main": "./dist/extension/index",
