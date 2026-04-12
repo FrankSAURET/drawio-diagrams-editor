@@ -1,4 +1,4 @@
-import * as vscode from "vscode";
+﻿import * as vscode from "vscode";
 import { Disposable } from "@hediet/std/disposable";
 import { DrawioEditorProviderBinary } from "./DrawioEditorProviderBinary";
 import { DrawioEditorProviderText } from "./DrawioEditorProviderText";
@@ -47,7 +47,7 @@ export class Extension {
 	constructor(private readonly context: vscode.ExtensionContext) {
 		this.dispose.track(
 			vscode.window.registerCustomEditorProvider(
-				"hediet.vscode-drawio-text",
+				"FrankSAURET.vscode-drawio-text",
 				new DrawioEditorProviderText(this.editorService),
 				{ webviewOptions: { retainContextWhenHidden: true } }
 			)
@@ -55,7 +55,7 @@ export class Extension {
 
 		this.dispose.track(
 			vscode.window.registerCustomEditorProvider(
-				"hediet.vscode-drawio",
+				"FrankSAURET.vscode-drawio",
 				new DrawioEditorProviderBinary(this.editorService),
 				{
 					supportsMultipleEditorsPerDocument: false,
@@ -66,7 +66,7 @@ export class Extension {
 
 		this.dispose.track(
 			registerFailableCommand(
-				"hediet.vscode-drawio.newDiagram",
+				"FrankSAURET.vscode-drawio.newDiagram",
 				async () => {
 					const targetUri = await vscode.window.showSaveDialog({
 						saveLabel: "Create",
@@ -85,7 +85,7 @@ export class Extension {
 						await vscode.commands.executeCommand(
 							"vscode.openWith",
 							targetUri,
-							"hediet.vscode-drawio-text"
+							"FrankSAURET.vscode-drawio-text"
 						);
 					} catch (e) {
 						console.error("Cannot create or open file", e);
@@ -99,7 +99,7 @@ export class Extension {
 
 		this.dispose.track(
 			registerFailableCommand(
-				"hediet.vscode-drawio.openDiagram",
+				"FrankSAURET.vscode-drawio.openDiagram",
 				async () => {
 					const uris = await vscode.window.showOpenDialog({
 						canSelectMany: false,

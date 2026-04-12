@@ -1,4 +1,4 @@
-import { Disposable } from "@hediet/std/disposable";
+﻿import { Disposable } from "@hediet/std/disposable";
 import { EventEmitter } from "@hediet/std/events";
 import { autorun, computed, observable, ObservableSet } from "mobx";
 import { extname } from "path";
@@ -20,7 +20,7 @@ import {
 import { DrawioBinaryDocument } from "./DrawioEditorProviderBinary";
 import { registerFailableCommand } from "./utils/registerFailableCommand";
 
-const drawioChangeThemeCommand = "hediet.vscode-drawio.changeTheme";
+const drawioChangeThemeCommand = "FrankSAURET.vscode-drawio.changeTheme";
 
 export class DrawioEditorService {
 	public readonly dispose = Disposable.fn();
@@ -57,7 +57,7 @@ export class DrawioEditorService {
 			}
 			commands.executeCommand(
 				"setContext",
-				"hediet.vscode-drawio.active",
+				"FrankSAURET.vscode-drawio.active",
 				!!a
 			);
 		});
@@ -73,7 +73,7 @@ export class DrawioEditorService {
 		);
 
 		this.dispose.track(
-			registerFailableCommand("hediet.vscode-drawio.convert", () => {
+			registerFailableCommand("FrankSAURET.vscode-drawio.convert", () => {
 				const activeDrawioEditor = this.activeDrawioEditor;
 				if (!activeDrawioEditor) {
 					return;
@@ -84,7 +84,7 @@ export class DrawioEditorService {
 
 		this.dispose.track(
 			registerFailableCommand(
-				"hediet.vscode-drawio.reload-webview",
+				"FrankSAURET.vscode-drawio.reload-webview",
 				() => {
 					for (const e of this.openedEditors) {
 						e.drawioClient.reloadWebview();
@@ -94,7 +94,7 @@ export class DrawioEditorService {
 		);
 
 		this.dispose.track(
-			registerFailableCommand("hediet.vscode-drawio.export", () => {
+			registerFailableCommand("FrankSAURET.vscode-drawio.export", () => {
 				const activeDrawioEditor = this.activeDrawioEditor;
 				if (!activeDrawioEditor) {
 					return;

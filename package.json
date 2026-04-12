@@ -1,4 +1,4 @@
-{
+﻿{
 	"name": "vscode-drawio",
 	"private": true,
 	"displayName": "%displayName%",
@@ -88,7 +88,7 @@
 		],
 		"customEditors": [
 			{
-				"viewType": "hediet.vscode-drawio",
+				"viewType": "FrankSAURET.vscode-drawio",
 				"displayName": "%customEditors.drawio.displayName%",
 				"selector": [
 					{
@@ -101,7 +101,7 @@
 				"priority": "default"
 			},
 			{
-				"viewType": "hediet.vscode-drawio-text",
+				"viewType": "FrankSAURET.vscode-drawio-text",
 				"displayName": "%customEditors.drawio-text.displayName%",
 				"selector": [
 					{
@@ -122,69 +122,69 @@
 		],
 		"commands": [
 			{
-				"command": "hediet.vscode-drawio.convert",
+				"command": "FrankSAURET.vscode-drawio.convert",
 				"title": "%commands.convert.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "hediet.vscode-drawio.export",
+				"command": "FrankSAURET.vscode-drawio.export",
 				"title": "%commands.export.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "hediet.vscode-drawio.toggleCodeLinkActivation",
+				"command": "FrankSAURET.vscode-drawio.toggleCodeLinkActivation",
 				"title": "%commands.toggleCodeLinkActivation.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "hediet.vscode-drawio.changeTheme",
+				"command": "FrankSAURET.vscode-drawio.changeTheme",
 				"title": "%commands.changeTheme.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "hediet.vscode-drawio.editDiagramAsText",
+				"command": "FrankSAURET.vscode-drawio.editDiagramAsText",
 				"title": "%commands.editDiagramAsText.title%",
-				"enablement": "hediet.vscode-drawio.experimentalFeaturesEnabled",
+				"enablement": "FrankSAURET.vscode-drawio.experimentalFeaturesEnabled",
 				"category": "Draw.io"
 			},
 			{
-				"command": "hediet.vscode-drawio.linkCodeWithSelectedNode",
+				"command": "FrankSAURET.vscode-drawio.linkCodeWithSelectedNode",
 				"title": "%commands.linkCodeWithSelectedNode.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "hediet.vscode-drawio.newDiagram",
+				"command": "FrankSAURET.vscode-drawio.newDiagram",
 				"title": "%commands.newDiagram.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "hediet.vscode-drawio.openDiagram",
+				"command": "FrankSAURET.vscode-drawio.openDiagram",
 				"title": "%commands.openDiagram.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "hediet.vscode-drawio.linkFileWithSelectedNode",
+				"command": "FrankSAURET.vscode-drawio.linkFileWithSelectedNode",
 				"title": "%commands.linkFileWithSelectedNode.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "hediet.vscode-drawio.linkSymbolWithSelectedNode",
+				"command": "FrankSAURET.vscode-drawio.linkSymbolWithSelectedNode",
 				"title": "%commands.linkSymbolWithSelectedNode.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "hediet.vscode-drawio.linkWsSymbolWithSelectedNode",
+				"command": "FrankSAURET.vscode-drawio.linkWsSymbolWithSelectedNode",
 				"title": "%commands.linkWsSymbolWithSelectedNode.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "hediet.vscode-drawio.openAsText",
+				"command": "FrankSAURET.vscode-drawio.openAsText",
 				"title": "%commands.openAsText.title%",
 				"category": "Draw.io",
 				"icon": "$(go-to-file)"
 			},
 			{
-				"command": "hediet.vscode-drawio.openAsDiagram",
+				"command": "FrankSAURET.vscode-drawio.openAsDiagram",
 				"title": "%commands.openAsDiagram.title%",
 				"category": "Draw.io",
 				"icon": "$(preview)"
@@ -192,7 +192,7 @@
 		],
 		"keybindings": [
 			{
-				"command": "hediet.vscode-drawio.linkCodeWithSelectedNode",
+				"command": "FrankSAURET.vscode-drawio.linkCodeWithSelectedNode",
 				"key": "shift+F3",
 				"when": "!findWidgetVisible"
 			}
@@ -202,28 +202,28 @@
 				"title": "%configuration.general.title%",
 				"order": 10,
 				"properties": {
-					"hediet.vscode-drawio.offline": {
+					"FrankSAURET.vscode-drawio.offline": {
 						"type": "boolean",
 						"default": true,
 						"title": "%configuration.offline.title%",
 						"description": "%configuration.offline.description%",
 						"order": 10
 					},
-					"hediet.vscode-drawio.online-url": {
+					"FrankSAURET.vscode-drawio.online-url": {
 						"type": "string",
 						"default": "https://embed.diagrams.net/",
 						"title": "%configuration.online-url.title%",
 						"description": "%configuration.online-url.description%",
 						"order": 11
 					},
-					"hediet.vscode-drawio.codeLinkActivated": {
+					"FrankSAURET.vscode-drawio.codeLinkActivated": {
 						"type": "boolean",
 						"default": false,
 						"title": "%configuration.codeLinkActivated.title%",
 						"description": "%configuration.codeLinkActivated.description%",
 						"order": 20
 					},
-					"hediet.vscode-drawio.local-storage": {
+					"FrankSAURET.vscode-drawio.local-storage": {
 						"anyOf": [
 							{
 								"type": "object"
@@ -238,27 +238,27 @@
 						"description": "%configuration.local-storage.description%",
 						"order": 30
 					},
-					"hediet.vscode-drawio.simpleLabels": {
+					"FrankSAURET.vscode-drawio.simpleLabels": {
 						"type": "boolean",
 						"default": false,
 						"title": "%configuration.simpleLabels.title%",
 						"description": "%configuration.simpleLabels.description%",
 						"order": 40
 					},
-					"hediet.vscode-drawio.zoomFactor": {
+					"FrankSAURET.vscode-drawio.zoomFactor": {
 						"type": "number",
 						"default": 1.2,
 						"title": "%configuration.zoomFactor.title%",
 						"description": "%configuration.zoomFactor.description%",
 						"order": 50
 					},
-					"hediet.vscode-drawio.globalVars": {
+					"FrankSAURET.vscode-drawio.globalVars": {
 						"type": "object",
 						"title": "%configuration.globalVars.title%",
 						"description": "%configuration.globalVars.description%",
 						"order": 60
 					},
-					"hediet.vscode-drawio.resizeImages": {
+					"FrankSAURET.vscode-drawio.resizeImages": {
 						"type": [
 							"boolean",
 							"null"
@@ -274,7 +274,7 @@
 				"title": "%configuration.plugins.section.title%",
 				"order": 20,
 				"properties": {
-					"hediet.vscode-drawio.plugins": {
+					"FrankSAURET.vscode-drawio.plugins": {
 						"type": "array",
 						"items": {
 							"anyOf": [
@@ -294,7 +294,7 @@
 						"markdownDescription": "%configuration.plugins.description%",
 						"order": 10
 					},
-					"hediet.vscode-drawio.knownPlugins": {
+					"FrankSAURET.vscode-drawio.knownPlugins": {
 						"type": "array",
 						"items": {
 							"type": "object",
@@ -316,7 +316,7 @@
 						"scope": "application",
 						"order": 15
 					},
-					"hediet.vscode-drawio.customLibraries": {
+					"FrankSAURET.vscode-drawio.customLibraries": {
 						"type": "array",
 						"items": {
 							"type": "object",
@@ -375,7 +375,7 @@
 				"title": "%configuration.themeAndStyles.title%",
 				"order": 30,
 				"properties": {
-					"hediet.vscode-drawio.styles": {
+					"FrankSAURET.vscode-drawio.styles": {
 						"title": "%configuration.styles.title%",
 						"description": "%configuration.styles.description%",
 						"type": "array",
@@ -410,22 +410,22 @@
 							}
 						}
 					},
-					"hediet.vscode-drawio.defaultVertexStyle": {
+					"FrankSAURET.vscode-drawio.defaultVertexStyle": {
 						"title": "%configuration.defaultVertexStyle.title%",
 						"description": "%configuration.defaultVertexStyle.description%",
 						"type": "object"
 					},
-					"hediet.vscode-drawio.defaultEdgeStyle": {
+					"FrankSAURET.vscode-drawio.defaultEdgeStyle": {
 						"title": "%configuration.defaultEdgeStyle.title%",
 						"description": "%configuration.defaultEdgeStyle.description%",
 						"type": "object"
 					},
-					"hediet.vscode-drawio.colorNames": {
+					"FrankSAURET.vscode-drawio.colorNames": {
 						"title": "%configuration.colorNames.title%",
 						"description": "%configuration.colorNames.description%",
 						"type": "object"
 					},
-					"hediet.vscode-drawio.presetColors": {
+					"FrankSAURET.vscode-drawio.presetColors": {
 						"title": "%configuration.presetColors.title%",
 						"description": "%configuration.presetColors.description%",
 						"type": "array",
@@ -434,7 +434,7 @@
 							"description": "Use hex codes without # at the beginning only (FFFFFF for absolute white, for example)."
 						}
 					},
-					"hediet.vscode-drawio.customColorSchemes": {
+					"FrankSAURET.vscode-drawio.customColorSchemes": {
 						"title": "%configuration.customColorSchemes.title%",
 						"markdownDescription": "%configuration.customColorSchemes.description%",
 						"type": "array",
@@ -468,7 +468,7 @@
 							}
 						}
 					},
-					"hediet.vscode-drawio.customFonts": {
+					"FrankSAURET.vscode-drawio.customFonts": {
 						"type": "array",
 						"items": {
 							"type": "string"
@@ -477,7 +477,7 @@
 						"title": "%configuration.customFonts.title%",
 						"description": "%configuration.customFonts.description%"
 					},
-					"hediet.vscode-drawio.theme": {
+					"FrankSAURET.vscode-drawio.theme": {
 						"title": "%configuration.theme.title%",
 						"type": "string",
 						"default": "kennedy",
@@ -487,7 +487,7 @@
 						],
 						"description": "%configuration.theme.description%"
 					},
-					"hediet.vscode-drawio.appearance": {
+					"FrankSAURET.vscode-drawio.appearance": {
 						"title": "%configuration.appearance.title%",
 						"type": "string",
 						"default": "light",
@@ -506,25 +506,25 @@
 		"menus": {
 			"explorer/context": [
 				{
-					"when": "hediet.vscode-drawio.active",
-					"command": "hediet.vscode-drawio.linkFileWithSelectedNode",
+					"when": "FrankSAURET.vscode-drawio.active",
+					"command": "FrankSAURET.vscode-drawio.linkFileWithSelectedNode",
 					"group": "Draw.io"
 				}
 			],
 			"commandPalette": [
 				{
 					"when": "false",
-					"command": "hediet.vscode-drawio.linkFileWithSelectedNode"
+					"command": "FrankSAURET.vscode-drawio.linkFileWithSelectedNode"
 				}
 			],
 			"editor/title": [
 				{
-					"command": "hediet.vscode-drawio.openAsText",
-					"when": "activeCustomEditorId == 'hediet.vscode-drawio-text' || activeCustomEditorId == 'hediet.vscode-drawio'",
+					"command": "FrankSAURET.vscode-drawio.openAsText",
+					"when": "activeCustomEditorId == 'FrankSAURET.vscode-drawio-text' || activeCustomEditorId == 'FrankSAURET.vscode-drawio'",
 					"group": "navigation"
 				},
 				{
-					"command": "hediet.vscode-drawio.openAsDiagram",
+					"command": "FrankSAURET.vscode-drawio.openAsDiagram",
 					"when": "!activeCustomEditorId && resourceFilename =~ /\\.(drawio|dio)(\\.svg|\\.png)?$/",
 					"group": "navigation"
 				}

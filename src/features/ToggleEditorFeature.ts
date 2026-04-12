@@ -1,4 +1,4 @@
-import * as vscode from "vscode";
+﻿import * as vscode from "vscode";
 import { Disposable } from "@hediet/std/disposable";
 
 export class ToggleEditorFeature {
@@ -7,13 +7,13 @@ export class ToggleEditorFeature {
 	constructor() {
 		this.dispose.track(
 			vscode.commands.registerCommand(
-				"hediet.vscode-drawio.openAsText",
+				"FrankSAURET.vscode-drawio.openAsText",
 				this.openAsText
 			)
 		);
 		this.dispose.track(
 			vscode.commands.registerCommand(
-				"hediet.vscode-drawio.openAsDiagram",
+				"FrankSAURET.vscode-drawio.openAsDiagram",
 				this.openAsDiagram
 			)
 		);
@@ -38,8 +38,8 @@ export class ToggleEditorFeature {
 			return;
 		}
 		const viewType = /\.(drawio|dio)\.(png)$/i.test(uri.fsPath)
-			? "hediet.vscode-drawio"
-			: "hediet.vscode-drawio-text";
+			? "FrankSAURET.vscode-drawio"
+			: "FrankSAURET.vscode-drawio-text";
 
 		await vscode.commands.executeCommand(
 			"vscode.openWith",
