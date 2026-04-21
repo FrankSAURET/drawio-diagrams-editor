@@ -1,4 +1,4 @@
-﻿import { Disposable } from "@hediet/std/disposable";
+import { Disposable } from "@hediet/std/disposable";
 import {
 	commands,
 	window,
@@ -25,15 +25,15 @@ import { path } from "../utils/path";
 import { registerFailableCommand } from "../utils/registerFailableCommand";
 
 const toggleCodeLinkActivationCommandName =
-	"FrankSAURET.vscode-drawio.toggleCodeLinkActivation";
+	"electropol-fr.DrawIo_In_VsCode.toggleCodeLinkActivation";
 const linkCodeWithSelectedNodeCommandName =
-	"FrankSAURET.vscode-drawio.linkCodeWithSelectedNode";
+	"electropol-fr.DrawIo_In_VsCode.linkCodeWithSelectedNode";
 const linkSymbolWithSelectedNodeCommandName =
-	"FrankSAURET.vscode-drawio.linkSymbolWithSelectedNode";
+	"electropol-fr.DrawIo_In_VsCode.linkSymbolWithSelectedNode";
 const linkWsSymbolWithSelectedNodeCommandName =
-	"FrankSAURET.vscode-drawio.linkWsSymbolWithSelectedNode";
+	"electropol-fr.DrawIo_In_VsCode.linkWsSymbolWithSelectedNode";
 const linkFileWithSelectedNodeCommandName =
-	"FrankSAURET.vscode-drawio.linkFileWithSelectedNode";
+	"electropol-fr.DrawIo_In_VsCode.linkFileWithSelectedNode";
 
 const symbolNameMap: Record<SymbolKind, string> = {
 	[SymbolKind.File]: "symbol-file",

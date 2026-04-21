@@ -1,9 +1,9 @@
 {
-	"displayName": "Draw.io Integration (FrankSAURET)",
+	"displayName": "DrawIo in VsCode",
 	"description": "This unofficial extension integrates Draw.io into VS Code.",
-	"viewsContainers.activitybar.drawio-explorer.title": "Draw.io",
-	"views.drawio-explorer.drawio-welcome.name": "Draw.io",
-	"viewsWelcome.drawio-welcome.contents": "Create or open a Draw.io diagram to get started.\n[New Diagram](command:FrankSAURET.vscode-drawio.newDiagram)\n[Open Diagram](command:FrankSAURET.vscode-drawio.openDiagram)",
+	"viewsContainers.activitybar.DrawIo_In_VsCode-explorer.title": "Draw.io",
+	"views.DrawIo_In_VsCode-explorer.DrawIo_In_VsCode-welcome.name": "Draw.io",
+	"viewsWelcome.DrawIo_In_VsCode-welcome.contents": "Create or open a Draw.io diagram to get started.\n[New Diagram](command:electropol-fr.DrawIo_In_VsCode.newDiagram)\n[Open Diagram](command:electropol-fr.DrawIo_In_VsCode.openDiagram)",
 	"customEditors.drawio.displayName": "Draw.io (Binary)",
 	"customEditors.drawio-text.displayName": "Draw.io",
 	"commands.convert.title": "Convert To...",

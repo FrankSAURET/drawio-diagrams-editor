@@ -1,4 +1,4 @@
-﻿import { Disposable } from "@hediet/std/disposable";
+import { Disposable } from "@hediet/std/disposable";
 import { Config } from "../Config";
 import { workspace, commands, window, ViewColumn, TextDocument } from "vscode";
 import { DrawioEditorService, DrawioEditor } from "../DrawioEditorService";
@@ -41,7 +41,7 @@ export class EditDiagramAsTextFeature {
 
 		this.dispose.track(
 			registerFailableCommand(
-				"FrankSAURET.vscode-drawio.editDiagramAsText",
+				"electropol-fr.DrawIo_In_VsCode.editDiagramAsText",
 				async () => {
 					const activeDrawioEditor =
 						this.editorManager.activeDrawioEditor;

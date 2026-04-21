@@ -1,4 +1,4 @@
-﻿import { autorun, computed, observable } from "mobx";
+import { autorun, computed, observable } from "mobx";
 import {
 	ColorTheme,
 	ColorThemeKind,
@@ -19,7 +19,7 @@ import {
 } from "./vscode-utils/VsCodeSetting";
 import * as packageJson from "../package.json";
 
-const extensionId = "FrankSAURET.vscode-drawio";
+const extensionId = "electropol-fr.DrawIo_In_VsCode";
 const experimentalFeaturesEnabled = "vscode-drawio.experimentalFeaturesEnabled";
 
 export async function setContext(

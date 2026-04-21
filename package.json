@@ -1,5 +1,5 @@
 {
-	"name": "vscode-drawio-VFS",
+	"name": "drawio-in-vscode",
 	"displayName": "%displayName%",
 	"description": "%description%",
 	"version": "1.9.1",
@@ -33,7 +33,7 @@
 	],
 	"activationEvents": [],
 	"repository": {
-		"url": "https://github.com/FrankSAURET/vscode-drawio.git"
+		"url": "https://github.com/FrankSAURET/DrawIo_In_VsCode.git"
 	},
 	"browser": "./dist/extension/index",
 	"main": "./dist/extension/index",
@@ -46,17 +46,17 @@
 		"viewsContainers": {
 			"activitybar": [
 				{
-					"id": "drawio-explorer",
-					"title": "%viewsContainers.activitybar.drawio-explorer.title%",
+					"id": "DrawIo_In_VsCode-explorer",
+					"title": "%viewsContainers.activitybar.DrawIo_In_VsCode-explorer.title%",
 					"icon": "media/drawio-activity-bar.svg"
 				}
 			]
 		},
 		"views": {
-			"drawio-explorer": [
+			"DrawIo_In_VsCode-explorer": [
 				{
-					"id": "drawio-welcome",
-					"name": "%views.drawio-explorer.drawio-welcome.name%",
+					"id": "DrawIo_In_VsCode-welcome",
+					"name": "%views.DrawIo_In_VsCode-explorer.DrawIo_In_VsCode-welcome.name%",
 					"visibility": "visible",
 					"initialSize": 1
 				}
@@ -64,8 +64,8 @@
 		},
 		"viewsWelcome": [
 			{
-				"view": "drawio-welcome",
-				"contents": "%viewsWelcome.drawio-welcome.contents%"
+				"view": "DrawIo_In_VsCode-welcome",
+				"contents": "%viewsWelcome.DrawIo_In_VsCode-welcome.contents%"
 			}
 		],
 		"languages": [
@@ -87,7 +87,7 @@
 		],
 		"customEditors": [
 			{
-				"viewType": "FrankSAURET.vscode-drawio",
+				"viewType": "electropol-fr.DrawIo_In_VsCode",
 				"displayName": "%customEditors.drawio.displayName%",
 				"selector": [
 					{
@@ -100,7 +100,7 @@
 				"priority": "default"
 			},
 			{
-				"viewType": "FrankSAURET.vscode-drawio-text",
+				"viewType": "electropol-fr.DrawIo_In_VsCode-text",
 				"displayName": "%customEditors.drawio-text.displayName%",
 				"selector": [
 					{
@@ -121,69 +121,69 @@
 		],
 		"commands": [
 			{
-				"command": "FrankSAURET.vscode-drawio.convert",
+				"command": "electropol-fr.DrawIo_In_VsCode.convert",
 				"title": "%commands.convert.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "FrankSAURET.vscode-drawio.export",
+				"command": "electropol-fr.DrawIo_In_VsCode.export",
 				"title": "%commands.export.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "FrankSAURET.vscode-drawio.toggleCodeLinkActivation",
+				"command": "electropol-fr.DrawIo_In_VsCode.toggleCodeLinkActivation",
 				"title": "%commands.toggleCodeLinkActivation.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "FrankSAURET.vscode-drawio.changeTheme",
+				"command": "electropol-fr.DrawIo_In_VsCode.changeTheme",
 				"title": "%commands.changeTheme.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "FrankSAURET.vscode-drawio.editDiagramAsText",
+				"command": "electropol-fr.DrawIo_In_VsCode.editDiagramAsText",
 				"title": "%commands.editDiagramAsText.title%",
-				"enablement": "FrankSAURET.vscode-drawio.experimentalFeaturesEnabled",
+				"enablement": "electropol-fr.DrawIo_In_VsCode.experimentalFeaturesEnabled",
 				"category": "Draw.io"
 			},
 			{
-				"command": "FrankSAURET.vscode-drawio.linkCodeWithSelectedNode",
+				"command": "electropol-fr.DrawIo_In_VsCode.linkCodeWithSelectedNode",
 				"title": "%commands.linkCodeWithSelectedNode.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "FrankSAURET.vscode-drawio.newDiagram",
+				"command": "electropol-fr.DrawIo_In_VsCode.newDiagram",
 				"title": "%commands.newDiagram.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "FrankSAURET.vscode-drawio.openDiagram",
+				"command": "electropol-fr.DrawIo_In_VsCode.openDiagram",
 				"title": "%commands.openDiagram.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "FrankSAURET.vscode-drawio.linkFileWithSelectedNode",
+				"command": "electropol-fr.DrawIo_In_VsCode.linkFileWithSelectedNode",
 				"title": "%commands.linkFileWithSelectedNode.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "FrankSAURET.vscode-drawio.linkSymbolWithSelectedNode",
+				"command": "electropol-fr.DrawIo_In_VsCode.linkSymbolWithSelectedNode",
 				"title": "%commands.linkSymbolWithSelectedNode.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "FrankSAURET.vscode-drawio.linkWsSymbolWithSelectedNode",
+				"command": "electropol-fr.DrawIo_In_VsCode.linkWsSymbolWithSelectedNode",
 				"title": "%commands.linkWsSymbolWithSelectedNode.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "FrankSAURET.vscode-drawio.openAsText",
+				"command": "electropol-fr.DrawIo_In_VsCode.openAsText",
 				"title": "%commands.openAsText.title%",
 				"category": "Draw.io",
 				"icon": "$(go-to-file)"
 			},
 			{
-				"command": "FrankSAURET.vscode-drawio.openAsDiagram",
+				"command": "electropol-fr.DrawIo_In_VsCode.openAsDiagram",
 				"title": "%commands.openAsDiagram.title%",
 				"category": "Draw.io",
 				"icon": "$(preview)"
@@ -191,7 +191,7 @@
 		],
 		"keybindings": [
 			{
-				"command": "FrankSAURET.vscode-drawio.linkCodeWithSelectedNode",
+				"command": "electropol-fr.DrawIo_In_VsCode.linkCodeWithSelectedNode",
 				"key": "shift+F3",
 				"when": "!findWidgetVisible"
 			}
@@ -201,28 +201,28 @@
 				"title": "%configuration.general.title%",
 				"order": 10,
 				"properties": {
-					"FrankSAURET.vscode-drawio.offline": {
+					"electropol-fr.DrawIo_In_VsCode.offline": {
 						"type": "boolean",
 						"default": true,
 						"title": "%configuration.offline.title%",
 						"description": "%configuration.offline.description%",
 						"order": 10
 					},
-					"FrankSAURET.vscode-drawio.online-url": {
+					"electropol-fr.DrawIo_In_VsCode.online-url": {
 						"type": "string",
 						"default": "https://embed.diagrams.net/",
 						"title": "%configuration.online-url.title%",
 						"description": "%configuration.online-url.description%",
 						"order": 11
 					},
-					"FrankSAURET.vscode-drawio.codeLinkActivated": {
+					"electropol-fr.DrawIo_In_VsCode.codeLinkActivated": {
 						"type": "boolean",
 						"default": false,
 						"title": "%configuration.codeLinkActivated.title%",
 						"description": "%configuration.codeLinkActivated.description%",
 						"order": 20
 					},
-					"FrankSAURET.vscode-drawio.local-storage": {
+					"electropol-fr.DrawIo_In_VsCode.local-storage": {
 						"anyOf": [
 							{
 								"type": "object"
@@ -237,27 +237,27 @@
 						"description": "%configuration.local-storage.description%",
 						"order": 30
 					},
-					"FrankSAURET.vscode-drawio.simpleLabels": {
+					"electropol-fr.DrawIo_In_VsCode.simpleLabels": {
 						"type": "boolean",
 						"default": false,
 						"title": "%configuration.simpleLabels.title%",
 						"description": "%configuration.simpleLabels.description%",
 						"order": 40
 					},
-					"FrankSAURET.vscode-drawio.zoomFactor": {
+					"electropol-fr.DrawIo_In_VsCode.zoomFactor": {
 						"type": "number",
 						"default": 1.2,
 						"title": "%configuration.zoomFactor.title%",
 						"description": "%configuration.zoomFactor.description%",
 						"order": 50
 					},
-					"FrankSAURET.vscode-drawio.globalVars": {
+					"electropol-fr.DrawIo_In_VsCode.globalVars": {
 						"type": "object",
 						"title": "%configuration.globalVars.title%",
 						"description": "%configuration.globalVars.description%",
 						"order": 60
 					},
-					"FrankSAURET.vscode-drawio.resizeImages": {
+					"electropol-fr.DrawIo_In_VsCode.resizeImages": {
 						"type": [
 							"boolean",
 							"null"
@@ -273,7 +273,7 @@
 				"title": "%configuration.plugins.section.title%",
 				"order": 20,
 				"properties": {
-					"FrankSAURET.vscode-drawio.plugins": {
+					"electropol-fr.DrawIo_In_VsCode.plugins": {
 						"type": "array",
 						"items": {
 							"anyOf": [
@@ -293,7 +293,7 @@
 						"markdownDescription": "%configuration.plugins.description%",
 						"order": 10
 					},
-					"FrankSAURET.vscode-drawio.knownPlugins": {
+					"electropol-fr.DrawIo_In_VsCode.knownPlugins": {
 						"type": "array",
 						"items": {
 							"type": "object",
@@ -315,7 +315,7 @@
 						"scope": "application",
 						"order": 15
 					},
-					"FrankSAURET.vscode-drawio.customLibraries": {
+					"electropol-fr.DrawIo_In_VsCode.customLibraries": {
 						"type": "array",
 						"items": {
 							"type": "object",
@@ -374,7 +374,7 @@
 				"title": "%configuration.themeAndStyles.title%",
 				"order": 30,
 				"properties": {
-					"FrankSAURET.vscode-drawio.styles": {
+					"electropol-fr.DrawIo_In_VsCode.styles": {
 						"title": "%configuration.styles.title%",
 						"description": "%configuration.styles.description%",
 						"type": "array",
@@ -409,22 +409,22 @@
 							}
 						}
 					},
-					"FrankSAURET.vscode-drawio.defaultVertexStyle": {
+					"electropol-fr.DrawIo_In_VsCode.defaultVertexStyle": {
 						"title": "%configuration.defaultVertexStyle.title%",
 						"description": "%configuration.defaultVertexStyle.description%",
 						"type": "object"
 					},
-					"FrankSAURET.vscode-drawio.defaultEdgeStyle": {
+					"electropol-fr.DrawIo_In_VsCode.defaultEdgeStyle": {
 						"title": "%configuration.defaultEdgeStyle.title%",
 						"description": "%configuration.defaultEdgeStyle.description%",
 						"type": "object"
 					},
-					"FrankSAURET.vscode-drawio.colorNames": {
+					"electropol-fr.DrawIo_In_VsCode.colorNames": {
 						"title": "%configuration.colorNames.title%",
 						"description": "%configuration.colorNames.description%",
 						"type": "object"
 					},
-					"FrankSAURET.vscode-drawio.presetColors": {
+					"electropol-fr.DrawIo_In_VsCode.presetColors": {
 						"title": "%configuration.presetColors.title%",
 						"description": "%configuration.presetColors.description%",
 						"type": "array",
@@ -433,7 +433,7 @@
 							"description": "Use hex codes without # at the beginning only (FFFFFF for absolute white, for example)."
 						}
 					},
-					"FrankSAURET.vscode-drawio.customColorSchemes": {
+					"electropol-fr.DrawIo_In_VsCode.customColorSchemes": {
 						"title": "%configuration.customColorSchemes.title%",
 						"markdownDescription": "%configuration.customColorSchemes.description%",
 						"type": "array",
@@ -467,7 +467,7 @@
 							}
 						}
 					},
-					"FrankSAURET.vscode-drawio.customFonts": {
+					"electropol-fr.DrawIo_In_VsCode.customFonts": {
 						"type": "array",
 						"items": {
 							"type": "string"
@@ -476,7 +476,7 @@
 						"title": "%configuration.customFonts.title%",
 						"description": "%configuration.customFonts.description%"
 					},
-					"FrankSAURET.vscode-drawio.theme": {
+					"electropol-fr.DrawIo_In_VsCode.theme": {
 						"title": "%configuration.theme.title%",
 						"type": "string",
 						"default": "kennedy",
@@ -486,7 +486,7 @@
 						],
 						"description": "%configuration.theme.description%"
 					},
-					"FrankSAURET.vscode-drawio.appearance": {
+					"electropol-fr.DrawIo_In_VsCode.appearance": {
 						"title": "%configuration.appearance.title%",
 						"type": "string",
 						"default": "light",
@@ -505,25 +505,25 @@
 		"menus": {
 			"explorer/context": [
 				{
-					"when": "FrankSAURET.vscode-drawio.active",
-					"command": "FrankSAURET.vscode-drawio.linkFileWithSelectedNode",
+					"when": "electropol-fr.DrawIo_In_VsCode.active",
+					"command": "electropol-fr.DrawIo_In_VsCode.linkFileWithSelectedNode",
 					"group": "Draw.io"
 				}
 			],
 			"commandPalette": [
 				{
 					"when": "false",
-					"command": "FrankSAURET.vscode-drawio.linkFileWithSelectedNode"
+					"command": "electropol-fr.DrawIo_In_VsCode.linkFileWithSelectedNode"
 				}
 			],
 			"editor/title": [
 				{
-					"command": "FrankSAURET.vscode-drawio.openAsText",
-					"when": "activeCustomEditorId == 'FrankSAURET.vscode-drawio-text' || activeCustomEditorId == 'FrankSAURET.vscode-drawio'",
+					"command": "electropol-fr.DrawIo_In_VsCode.openAsText",
+					"when": "activeCustomEditorId == 'electropol-fr.DrawIo_In_VsCode-text' || activeCustomEditorId == 'electropol-fr.DrawIo_In_VsCode'",
 					"group": "navigation"
 				},
 				{
-					"command": "FrankSAURET.vscode-drawio.openAsDiagram",
+					"command": "electropol-fr.DrawIo_In_VsCode.openAsDiagram",
 					"when": "!activeCustomEditorId && resourceFilename =~ /\\.(drawio|dio)(\\.svg|\\.png)?$/",
 					"group": "navigation"
 				}

@@ -1,4 +1,4 @@
-﻿# Draw.io VS Code Integration
+# Draw.io VS Code Integration
 
 This unofficial extension integrates [Draw.io](https://app.diagrams.net/) (also known as [diagrams.net](https://www.diagrams.net/)) into VS Code.  
 Mentioned in the official diagrams.net [blog](https://www.diagrams.net/blog/embed-diagrams-vscode).
@@ -86,7 +86,7 @@ Add this to your VS Code `settings.json` file if you want to associate it with `
 
 ```json
 "workbench.editorAssociations": {
-    "*.svg": "FrankSAURET.vscode-drawio-text",
+    "*.svg": "electropol-fr.DrawIo_In_VsCode-text",
 }
 ```
 
