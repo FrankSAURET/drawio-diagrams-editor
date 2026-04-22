@@ -1,5 +1,6 @@
 import * as webpack from "webpack";
 import path = require("path");
+import * as fs from "fs";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import * as CopyPlugin from "copy-webpack-plugin";
 
@@ -48,6 +49,11 @@ module.exports = {
 		new CleanWebpackPlugin(),
 		new webpack.EnvironmentPlugin({
 			DEV: "0",
+		}),
+		new webpack.DefinePlugin({
+			DRAWIO_VERSION: JSON.stringify(
+				fs.readFileSync(r("./drawio/VERSION"), "utf-8").trim()
+			),
 		}),
 		// Without `as any`, I get "Excessive stack depth comparing types with TS 3.2"
 		new webpack.IgnorePlugin({ resourceRegExp: /^canvas$/ }) as any,

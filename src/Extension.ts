@@ -9,6 +9,7 @@ import { EditDiagramAsTextFeature } from "./features/EditDiagramAsTextFeature";
 import { LiveshareFeature } from "./features/LiveshareFeature";
 import { ToggleEditorFeature } from "./features/ToggleEditorFeature";
 import { ActivityBarFeature } from "./features/ActivityBarFeature";
+import { DrawioUpdateFeature } from "./features/DrawioUpdateFeature";
 import { DrawioClientFactory } from "./DrawioClient";
 import { registerFailableCommand } from "./utils/registerFailableCommand";
 
@@ -42,6 +43,9 @@ export class Extension {
 	);
 	private readonly activityBarFeature = this.dispose.track(
 		new ActivityBarFeature()
+	);
+	private readonly drawioUpdateFeature = this.dispose.track(
+		new DrawioUpdateFeature(this.context.globalState)
 	);
 
 	constructor(private readonly context: vscode.ExtensionContext) {
