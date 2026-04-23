@@ -1,11 +1,9 @@
 # Change Log
 
 All notable changes to this project will be documented in this file.
+New format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) — Versioning: [CalVer](https://calver.org/) (`YYYY.0M.micro`).
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [1.9.1] — Fork FrankSAURET
+## [2026.4.1] — 23 avril 2026
 
 This release marks the transition to an independently maintained fork.
 The original extension by [Henning Dieterichs (hediet)](https://github.com/hediet/vscode-drawio)
@@ -15,6 +13,7 @@ has not merged pull requests for over a year. This fork continues development un
 
 -   Activity bar toggle with i18n support (`fr`, `en`)
 -   Internationalization of all new UI strings (French/English)
+- Button to open xml.
 
 ### Fixed
 
