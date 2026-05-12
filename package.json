@@ -3,7 +3,6 @@
 	"displayName": "%displayName%",
 	"description": "%description%",
 	"version": "2026.4.1",
-	"preRelease": false,
 	"license": "GPL-3.0",
 	"publisher": "electropol-fr",
 	"keywords": [
@@ -21,6 +20,10 @@
 	},
 	"readme": "./README.md",
 	"icon": "docs/logo.drawio.png",
+	"galleryBanner": {
+		"color": "#1B7BC4",
+		"theme": "dark"
+	},
 	"extensionKind": [
 		"ui",
 		"workspace"
@@ -531,8 +534,8 @@
 		"build-extension": "webpack --mode production",
 		"build-plugins": "webpack --mode production --config ./drawio-custom-plugins/webpack.config.ts",
 		"package-extension": "yarn package-extension-preRelease",
-		"package-extension-stable": "vsce package --yarn --out ./dist/extension.vsix",
-		"package-extension-preRelease": "vsce package --yarn --out ./dist/extension.vsix --pre-release",
+		"package-extension-stable": "vsce package --yarn --out ./dist/extension.vsix --githubBranch main",
+		"package-extension-preRelease": "vsce package --yarn --out ./dist/extension.vsix --pre-release --githubBranch main",
 		"dev": "webpack --mode development --watch",
 		"dev-drawio-plugins": "webpack --mode development --watch --config ./drawio-custom-plugins/webpack.config.ts",
 		"dev-drawio-plugins-web": "webpack-dev-server --hot --config ./drawio-custom-plugins/webpack.config.ts"
