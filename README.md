@@ -1,22 +1,103 @@
 # Draw.io Diagrams Editor
 
-<img src="docs/Logo-DrawIo_In_VsCode.png" alt="alt text" width="100"/>
+<img src="docs/Logo-DrawIo_In_VsCode.png" alt="Draw.io Diagrams Editor" width="100"/>
 
-This unofficial extension integrates [Draw.io](https://app.diagrams.net/) (also known as [diagrams.net](https://www.diagrams.net/)) into VS Code.  
+Draw and maintain diagrams without leaving VS Code. This extension embeds the full [Draw.io / diagrams.net](https://app.diagrams.net/) editor — **offline, no browser, no account**.
 
-> **Note:** This is an actively maintained fork of the original extension by [Henning Dieterichs (hediet)](https://github.com/hediet/vscode-drawio), published under the same GPL-3.0 licence.  
-> The original project has not merged pull requests for over a year, which motivated this independently maintained fork.  
-> All credit for the original work goes to the original author.  
-> Original repository: <https://github.com/hediet/vscode-drawio>
+> Fork of [hediet/vscode-drawio](https://github.com/hediet/vscode-drawio) (GPL-3.0), actively maintained with bug fixes and improvements not yet merged upstream.
 
-## Features
+---
 
--   Edit `.drawio`, `.dio`, `.drawio.svg` or `.drawio.png` files in the Draw.io editor.
-- Edit  the Diagram and its XML Side by Side by clicking on the upper right icon (a sheet + arrow)
-  
-## quick start
+## Supported formats
 
-![alt text](docs/RunIt.png)
+| Extension | Description |
+|-----------|-------------|
+| `.drawio` / `.dio` | Native XML format, best for version control and diffs |
+| `.drawio.svg` | SVG with embedded diagram — renderable on GitHub without export |
+| `.drawio.png` | PNG with embedded diagram — same idea, lower quality than SVG |
 
-## Other informations
-[original readme](https://github.com/hediet/vscode-drawio/blob/main/README.md)
+Just create an empty file with one of these extensions and open it — the editor starts automatically.
+
+![Quick start](docs/RunIt.png)
+
+---
+
+## Editing diagram and XML side by side
+
+Click the **sheet + arrow** icon in the top-right corner of the editor to open the raw XML alongside the visual editor. Both stay synchronized: edits in one reflect instantly in the other.
+
+This makes bulk renaming, find/replace and scripted edits much faster than working in the visual editor alone.
+
+![XML side by side](docs/drawio-xml.gif)
+
+---
+
+## Code Link
+
+Label any node or edge `#SymbolName`. When **Code Link** is active (toggle in the status bar), double-clicking that node jumps straight to the matching symbol definition in your source code.
+
+Works with any language that supports VS Code workspace symbol search (TypeScript, Python, C#, Java, …).
+
+![Code Link demo](docs/demo-code-link.gif)
+
+---
+
+## Themes
+
+Switch themes at any time with the **`Draw.io: Change Theme`** command.
+
+<details>
+<summary>Available themes</summary>
+
+| atlas | Kennedy |
+|-------|---------|
+| <img src="docs/theme-atlas.png" width="380"> | <img src="docs/theme-Kennedy.png" width="380"> |
+
+| min | dark |
+|-----|------|
+| <img src="docs/theme-min.png" width="380"> | <img src="docs/theme-dark.png" width="380"> |
+
+</details>
+
+---
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `Draw.io: Convert To…` | Convert a diagram to another format |
+| `Draw.io: Export To…` | Export to PNG, SVG, PDF, … |
+| `Draw.io: Change Theme` | Switch the editor theme |
+| `Draw.io: Toggle Code Link Activation` | Enable/disable the Code Link feature |
+
+---
+
+## Associate plain `.svg` files with the editor
+
+By default only `*.drawio.svg` files open in this editor. To handle all `.svg` files, add to `settings.json`:
+
+```json
+"workbench.editorAssociations": {
+    "*.svg": "electropol-fr.drawio-diagrams-editor-text"
+}
+```
+
+Only Draw.io-generated SVGs can be edited this way — arbitrary SVG files are not supported.
+
+---
+
+## What changed in this fork
+
+- Activity bar panel with i18n support (🇫🇷 French / 🇬🇧 English)
+- Button to open XML source beside the diagram (no need for `View: Reopen Editor With…`)
+- SVG export fix
+- Updated to Draw.io v29+ (new shape libraries, `math4` format)
+- Ongoing bug fixes not yet merged in the original project
+
+---
+
+## Credits
+
+- **Frank Sauret** — fork maintainer ([GitHub](https://github.com/FrankSAURET))
+- **Henning Dieterichs** — original author ([hediet/vscode-drawio](https://github.com/hediet/vscode-drawio))
+- **Vincent Rouillé** — contributor ([Speedy37](https://github.com/Speedy37))

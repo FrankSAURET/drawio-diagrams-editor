@@ -2,8 +2,8 @@
 	"name": "drawio-diagrams-editor",
 	"displayName": "%displayName%",
 	"description": "%description%",
-	"version": "2026.4.1",
-	"license": "GPL-3.0",
+	"version": "2026.5.1",
+	"license": "SEE LICENSE IN LICENSE.md",
 	"publisher": "electropol-fr",
 	"keywords": [
 		"drawio",
@@ -36,7 +36,11 @@
 	],
 	"activationEvents": [],
 	"repository": {
+		"type": "git",
 		"url": "https://github.com/FrankSAURET/drawio-diagrams-editor.git"
+	},
+	"bugs": {
+		"url": "https://github.com/FrankSAURET/drawio-diagrams-editor/issues"
 	},
 	"browser": "./dist/extension/index",
 	"main": "./dist/extension/index",
@@ -527,13 +531,14 @@
 		}
 	},
 	"scripts": {
+		"vscode:prepublish": "yarn build-extension && yarn build-plugins",
 		"run-script": "node ./scripts/run-script",
 		"lint": "echo 'add linting'",
 		"_lint": "yarn run-script check-version && prettier --check ./src",
 		"build": "yarn build-extension && yarn build-plugins && yarn package-extension",
 		"build-extension": "webpack --mode production",
 		"build-plugins": "webpack --mode production --config ./drawio-custom-plugins/webpack.config.ts",
-		"package-extension": "yarn package-extension-preRelease",
+		"package-extension": "yarn package-extension-stable",
 		"package-extension-stable": "vsce package --yarn --out ./dist/extension.vsix --githubBranch main",
 		"package-extension-preRelease": "vsce package --yarn --out ./dist/extension.vsix --pre-release --githubBranch main",
 		"dev": "webpack --mode development --watch",

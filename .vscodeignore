@@ -35,5 +35,11 @@ architecture.drawio.svg
 # Fichiers Markdown dans docs/ (les images sont conservées pour le README et l'icône)
 docs/*.md
 
+# GIFs uniquement utilisés dans docs/*.md (déjà exclues) — inutiles dans le VSIX
+docs/liveshare-demo.gif
+docs/drawio-png.gif
+docs/code-link-symbol-demo.gif
+docs/code-link-with-screenshots.gif
+
 # Paquets VSIX déjà construits
 dist/**/*.vsix
