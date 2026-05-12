@@ -24,16 +24,11 @@ import { Config } from "../Config";
 import { path } from "../utils/path";
 import { registerFailableCommand } from "../utils/registerFailableCommand";
 
-const toggleCodeLinkActivationCommandName =
-	"hediet.vscode-drawio.toggleCodeLinkActivation";
-const linkCodeWithSelectedNodeCommandName =
-	"hediet.vscode-drawio.linkCodeWithSelectedNode";
-const linkSymbolWithSelectedNodeCommandName =
-	"hediet.vscode-drawio.linkSymbolWithSelectedNode";
-const linkWsSymbolWithSelectedNodeCommandName =
-	"hediet.vscode-drawio.linkWsSymbolWithSelectedNode";
-const linkFileWithSelectedNodeCommandName =
-	"hediet.vscode-drawio.linkFileWithSelectedNode";
+const toggleCodeLinkActivationCommandName = "electropol-fr.drawio-diagrams-editor.toggleCodeLinkActivation";
+const linkCodeWithSelectedNodeCommandName = "electropol-fr.drawio-diagrams-editor.linkCodeWithSelectedNode";
+const linkSymbolWithSelectedNodeCommandName = "electropol-fr.drawio-diagrams-editor.linkSymbolWithSelectedNode";
+const linkWsSymbolWithSelectedNodeCommandName = "electropol-fr.drawio-diagrams-editor.linkWsSymbolWithSelectedNode";
+const linkFileWithSelectedNodeCommandName = "electropol-fr.drawio-diagrams-editor.linkFileWithSelectedNode";
 
 const symbolNameMap: Record<SymbolKind, string> = {
 	[SymbolKind.File]: "symbol-file",

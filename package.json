@@ -1,12 +1,10 @@
 {
-	"name": "vscode-drawio",
-	"private": true,
-	"displayName": "Draw.io Integration",
-	"description": "This unofficial extension integrates Draw.io into VS Code.",
-	"version": "1.9.0",
-	"preRelease": false,
+	"name": "drawio-diagrams-editor",
+	"displayName": "%displayName%",
+	"description": "%description%",
+	"version": "2026.4.1",
 	"license": "GPL-3.0",
-	"publisher": "hediet",
+	"publisher": "electropol-fr",
 	"keywords": [
 		"drawio",
 		"diagram",
@@ -17,11 +15,15 @@
 		"code link"
 	],
 	"author": {
-		"email": "henning.dieterichs@live.de",
-		"name": "Henning Dieterichs"
+		"name": "Frank Sauret",
+		"url": "https://github.com/FrankSAURET"
 	},
 	"readme": "./README.md",
 	"icon": "docs/logo.drawio.png",
+	"galleryBanner": {
+		"color": "#1B7BC4",
+		"theme": "dark"
+	},
 	"extensionKind": [
 		"ui",
 		"workspace"
@@ -34,7 +36,7 @@
 	],
 	"activationEvents": [],
 	"repository": {
-		"url": "https://github.com/hediet/vscode-drawio.git"
+		"url": "https://github.com/FrankSAURET/drawio-diagrams-editor.git"
 	},
 	"browser": "./dist/extension/index",
 	"main": "./dist/extension/index",
@@ -44,6 +46,31 @@
 		}
 	},
 	"contributes": {
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "drawio-diagrams-editor-explorer",
+					"title": "%viewsContainers.activitybar.drawio-diagrams-editor-explorer.title%",
+					"icon": "media/drawio-activity-bar.svg"
+				}
+			]
+		},
+		"views": {
+			"drawio-diagrams-editor-explorer": [
+				{
+					"id": "drawio-diagrams-editor-welcome",
+					"name": "%views.drawio-diagrams-editor-explorer.drawio-diagrams-editor-welcome.name%",
+					"visibility": "visible",
+					"initialSize": 1
+				}
+			]
+		},
+		"viewsWelcome": [
+			{
+				"view": "drawio-diagrams-editor-welcome",
+				"contents": "%viewsWelcome.drawio-diagrams-editor-welcome.contents%"
+			}
+		],
 		"languages": [
 			{
 				"id": "drawio",
@@ -63,8 +90,8 @@
 		],
 		"customEditors": [
 			{
-				"viewType": "hediet.vscode-drawio",
-				"displayName": "Draw.io (Binary)",
+				"viewType": "electropol-fr.drawio-diagrams-editor",
+				"displayName": "%customEditors.drawio.displayName%",
 				"selector": [
 					{
 						"filenamePattern": "*.drawio.png"
@@ -76,8 +103,8 @@
 				"priority": "default"
 			},
 			{
-				"viewType": "hediet.vscode-drawio-text",
-				"displayName": "Draw.io",
+				"viewType": "electropol-fr.drawio-diagrams-editor-text",
+				"displayName": "%customEditors.drawio-text.displayName%",
 				"selector": [
 					{
 						"filenamePattern": "*.drawio"
@@ -97,91 +124,108 @@
 		],
 		"commands": [
 			{
-				"command": "hediet.vscode-drawio.convert",
-				"title": "Convert To...",
+				"command": "electropol-fr.drawio-diagrams-editor.convert",
+				"title": "%commands.convert.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "hediet.vscode-drawio.export",
-				"title": "Export To...",
+				"command": "electropol-fr.drawio-diagrams-editor.export",
+				"title": "%commands.export.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "hediet.vscode-drawio.toggleCodeLinkActivation",
-				"title": "Toggle Code Link Activation",
+				"command": "electropol-fr.drawio-diagrams-editor.toggleCodeLinkActivation",
+				"title": "%commands.toggleCodeLinkActivation.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "hediet.vscode-drawio.changeTheme",
-				"title": "Change Theme",
+				"command": "electropol-fr.drawio-diagrams-editor.changeTheme",
+				"title": "%commands.changeTheme.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "hediet.vscode-drawio.editDiagramAsText",
-				"title": "Edit Diagram As Text (Experimental)",
-				"enablement": "hediet.vscode-drawio.experimentalFeaturesEnabled",
+				"command": "electropol-fr.drawio-diagrams-editor.editDiagramAsText",
+				"title": "%commands.editDiagramAsText.title%",
+				"enablement": "electropol-fr.drawio-diagrams-editor.experimentalFeaturesEnabled",
 				"category": "Draw.io"
 			},
 			{
-				"command": "hediet.vscode-drawio.linkCodeWithSelectedNode",
-				"title": "Link Code with Selected Node",
+				"command": "electropol-fr.drawio-diagrams-editor.linkCodeWithSelectedNode",
+				"title": "%commands.linkCodeWithSelectedNode.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "hediet.vscode-drawio.newDiagram",
-				"title": "New Draw.io Diagram",
+				"command": "electropol-fr.drawio-diagrams-editor.newDiagram",
+				"title": "%commands.newDiagram.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "hediet.vscode-drawio.linkFileWithSelectedNode",
-				"title": "Link File With Selected Node",
+				"command": "electropol-fr.drawio-diagrams-editor.openDiagram",
+				"title": "%commands.openDiagram.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "hediet.vscode-drawio.linkSymbolWithSelectedNode",
-				"title": "Link Symbol With Selected Node",
+				"command": "electropol-fr.drawio-diagrams-editor.linkFileWithSelectedNode",
+				"title": "%commands.linkFileWithSelectedNode.title%",
 				"category": "Draw.io"
 			},
 			{
-				"command": "hediet.vscode-drawio.linkWsSymbolWithSelectedNode",
-				"title": "Link Workspace Symbol With Selected Node",
+				"command": "electropol-fr.drawio-diagrams-editor.linkSymbolWithSelectedNode",
+				"title": "%commands.linkSymbolWithSelectedNode.title%",
 				"category": "Draw.io"
+			},
+			{
+				"command": "electropol-fr.drawio-diagrams-editor.linkWsSymbolWithSelectedNode",
+				"title": "%commands.linkWsSymbolWithSelectedNode.title%",
+				"category": "Draw.io"
+			},
+			{
+				"command": "electropol-fr.drawio-diagrams-editor.openAsText",
+				"title": "%commands.openAsText.title%",
+				"category": "Draw.io",
+				"icon": "$(go-to-file)"
+			},
+			{
+				"command": "electropol-fr.drawio-diagrams-editor.openAsDiagram",
+				"title": "%commands.openAsDiagram.title%",
+				"category": "Draw.io",
+				"icon": "$(preview)"
 			}
 		],
 		"keybindings": [
 			{
-				"command": "hediet.vscode-drawio.linkCodeWithSelectedNode",
+				"command": "electropol-fr.drawio-diagrams-editor.linkCodeWithSelectedNode",
 				"key": "shift+F3",
 				"when": "!findWidgetVisible"
 			}
 		],
 		"configuration": [
 			{
-				"title": "General",
+				"title": "%configuration.general.title%",
 				"order": 10,
 				"properties": {
-					"hediet.vscode-drawio.offline": {
+					"electropol-fr.drawio-diagrams-editor.offline": {
 						"type": "boolean",
 						"default": true,
-						"title": "Use Offline Mode",
-						"description": "When enabled, the bundled instance of Draw.io is used.",
+						"title": "%configuration.offline.title%",
+						"description": "%configuration.offline.description%",
 						"order": 10
 					},
-					"hediet.vscode-drawio.online-url": {
+					"electropol-fr.drawio-diagrams-editor.online-url": {
 						"type": "string",
 						"default": "https://embed.diagrams.net/",
-						"title": "Online URL",
-						"description": "The app to use when offline mode is disabled.",
+						"title": "%configuration.online-url.title%",
+						"description": "%configuration.online-url.description%",
 						"order": 11
 					},
-					"hediet.vscode-drawio.codeLinkActivated": {
+					"electropol-fr.drawio-diagrams-editor.codeLinkActivated": {
 						"type": "boolean",
 						"default": false,
-						"title": "Code Link Enabled",
-						"description": "When activated, selecting a node will navigate to an associated code section.",
+						"title": "%configuration.codeLinkActivated.title%",
+						"description": "%configuration.codeLinkActivated.description%",
 						"order": 20
 					},
-					"hediet.vscode-drawio.local-storage": {
+					"electropol-fr.drawio-diagrams-editor.local-storage": {
 						"anyOf": [
 							{
 								"type": "object"
@@ -192,47 +236,47 @@
 						],
 						"default": {},
 						"readOnly": true,
-						"title": "Draw.io Local Storage",
-						"description": "Only change this property if you know what you are doing. Manual changes to this property are not supported!",
+						"title": "%configuration.local-storage.title%",
+						"description": "%configuration.local-storage.description%",
 						"order": 30
 					},
-					"hediet.vscode-drawio.simpleLabels": {
+					"electropol-fr.drawio-diagrams-editor.simpleLabels": {
 						"type": "boolean",
 						"default": false,
-						"title": "Use SimpleLabels",
-						"description": "When enabled, no ForeignObjects are used in the svg.",
+						"title": "%configuration.simpleLabels.title%",
+						"description": "%configuration.simpleLabels.description%",
 						"order": 40
 					},
-					"hediet.vscode-drawio.zoomFactor": {
+					"electropol-fr.drawio-diagrams-editor.zoomFactor": {
 						"type": "number",
 						"default": 1.2,
-						"title": "Draw.io zoom factor",
-						"description": "Defines the zoom factor for mouse wheel and trackpad zoom.",
+						"title": "%configuration.zoomFactor.title%",
+						"description": "%configuration.zoomFactor.description%",
 						"order": 50
 					},
-					"hediet.vscode-drawio.globalVars": {
+					"electropol-fr.drawio-diagrams-editor.globalVars": {
 						"type": "object",
-						"title": "Draw.io global variables.",
-						"description": "Defines global variables for system-wide placeholders using a JSON structure with key, value pairs. Keep the number of global variables small.",
+						"title": "%configuration.globalVars.title%",
+						"description": "%configuration.globalVars.description%",
 						"order": 60
 					},
-					"hediet.vscode-drawio.resizeImages": {
+					"electropol-fr.drawio-diagrams-editor.resizeImages": {
 						"type": [
 							"boolean",
 							"null"
 						],
-						"title": "Draw.io resize images.",
-						"description": "If set to true, images are resized automatically on paste. If not defined, the user will be asked to confirm the resize.",
+						"title": "%configuration.resizeImages.title%",
+						"description": "%configuration.resizeImages.description%",
 						"default": null,
 						"order": 70
 					}
 				}
 			},
 			{
-				"title": "Plugins",
+				"title": "%configuration.plugins.section.title%",
 				"order": 20,
 				"properties": {
-					"hediet.vscode-drawio.plugins": {
+					"electropol-fr.drawio-diagrams-editor.plugins": {
 						"type": "array",
 						"items": {
 							"anyOf": [
@@ -248,11 +292,11 @@
 							]
 						},
 						"default": [],
-						"title": "Plugins",
-						"markdownDescription": "Loads Draw.io plugins from the local filesystem.  See description of the `file` property. See [plugins documentation](https://github.com/hediet/vscode-drawio/blob/master/docs/plugins.md).",
+						"title": "%configuration.plugins.title%",
+						"markdownDescription": "%configuration.plugins.description%",
 						"order": 10
 					},
-					"hediet.vscode-drawio.knownPlugins": {
+					"electropol-fr.drawio-diagrams-editor.knownPlugins": {
 						"type": "array",
 						"items": {
 							"type": "object",
@@ -269,23 +313,23 @@
 							}
 						},
 						"default": [],
-						"title": "Known Plugins",
-						"markdownDescription": "List of allowed or denied plugins. The extension will read and write to this list based on what the used decides when loading specific plugins. See [plugins documentation](https://github.com/hediet/vscode-drawio/blob/master/docs/plugins.md).",
+						"title": "%configuration.knownPlugins.title%",
+						"markdownDescription": "%configuration.knownPlugins.description%",
 						"scope": "application",
 						"order": 15
 					},
-					"hediet.vscode-drawio.customLibraries": {
+					"electropol-fr.drawio-diagrams-editor.customLibraries": {
 						"type": "array",
 						"items": {
 							"type": "object",
 							"properties": {
 								"entryId": {
 									"type": "string",
-									"description": "The id of the entry. A specfic entry can be enabled or deactivated in the editor."
+									"description": "The id of the entry."
 								},
 								"libName": {
 									"type": "string",
-									"description": "The name of the library in the shape overview."
+									"description": "The name of the library."
 								}
 							},
 							"anyOf": [
@@ -323,19 +367,19 @@
 							]
 						},
 						"default": [],
-						"title": "Custom Libraries",
-						"description": "Configures the Draw.io editor to use custom libraries.",
+						"title": "%configuration.customLibraries.title%",
+						"description": "%configuration.customLibraries.description%",
 						"order": 50
 					}
 				}
 			},
 			{
-				"title": "Theme and styles",
+				"title": "%configuration.themeAndStyles.title%",
 				"order": 30,
 				"properties": {
-					"hediet.vscode-drawio.styles": {
-						"title": "Styles",
-						"description": "Defines an array of objects that contain the colours (fontColor, fillColor, strokeColor and gradientColor) for the Style tab of the format panel if the selection is empty. These objects can have a commonStyle (which is applied to both vertices and edges), vertexStyle (applied to vertices) and edgeStyle (applied to edges), and a graph with background and gridColor. An empty object means apply the default colors",
+					"electropol-fr.drawio-diagrams-editor.styles": {
+						"title": "%configuration.styles.title%",
+						"description": "%configuration.styles.description%",
 						"type": "array",
 						"items": {
 							"type": "object",
@@ -368,85 +412,78 @@
 							}
 						}
 					},
-					"hediet.vscode-drawio.defaultVertexStyle": {
-						"title": "Default Vertex Style",
-						"description": "Default styling of vertices (shapes).",
+					"electropol-fr.drawio-diagrams-editor.defaultVertexStyle": {
+						"title": "%configuration.defaultVertexStyle.title%",
+						"description": "%configuration.defaultVertexStyle.description%",
 						"type": "object"
 					},
-					"hediet.vscode-drawio.defaultEdgeStyle": {
-						"title": "Default Edge Style",
-						"description": "Default styling of edges.",
+					"electropol-fr.drawio-diagrams-editor.defaultEdgeStyle": {
+						"title": "%configuration.defaultEdgeStyle.title%",
+						"description": "%configuration.defaultEdgeStyle.description%",
 						"type": "object"
 					},
-					"hediet.vscode-drawio.colorNames": {
-						"title": "Color Names",
-						"description": "Names for colors, eg. {‘FFFFFF’: ‘White’, ‘000000’: ‘Black’} that are used as tooltips (uppercase, no leading # for the colour codes)",
+					"electropol-fr.drawio-diagrams-editor.colorNames": {
+						"title": "%configuration.colorNames.title%",
+						"description": "%configuration.colorNames.description%",
 						"type": "object"
 					},
-					"hediet.vscode-drawio.presetColors": {
-						"title": "Preset Colors",
-						"description": "Color codes for the upper palette in the color dialog.",
+					"electropol-fr.drawio-diagrams-editor.presetColors": {
+						"title": "%configuration.presetColors.title%",
+						"description": "%configuration.presetColors.description%",
 						"type": "array",
 						"items": {
-							"type": "string",
-							"description": "Use hex codes without # at the beginning only (FFFFFF for absolute white, for example)."
+							"type": "string"
 						}
 					},
-					"hediet.vscode-drawio.customColorSchemes": {
-						"title": "Custom Color Schemes",
-						"markdownDescription": "Available color schemes in the style section at the top of the format panel. See example [here](https://www.diagrams.net/doc/faq/custom-colours-confluence-cloud#default-colour-schemes---format-panel)",
+					"electropol-fr.drawio-diagrams-editor.customColorSchemes": {
+						"title": "%configuration.customColorSchemes.title%",
+						"markdownDescription": "%configuration.customColorSchemes.description%",
 						"type": "array",
 						"items": {
 							"type": "array",
-							"description": "Represents a page of color schemes.",
 							"items": {
 								"type": "object",
 								"properties": {
 									"title": {
-										"type": "string",
-										"description": "Title of the color used in tooltips."
+										"type": "string"
 									},
 									"fill": {
-										"type": "string",
-										"description": "Use hex codes with # at the beginning (#FFFFFF for absolute white, for example)."
+										"type": "string"
 									},
 									"stroke": {
-										"type": "string",
-										"description": "Use hex codes with # at the beginning (#FFFFFF for absolute white, for example)."
+										"type": "string"
 									},
 									"gradient": {
-										"type": "string",
-										"description": "Use hex codes with # at the beginning (#FFFFFF for absolute white, for example)."
+										"type": "string"
 									},
 									"font": {
-										"type": "string",
-										"description": "Use hex codes with # at the beginning (#FFFFFF for absolute white, for example)."
+										"type": "string"
 									}
 								}
 							}
 						}
 					},
-					"hediet.vscode-drawio.customFonts": {
+					"electropol-fr.drawio-diagrams-editor.customFonts": {
 						"type": "array",
 						"items": {
 							"type": "string"
 						},
 						"default": [],
-						"title": "Custom Fonts",
-						"description": "Configures the Draw.io editor to use custom fonts."
+						"title": "%configuration.customFonts.title%",
+						"description": "%configuration.customFonts.description%"
 					},
-					"hediet.vscode-drawio.theme": {
-						"title": "Draw.io Theme",
+					"electropol-fr.drawio-diagrams-editor.theme": {
+						"title": "%configuration.theme.title%",
 						"type": "string",
 						"default": "kennedy",
 						"enum": [
 							"kennedy",
 							"min"
 						],
-						"description": "The theme to use for the Draw.io editor. Use \"automatic\" to automatically choose a Draw.io theme that matches your current VS Code theme."
+						"description": "%configuration.theme.description%"
 					},
-					"hediet.vscode-drawio.appearance": {
-						"title": "Draw.io Appearance",
+					"electropol-fr.drawio-diagrams-editor.appearance": {
+						"title": "%configuration.appearance.title%",
 						"type": "string",
 						"default": "light",
 						"enum": [
@@ -456,7 +493,7 @@
 							"high-contrast-light",
 							"high-contrast"
 						],
-						"description": "The appearance to use for the Draw.io editor. Use \"automatic\" to automatically choose a Draw.io theme that matches your current VS Code theme."
+						"description": "%configuration.appearance.description%"
 					}
 				}
 			}
@@ -464,15 +501,27 @@
 		"menus": {
 			"explorer/context": [
 				{
-					"when": "hediet.vscode-drawio.active",
-					"command": "hediet.vscode-drawio.linkFileWithSelectedNode",
+					"when": "electropol-fr.drawio-diagrams-editor.active",
+					"command": "electropol-fr.drawio-diagrams-editor.linkFileWithSelectedNode",
 					"group": "Draw.io"
 				}
 			],
 			"commandPalette": [
 				{
 					"when": "false",
-					"command": "hediet.vscode-drawio.linkFileWithSelectedNode"
+					"command": "electropol-fr.drawio-diagrams-editor.linkFileWithSelectedNode"
+				}
+			],
+			"editor/title": [
+				{
+					"command": "electropol-fr.drawio-diagrams-editor.openAsText",
+					"when": "activeCustomEditorId == 'electropol-fr.drawio-diagrams-editor-text' || activeCustomEditorId == 'electropol-fr.drawio-diagrams-editor'",
+					"group": "navigation"
+				},
+				{
+					"command": "electropol-fr.drawio-diagrams-editor.openAsDiagram",
+					"when": "!activeCustomEditorId && resourceFilename =~ /\\.(drawio|dio)(\\.svg|\\.png)?$/",
+					"group": "navigation"
 				}
 			]
 		}
@@ -485,31 +534,12 @@
 		"build-extension": "webpack --mode production",
 		"build-plugins": "webpack --mode production --config ./drawio-custom-plugins/webpack.config.ts",
 		"package-extension": "yarn package-extension-preRelease",
-		"package-extension-stable": "vsce package --yarn --out ./dist/extension.vsix",
-		"package-extension-preRelease": "vsce package --yarn --out ./dist/extension.vsix --pre-release",
+		"package-extension-stable": "vsce package --yarn --out ./dist/extension.vsix --githubBranch main",
+		"package-extension-preRelease": "vsce package --yarn --out ./dist/extension.vsix --pre-release --githubBranch main",
 		"dev": "webpack --mode development --watch",
 		"dev-drawio-plugins": "webpack --mode development --watch --config ./drawio-custom-plugins/webpack.config.ts",
 		"dev-drawio-plugins-web": "webpack-dev-server --hot --config ./drawio-custom-plugins/webpack.config.ts"
 	},
-	"files": [
-		"dist/custom-drawio-plugins/**/*",
-		"dist/extension/**/*",
-		"package.json",
-		"docs/**/*",
-		"drawio/LICENSE",
-		"drawio/VERSION",
-		"drawio/src/main/webapp/js/**/*",
-		"drawio/src/main/webapp/connect/**/*",
-		"drawio/src/main/webapp/images/**/*",
-		"drawio/src/main/webapp/img/**/*",
-		"drawio/src/main/webapp/math/**/*",
-		"drawio/src/main/webapp/mxgraph/**/*",
-		"drawio/src/main/webapp/plugins/**/*",
-		"drawio/src/main/webapp/resources/**/*",
-		"drawio/src/main/webapp/styles/**/*",
-		"drawio/src/main/webapp/templates/**/*",
-		"LICENSE.md"
-	],
 	"devDependencies": {
 		"@actions/exec": "^1.0.4",
 		"@actions/github": "^2.2.0",

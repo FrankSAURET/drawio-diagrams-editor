@@ -1,0 +1,39 @@
+# Contrôle de version
+.git/**
+.github/**
+.gitattributes
+.gitignore
+.gitmodules
+
+# Formatage
+.prettierignore
+.prettierrc.json
+
+# Configuration VS Code dev
+.vscode/**
+
+# Code source TypeScript (compilé dans dist/)
+src/**
+drawio-custom-plugins/**
+
+# Sous-module drawio (très volumineux, non nécessaire à l'exécution)
+drawio/**
+
+# Outils de build & dépendances dev
+node_modules/**
+webpack.config.ts
+tsconfig.json
+tslint.json
+yarn.lock
+scripts/**
+
+# Exemples & notes de développement
+examples/**
+NOTES.md
+architecture.drawio.svg
+
+# Fichiers Markdown dans docs/ (les images sont conservées pour le README et l'icône)
+docs/*.md
+
+# Paquets VSIX déjà construits
+dist/**/*.vsix
