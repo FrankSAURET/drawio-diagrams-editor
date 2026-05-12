@@ -24,16 +24,11 @@ import { Config } from "../Config";
 import { path } from "../utils/path";
 import { registerFailableCommand } from "../utils/registerFailableCommand";
 
-const toggleCodeLinkActivationCommandName =
-	"electropol-fr.DrawIo_In_VsCode.toggleCodeLinkActivation";
-const linkCodeWithSelectedNodeCommandName =
-	"electropol-fr.DrawIo_In_VsCode.linkCodeWithSelectedNode";
-const linkSymbolWithSelectedNodeCommandName =
-	"electropol-fr.DrawIo_In_VsCode.linkSymbolWithSelectedNode";
-const linkWsSymbolWithSelectedNodeCommandName =
-	"electropol-fr.DrawIo_In_VsCode.linkWsSymbolWithSelectedNode";
-const linkFileWithSelectedNodeCommandName =
-	"electropol-fr.DrawIo_In_VsCode.linkFileWithSelectedNode";
+const toggleCodeLinkActivationCommandName = "electropol-fr.drawio-diagrams-editor.toggleCodeLinkActivation";
+const linkCodeWithSelectedNodeCommandName = "electropol-fr.drawio-diagrams-editor.linkCodeWithSelectedNode";
+const linkSymbolWithSelectedNodeCommandName = "electropol-fr.drawio-diagrams-editor.linkSymbolWithSelectedNode";
+const linkWsSymbolWithSelectedNodeCommandName = "electropol-fr.drawio-diagrams-editor.linkWsSymbolWithSelectedNode";
+const linkFileWithSelectedNodeCommandName = "electropol-fr.drawio-diagrams-editor.linkFileWithSelectedNode";
 
 const symbolNameMap: Record<SymbolKind, string> = {
 	[SymbolKind.File]: "symbol-file",

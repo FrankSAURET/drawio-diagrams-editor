@@ -19,7 +19,7 @@ import {
 } from "./vscode-utils/VsCodeSetting";
 import * as packageJson from "../package.json";
 
-const extensionId = "electropol-fr.DrawIo_In_VsCode";
+const extensionId = "electropol-fr.drawio-diagrams-editor";
 const experimentalFeaturesEnabled = "vscode-drawio.experimentalFeaturesEnabled";
 
 export async function setContext(

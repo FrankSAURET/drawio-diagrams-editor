@@ -7,13 +7,13 @@ export class ToggleEditorFeature {
 	constructor() {
 		this.dispose.track(
 			vscode.commands.registerCommand(
-				"electropol-fr.DrawIo_In_VsCode.openAsText",
+				"electropol-fr.drawio-diagrams-editor.openAsText",
 				this.openAsText
 			)
 		);
 		this.dispose.track(
 			vscode.commands.registerCommand(
-				"electropol-fr.DrawIo_In_VsCode.openAsDiagram",
+				"electropol-fr.drawio-diagrams-editor.openAsDiagram",
 				this.openAsDiagram
 			)
 		);
@@ -38,8 +38,8 @@ export class ToggleEditorFeature {
 			return;
 		}
 		const viewType = /\.(drawio|dio)\.(png)$/i.test(uri.fsPath)
-			? "electropol-fr.DrawIo_In_VsCode"
-			: "electropol-fr.DrawIo_In_VsCode-text";
+			? "electropol-fr.drawio-diagrams-editor"
+			: "electropol-fr.drawio-diagrams-editor-text";
 
 		await vscode.commands.executeCommand(
 			"vscode.openWith",

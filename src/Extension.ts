@@ -51,7 +51,7 @@ export class Extension {
 	constructor(private readonly context: vscode.ExtensionContext) {
 		this.dispose.track(
 			vscode.window.registerCustomEditorProvider(
-				"electropol-fr.DrawIo_In_VsCode-text",
+				"electropol-fr.drawio-diagrams-editor-text",
 				new DrawioEditorProviderText(this.editorService),
 				{ webviewOptions: { retainContextWhenHidden: true } }
 			)
@@ -59,7 +59,7 @@ export class Extension {
 
 		this.dispose.track(
 			vscode.window.registerCustomEditorProvider(
-				"electropol-fr.DrawIo_In_VsCode",
+				"electropol-fr.drawio-diagrams-editor",
 				new DrawioEditorProviderBinary(this.editorService),
 				{
 					supportsMultipleEditorsPerDocument: false,
@@ -70,7 +70,7 @@ export class Extension {
 
 		this.dispose.track(
 			registerFailableCommand(
-				"electropol-fr.DrawIo_In_VsCode.newDiagram",
+				"electropol-fr.drawio-diagrams-editor.newDiagram",
 				async () => {
 					const targetUri = await vscode.window.showSaveDialog({
 						saveLabel: "Create",
@@ -89,7 +89,7 @@ export class Extension {
 						await vscode.commands.executeCommand(
 							"vscode.openWith",
 							targetUri,
-							"electropol-fr.DrawIo_In_VsCode-text"
+							"electropol-fr.drawio-diagrams-editor-text"
 						);
 					} catch (e) {
 						console.error("Cannot create or open file", e);
@@ -103,7 +103,7 @@ export class Extension {
 
 		this.dispose.track(
 			registerFailableCommand(
-				"electropol-fr.DrawIo_In_VsCode.openDiagram",
+				"electropol-fr.drawio-diagrams-editor.openDiagram",
 				async () => {
 					const uris = await vscode.window.showOpenDialog({
 						canSelectMany: false,

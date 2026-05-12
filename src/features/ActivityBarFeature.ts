@@ -7,7 +7,7 @@ export class ActivityBarFeature {
 	constructor() {
 		this.dispose.track(
 			vscode.window.registerTreeDataProvider(
-				"DrawIo_In_VsCode-welcome",
+				"drawio-diagrams-editor-welcome",
 				new EmptyTreeDataProvider()
 			)
 		);

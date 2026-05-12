@@ -1,4 +1,4 @@
-# Draw.io in VsCode
+# Draw.io Diagrams Editor
 
 <img src="docs/Logo-DrawIo_In_VsCode.png" alt="alt text" width="100"/>
 
