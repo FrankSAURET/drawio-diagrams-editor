@@ -2,9 +2,29 @@
 
 <img src="docs/Logo-DrawIo_In_VsCode.png" alt="Draw.io Diagrams Editor" width="100"/>
 
+> Unofficial version with no affiliation, sponsorship or endorsement in any way from draw.io  or diagrams.net.
+
 Draw and maintain diagrams without leaving VS Code. This extension embeds the full [Draw.io / diagrams.net](https://app.diagrams.net/) editor — **offline, no browser, no account**.
 
 > Fork of [hediet/vscode-drawio](https://github.com/hediet/vscode-drawio) (GPL-3.0), actively maintained with bug fixes and improvements not yet merged upstream.
+
+---
+
+## Network and privacy
+
+Default behaviour is designed to stay local:
+
+- **Offline mode is enabled by default**. The bundled editor is used locally.
+- The extension performs a **version check once every 24 hours** against the GitHub releases API to detect new upstream Draw.io versions.
+- This check only stores a local timestamp and the last dismissed version in VS Code state.
+- The VS Code extension layer does **not include telemetry or analytics reporting**.
+
+Network access can still occur in these cases:
+
+- If you disable offline mode, the editor loads the configured remote URL, which is `https://embed.diagrams.net/` by default.
+- If you configure external resources such as custom library URLs, those resources may trigger additional requests.
+
+See [PRIVACY.md](./PRIVACY.md) for the full privacy notice.
 
 ---
 
