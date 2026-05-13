@@ -2,9 +2,9 @@
 
 <img src="docs/Logo-DrawIo_In_VsCode.png" alt="Draw.io Diagrams Editor" width="100"/>
 
-> Unofficial version with no affiliation, sponsorship or endorsement in any way from draw.io  or diagrams.net.
-
 Draw and maintain diagrams without leaving VS Code. This extension embeds the full [Draw.io / diagrams.net](https://app.diagrams.net/) editor — **offline, no browser, no account**.
+
+> Unofficial version with no affiliation, sponsorship or endorsement in any way from draw.io  or diagrams.net.
 
 > Fork of [hediet/vscode-drawio](https://github.com/hediet/vscode-drawio) (GPL-3.0), actively maintained with bug fixes and improvements not yet merged upstream.
 
