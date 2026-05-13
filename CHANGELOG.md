@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 New format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) — Versioning: [CalVer](https://calver.org/) (`YYYY.0M.micro`).
 
-## [2026.5.1] - 2026-05-13
+## [2026.5.0] - 2026-05-13
 
 This release marks the transition to an independently maintained fork.
 The original extension by [Henning Dieterichs (hediet)](https://github.com/hediet/vscode-drawio)
