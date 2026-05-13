@@ -87,19 +87,31 @@ export class DrawioUpdateFeature {
 		current: string,
 		latest: string
 	): void {
-		const download = `Télécharger Draw.io ${latest}`;
+		const download = `Voir Draw.io ${latest}`;
+		const requestUpdate = "Demander la mise à jour";
 		const dismiss = "Ignorer";
 
 		vscode.window
-			.showInformationMessage(
-				`Une nouvelle version de Draw.io est disponible : ${latest} (version actuelle : ${current}).`,
+			.showWarningMessage(
+				`Draw.io ${latest} est disponible (version actuelle intégrée : ${current}). ⚠️ Attention : mettre à jour Draw.io peut provoquer des dysfonctionnements de l'extension. Si c'est le cas, réinstallez l'extension depuis le Marketplace. Vous pouvez aussi envoyer une demande de mise à jour sur GitHub.`,
 				download,
+				requestUpdate,
 				dismiss
 			)
 			.then((choice) => {
 				if (choice === download) {
 					vscode.env.openExternal(
 						vscode.Uri.parse(GITHUB_RELEASES_PAGE)
+					);
+				} else if (choice === requestUpdate) {
+					vscode.env.openExternal(
+						vscode.Uri.parse(
+							"https://github.com/FrankSAURET/drawio-diagrams-editor/issues/new?title=Demande+de+mise+%C3%A0+jour+Draw.io+vers+" +
+								encodeURIComponent(latest) +
+								"&body=La+version+" +
+								encodeURIComponent(latest) +
+								"+de+Draw.io+est+disponible.+Merci+de+mettre+%C3%A0+jour+l%27extension."
+						)
 					);
 				} else if (choice === dismiss) {
 					this.globalState.update(DISMISSED_VERSION_KEY, latest);
