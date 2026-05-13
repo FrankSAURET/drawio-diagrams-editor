@@ -1,6 +1,6 @@
 # Draw.io Diagrams Editor
 
-<img src="docs/Logo-DrawIo_In_VsCode.png" alt="Draw.io Diagrams Editor" width="100"/>
+<img src="docs/Logo-drawio-diagrams-editor.png" alt="Draw.io Diagrams Editor" width="100"/>
 
 Draw and maintain diagrams without leaving VS Code. This extension embeds the full [Draw.io / diagrams.net](https://app.diagrams.net/) editor — **offline, no browser, no account**.
 
