@@ -19,10 +19,6 @@ export async function run(): Promise<void> {
 		throw new Error("Version in package.json does not match latest version in changelog.");
 	}
 
-	if (stableVersion.patch !== 0) {
-		throw new Error("Patch version must be 0.");
-	}
-
 	const gh = new GitHubClient();
 
 	const isPreRelease = !!packageJson.preRelease;
