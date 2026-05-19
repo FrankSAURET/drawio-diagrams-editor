@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 New format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) — Versioning: [CalVer](https://calver.org/) (`YYYY.0M.micro`).
 
-## [2026.5.0] - 2026-05-13
+## [2026.5.1] - 2026-05-19
 
 This release marks the transition to an independently maintained fork.
 The original extension by [Henning Dieterichs (hediet)](https://github.com/hediet/vscode-drawio)
@@ -24,3 +24,5 @@ has not merged pull requests for over a year. This fork continues development un
 ### Changed
 
 -   Mise à jour du sous-module Draw.io vers la version **30.0.1** 
+
+[2026.5.1]: https://github.com/FrankSAURET/drawio-diagrams-editor/releases/tag/2026.5.1
