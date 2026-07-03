@@ -2,7 +2,7 @@
 	"name": "drawio-diagrams-editor",
 	"displayName": "%displayName%",
 	"description": "%description%",
-	"version": "2026.5.1",
+	"version": "2026.7.0",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"publisher": "electropol-fr",
 	"keywords": [
@@ -542,8 +542,8 @@
 		"build-extension": "webpack --mode production",
 		"build-plugins": "webpack --mode production --config ./drawio-custom-plugins/webpack.config.ts",
 		"package-extension": "yarn package-extension-stable",
-		"package-extension-stable": "vsce package --yarn --out ./dist/extension.vsix --githubBranch main",
-		"package-extension-preRelease": "vsce package --yarn --out ./dist/extension.vsix --pre-release --githubBranch main",
+		"package-extension-stable": "vsce package --yarn --githubBranch main",
+		"package-extension-preRelease": "vsce package --yarn --pre-release --githubBranch main",
 		"dev": "webpack --mode development --watch",
 		"dev-drawio-plugins": "webpack --mode development --watch --config ./drawio-custom-plugins/webpack.config.ts",
 		"dev-drawio-plugins-web": "webpack-dev-server --hot --config ./drawio-custom-plugins/webpack.config.ts"

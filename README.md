@@ -116,20 +116,16 @@ Only Draw.io-generated SVGs can be edited this way — arbitrary SVG files are n
 
 ---
 
-### Draw.io — highlights since March 2025
+### Draw.io — highlights since 2026
 
 Key features brought by the Draw.io versions bundled in this extension.
 
 | Version | Date | Highlights |
 |---------|------|------------|
-| 26.1–26.2 | Mar–Apr 2025 | fill/stroke styles for XML stencils; Note shape in sidebar; `primaryColor` option for custom shape properties |
-| 27.0 | May 2025 | Service Worker / offline PWA support; splash screen disabled by default |
-| 28.0 | Jul 2025 | HTML→SVG conversion for labels; resizable metadata dialog |
-| 28.2 | Sep 2025 | Gliffy shape mappings; multi-page animations; opacity option in color picker; shape name shown in cell properties |
-| 29.5 | Feb 2026 | Inline edge toolbar; dockable floating windows; animated GIF export; `autosizeText` style for sticky notes |
-| 29.6 | Mar–Apr 2026 | Collapsible sections in Format panel; improved omni search; copy/paste text style; compressed SVG CLI export; elastic pop animation |
-| 29.7 | Apr 2026 | Desktop presentation mode; localized shape search; page actions in omnibox |
-| 30.0 | May 2026 | Native Mermaid shapes; MathJax label sizing; adaptive colors in page setup; `lockedGroup` cell style |
+| 2026.2.0 | Feb 2026 | Inline edge toolbar; dockable floating windows; animated GIF export; `autosizeText` style for sticky notes |
+| 2026.4.0 | Mar–Apr 2026 | Collapsible sections in Format panel; improved omni search; copy/paste text style; compressed SVG CLI export; elastic pop animation |
+| 2026.4.1 | Apr 2026 | Desktop presentation mode; localized shape search; page actions in omnibox |
+| 2026.5.0 | May 2026 | Native Mermaid shapes; MathJax label sizing; adaptive colors in page setup; `lockedGroup` cell style |
 
 ---
 

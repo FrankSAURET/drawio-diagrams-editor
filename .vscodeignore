@@ -16,8 +16,11 @@
 src/**
 drawio-custom-plugins/**
 
-# Sous-module drawio (très volumineux, non nécessaire à l'exécution)
+# Sous-module drawio: on exclut tout puis on réinclut le runtime webapp requis en mode offline
 drawio/**
+!drawio/src/
+!drawio/src/main/
+!drawio/src/main/webapp/**
 
 # Outils de build & dépendances dev
 node_modules/**
