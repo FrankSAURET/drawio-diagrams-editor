@@ -62,7 +62,9 @@ const symbolNameMap: Record<SymbolKind, string> = {
 export class LinkCodeWithSelectedNodeService {
 	public readonly dispose = Disposable.fn();
 
-	private readonly statusBar = window.createStatusBarItem();
+	private readonly statusBar = this.dispose.track(
+		window.createStatusBarItem()
+	);
 
 	private lastActiveTextEditor: TextEditor | undefined =
 		window.activeTextEditor;

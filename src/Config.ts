@@ -20,7 +20,8 @@ import {
 import * as packageJson from "../package.json";
 
 const extensionId = "electropol-fr.drawio-diagrams-editor";
-const experimentalFeaturesEnabled = "vscode-drawio.experimentalFeaturesEnabled";
+const experimentalFeaturesEnabled =
+	"electropol-fr.drawio-diagrams-editor.experimentalFeaturesEnabled";
 
 export async function setContext(
 	key: string,

@@ -130,10 +130,10 @@ class DiagramAsTextDocument {
 	) {}
 
 	public toString(): string {
-		return (
-			this.vertexUpdates.map((n) => `${n.id}:${n.label}`).join("\n") +
-			this.newVertices.map((v) => v.label).join("\n")
-		);
+		return [
+			...this.vertexUpdates.map((n) => `${n.id}:${n.label}`),
+			...this.newVertices.map((v) => v.label),
+		].join("\n");
 	}
 
 	public removeDuplicates(): void {

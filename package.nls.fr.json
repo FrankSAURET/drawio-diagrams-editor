@@ -26,6 +26,8 @@
 	"configuration.online-url.description": "L'application à utiliser lorsque le mode hors ligne est désactivé.",
 	"configuration.codeLinkActivated.title": "Lien avec le code activé",
 	"configuration.codeLinkActivated.description": "Lorsqu'activé, sélectionner un nœud naviguera vers la section de code associée.",
+	"configuration.enableExperimentalFeatures.title": "Activer les fonctionnalités expérimentales",
+	"configuration.enableExperimentalFeatures.description": "Si activé, les fonctionnalités expérimentales comme « Modifier le diagramme en texte » deviennent disponibles.",
 	"configuration.local-storage.title": "Stockage local Draw.io",
 	"configuration.local-storage.description": "Ne modifiez cette propriété que si vous savez ce que vous faites. Les modifications manuelles de cette propriété ne sont pas prises en charge !",
 	"configuration.simpleLabels.title": "Utiliser les labels simples",

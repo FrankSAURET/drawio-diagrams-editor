@@ -26,6 +26,8 @@
 	"configuration.online-url.description": "The app to use when offline mode is disabled.",
 	"configuration.codeLinkActivated.title": "Code Link Enabled",
 	"configuration.codeLinkActivated.description": "When activated, selecting a node will navigate to an associated code section.",
+	"configuration.enableExperimentalFeatures.title": "Enable Experimental Features",
+	"configuration.enableExperimentalFeatures.description": "When enabled, experimental features such as 'Edit Diagram As Text' become available.",
 	"configuration.local-storage.title": "Draw.io Local Storage",
 	"configuration.local-storage.description": "Only change this property if you know what you are doing. Manual changes to this property are not supported!",
 	"configuration.simpleLabels.title": "Use SimpleLabels",

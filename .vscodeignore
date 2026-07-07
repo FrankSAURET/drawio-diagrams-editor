@@ -1,3 +1,9 @@
+# ============================================================
+# .vscodeignore — ne garder dans le VSIX que le strict nécessaire :
+#   dist/ (code compilé), runtime webapp drawio (offline),
+#   README/CHANGELOG/LICENSE/PRIVACY, nls, icône, media/.
+# ============================================================
+
 # Contrôle de version
 .git/**
 .github/**
@@ -16,11 +22,42 @@
 src/**
 drawio-custom-plugins/**
 
-# Sous-module drawio: on exclut tout puis on réinclut le runtime webapp requis en mode offline
+# Cartes de source et paquets déjà construits
+dist/**/*.map
+**/*.vsix
+
+# Sous-module drawio : tout exclure puis réinclure UNIQUEMENT le runtime
+# chargé par la webview offline (webview-content.html) et les chargements
+# dynamiques de app.min.js (mermaid, orgchart, jquery, deflate, simplepeer,
+# jszip, MathJax/math4, stencils, ressources i18n, images).
+# Exclus volontairement : sources dev (js/diagramly, js/grapheditor,
+# mxgraph/src, shapes/), bundles inutilisés (integrate.min.js, viewer*.min.js),
+# WEB-INF (serveur), templates (dialogue inaccessible en mode embed),
+# SDK cloud (onedrive/dropbox), service-worker/workbox.
 drawio/**
-!drawio/src/
-!drawio/src/main/
-!drawio/src/main/webapp/**
+!drawio/LICENSE
+!drawio/src/main/webapp/js/PreConfig.js
+!drawio/src/main/webapp/js/PostConfig.js
+!drawio/src/main/webapp/js/app.min.js
+!drawio/src/main/webapp/js/extensions.min.js
+!drawio/src/main/webapp/js/stencils.min.js
+!drawio/src/main/webapp/js/shapes-14-6-5.min.js
+!drawio/src/main/webapp/js/orgchart.min.js
+!drawio/src/main/webapp/js/orgchart/**
+!drawio/src/main/webapp/js/mermaid/**
+!drawio/src/main/webapp/js/jquery/**
+!drawio/src/main/webapp/js/deflate/**
+!drawio/src/main/webapp/js/jszip/**
+!drawio/src/main/webapp/js/simplepeer/**
+!drawio/src/main/webapp/styles/**
+!drawio/src/main/webapp/images/**
+!drawio/src/main/webapp/img/**
+!drawio/src/main/webapp/mxgraph/css/**
+!drawio/src/main/webapp/mxgraph/images/**
+!drawio/src/main/webapp/resources/**
+!drawio/src/main/webapp/stencils/**
+!drawio/src/main/webapp/math4/**
+!drawio/src/main/webapp/plugins/**
 
 # Outils de build & dépendances dev
 node_modules/**
@@ -34,15 +71,10 @@ scripts/**
 examples/**
 NOTES.md
 architecture.drawio.svg
+debug.log
+README original.md
 
-# Fichiers Markdown dans docs/ (les images sont conservées pour le README et l'icône)
-docs/*.md
-
-# GIFs uniquement utilisés dans docs/*.md (déjà exclues) — inutiles dans le VSIX
-docs/liveshare-demo.gif
-docs/drawio-png.gif
-docs/code-link-symbol-demo.gif
-docs/code-link-with-screenshots.gif
-
-# Paquets VSIX déjà construits
-dist/**/*.vsix
+# docs/ : seule l'icône est embarquée. Les images du README sont réécrites
+# par vsce en URLs GitHub absolues (champ "repository"), inutile de les livrer.
+docs/**
+!docs/Logo-drawio-diagrams-editor.png

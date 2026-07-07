@@ -364,7 +364,8 @@ export class DrawioEditor {
 			availableOptions,
 			{
 				onDidSelectItem: async (item) => {
-					(item as any).onSelect(true);
+					// Separators have no onSelect handler.
+					(item as any).onSelect?.(true);
 				},
 			}
 		);

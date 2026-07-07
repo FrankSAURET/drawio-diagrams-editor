@@ -2,7 +2,7 @@
 	"name": "drawio-diagrams-editor",
 	"displayName": "%displayName%",
 	"description": "%description%",
-	"version": "2026.7.0",
+	"version": "2026.7.1",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"publisher": "electropol-fr",
 	"keywords": [
@@ -276,6 +276,13 @@
 						"description": "%configuration.resizeImages.description%",
 						"default": null,
 						"order": 70
+					},
+					"electropol-fr.drawio-diagrams-editor.enableExperimentalFeatures": {
+						"type": "boolean",
+						"default": false,
+						"title": "%configuration.enableExperimentalFeatures.title%",
+						"description": "%configuration.enableExperimentalFeatures.description%",
+						"order": 80
 					}
 				}
 			},

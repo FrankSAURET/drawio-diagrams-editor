@@ -68,8 +68,7 @@ export class VsCodeSetting<T> {
 				].some((i) => i !== undefined)
 			) {
 				target = ConfigurationTarget.WorkspaceFolder;
-			}
-			if (
+			} else if (
 				result &&
 				[result.workspaceLanguageValue, result.workspaceValue].some(
 					(i) => i !== undefined

@@ -49,7 +49,9 @@ export class DrawioEditorProviderText implements CustomTextEditorProvider {
 			let lastDocument = getNormalizedDocument(document.getText());
 			let isThisEditorSaving = false;
 
-			workspace.onDidChangeTextDocument(async (evt) => {
+			// The subscription must be disposed with the panel, otherwise it
+			// leaks and keeps sending merges to a dead webview.
+			const changeSubscription = workspace.onDidChangeTextDocument(async (evt) => {
 				if (evt.document !== document) {
 					return;
 				}
@@ -150,6 +152,10 @@ export class DrawioEditorProviderText implements CustomTextEditorProvider {
 
 			drawioClient.onInit.sub(async () => {
 				drawioClient.loadXmlLike(document.getText());
+			});
+
+			webviewPanel.onDidDispose(() => {
+				changeSubscription.dispose();
 			});
 		} catch (e) {
 			window.showErrorMessage(`Failed to open diagram: ${e}`);
