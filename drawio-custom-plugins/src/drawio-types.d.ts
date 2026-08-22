@@ -12,7 +12,11 @@ declare class mxCellHighlight {
 
 declare class mxResources {
     static parse(value: string): void;
-    static get(key: string): string;
+    static get(
+        key: string,
+        params?: string[] | null,
+        defaultValue?: string
+    ): string;
 }
 
 declare class mxMouseEvent {

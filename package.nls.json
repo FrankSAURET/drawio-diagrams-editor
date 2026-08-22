@@ -3,7 +3,6 @@
 	"description": "Edit your draw.io diagrams (app.diagrams.net).",
 	"viewsContainers.activitybar.drawio-diagrams-editor-explorer.title": "Draw.io",
 	"views.drawio-diagrams-editor-explorer.drawio-diagrams-editor-welcome.name": "Draw.io",
-	"viewsWelcome.drawio-diagrams-editor-welcome.contents": "Create or open a Draw.io diagram to get started.\n[New Diagram](command:electropol-fr.drawio-diagrams-editor.newDiagram)\n[Open Diagram](command:electropol-fr.drawio-diagrams-editor.openDiagram)",
 	"customEditors.drawio.displayName": "Draw.io (Binary)",
 	"customEditors.drawio-text.displayName": "Draw.io",
 	"commands.convert.title": "Convert To...",

@@ -1,7 +1,15 @@
 # À faire
-1. Rajoute un menu ouvrir à fichier. Attention il devra toujours revenir à chaque update à partir du dépot de drawio
-2. Masque le volet  drawio au démarage. et ne met qu'une entrée dedans : Drawio qui lance drawio.
-3. traduit les entrées non traduites
+
+*(vide)*
+
+# v2026.8.0.2
+
+1. ✅ Version publique passée au calver du mois : **2026.8.0** (prochaine publication), build interne `2026.8.0.2`.
+2. ✅ Entrée « Ouvrir… » ajoutée au menu Fichier de la webview ([menu-entries.ts](drawio-custom-plugins/src/menu-entries.ts)) : c'est un plugin Draw.io, donc il survit à chaque mise à jour du dépôt drawio. L'action envoie `invokeCommand: "open"` → [DrawioEditorService.ts](src/DrawioEditorService.ts) déclenche la commande VS Code `openDiagram` (boîte de dialogue native + bon éditeur personnalisé).
+3. ✅ Volet Draw.io masqué au démarrage (`"visibility": "collapsed"` dans [package.json](package.json)) et réduit à une seule entrée « Drawio » qui lance l'éditeur ([ActivityBarFeature.ts](src/features/ActivityBarFeature.ts) : `TreeDataProvider` avec l'icône `media/drawio-icon.svg`). Le bloc `viewsWelcome` a été supprimé.
+4. ✅ Toutes les chaînes visibles migrées vers l'API `vscode.l10n` (39 chaînes dans 10 fichiers de `src/`), base en anglais + bundle FR [l10n/bundle.l10n.fr.json](l10n/bundle.l10n.fr.json). `"l10n": "./l10n"` déclaré dans le manifeste ; `engines.vscode` et `@types/vscode` passés à **1.73** (version minimale de l'API `l10n`).
+5. ✅ Libellés du menu Fichier de la webview tirés du dictionnaire de Draw.io (`mxResources.get("open"/"import"/"export"/"save")`) : ils suivent désormais la langue de l'éditeur au lieu d'être figés en anglais.
+6. ✅ `package.nls.fr.json` complété : plus aucune clé manquante (`displayName`, `description`, `commands.associateFileType.title`).
 
 # v2026.7.1.1
 
@@ -13,7 +21,7 @@
    3. ✅ ProgId `ElectropolFr.DrawioDiagram` : icône `media/drawio.ico`, commande `"Code.exe" "%1"`, extensions `.drawio` et `.dio`.
    4. ✅ Chemin d'installation re-vérifié à chaque démarrage et corrigé en silence (il change à chaque mise à jour de l'extension).
    5. ✅ Commande manuelle « Associate .drawio Files With VS Code (Windows) », masquée de la palette hors Windows.
-   6. ⏳ Traduction FR des nouvelles clés nls (lot de traduction avant publication).
+   6. ✅ Traduction FR des nouvelles clés nls (faite dans le lot v2026.8.0.2).
 4. ✅ Fichiers supprimables déplacés dans `A Examiner/` (arborescence d'origine conservée, rien de supprimé) : [debug.log](A%20Examiner/debug.log), [NOTES.md](A%20Examiner/NOTES.md), [README original.md](A%20Examiner/README%20original.md), [tslint.json](A%20Examiner/tslint.json), [examples/temp/](A%20Examiner/examples/temp/). `A Examiner/**` et `Archives/**` exclus du VSIX dans [.vscodeignore](.vscodeignore) mais versionnés dans git.
 5. ✅ `tslint` retiré des `devDependencies` (lint mort : le script `lint` n'est qu'un `echo`).
 

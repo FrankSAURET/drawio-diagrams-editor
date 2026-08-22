@@ -6,7 +6,7 @@ declare type CustomDrawioEvent = NodeSelectedEvent | GetVerticesResultEvent
 
 declare interface InvokeCommandEvent {
     event: "invokeCommand";
-    command: "export" | "save" | "convert";
+    command: "export" | "save" | "convert" | "open";
 }
 
 declare interface FocusChangedEvent {

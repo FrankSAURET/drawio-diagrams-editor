@@ -1,3 +1,4 @@
+import { l10n } from "vscode";
 import {
 	CustomEditorProvider,
 	EventEmitter,
@@ -95,7 +96,9 @@ export class DrawioEditorProviderBinary
 
 			document.setDrawioClient(editor.drawioClient);
 		} catch (e) {
-			window.showErrorMessage(`Failed to open diagram: ${e}`);
+			window.showErrorMessage(
+				l10n.t("Failed to open diagram: {0}", String(e))
+			);
 			throw e;
 		}
 	}

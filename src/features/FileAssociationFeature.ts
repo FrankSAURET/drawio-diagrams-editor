@@ -1,3 +1,4 @@
+import { l10n } from "vscode";
 import * as vscode from "vscode";
 import { Disposable } from "@hediet/std/disposable";
 
@@ -66,12 +67,14 @@ export class FileAssociationFeature {
 	}
 
 	private async prompt(): Promise<void> {
-		const yes = "Oui, associer";
-		const later = "Plus tard";
-		const never = "Ne plus demander";
+		const yes = l10n.t("Yes, associate");
+		const later = l10n.t("Later");
+		const never = l10n.t("Don't ask again");
 
 		const choice = await vscode.window.showInformationMessage(
-			"Ouvrir les fichiers .drawio et .dio dans VS Code depuis l'Explorateur Windows (avec l'icône Draw.io) ?",
+			l10n.t(
+				"Open .drawio and .dio files in VS Code from Windows Explorer (with the Draw.io icon)?"
+			),
 			yes,
 			later,
 			never
@@ -89,7 +92,9 @@ export class FileAssociationFeature {
 		if (!this.isWindows) {
 			if (showFeedback) {
 				vscode.window.showWarningMessage(
-					"L'association de type de fichier n'est disponible que sous Windows."
+					l10n.t(
+						"File type association is only available on Windows."
+					)
 				);
 			}
 			return;
@@ -101,12 +106,14 @@ export class FileAssociationFeature {
 			await this.globalState.update(PROMPTED_KEY, true);
 			if (showFeedback) {
 				vscode.window.showInformationMessage(
-					"Les fichiers .drawio et .dio sont associés à VS Code. Si Windows ouvre encore une autre application, faites un clic droit sur un fichier → « Ouvrir avec » → « Choisir une autre application » et sélectionnez Visual Studio Code."
+					l10n.t(
+						'.drawio and .dio files are now associated with VS Code. If Windows still opens another application, right-click a file, choose "Open with" then "Choose another app" and select Visual Studio Code.'
+					)
 				);
 			}
 		} catch (e: any) {
 			vscode.window.showErrorMessage(
-				"Association impossible : " + (e?.message ?? String(e))
+				l10n.t("Association failed: {0}", e?.message ?? String(e))
 			);
 		}
 	}
@@ -127,7 +134,7 @@ export class FileAssociationFeature {
 			"\ufeffWindows Registry Editor Version 5.00",
 			"",
 			`[${root}\\${PROG_ID}]`,
-			'@="Diagramme Draw.io"',
+			`@="${l10n.t("Draw.io Diagram")}"`,
 			"",
 			`[${root}\\${PROG_ID}\\DefaultIcon]`,
 			`@="${esc(this.iconPath)},0"`,

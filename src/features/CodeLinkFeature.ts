@@ -1,3 +1,4 @@
+import { l10n } from "vscode";
 import { Disposable } from "@hediet/std/disposable";
 import {
 	commands,
@@ -142,18 +143,18 @@ export class LinkCodeWithSelectedNodeService {
 		const lastActiveDrawioEditor =
 			this.editorManager.lastActiveDrawioEditor;
 		if (!lastActiveDrawioEditor) {
-			window.showErrorMessage("No active drawio instance.");
+			window.showErrorMessage(l10n.t("No active drawio instance."));
 			return;
 		}
 
 		const editor = this.lastActiveTextEditor;
 		if (!editor) {
-			window.showErrorMessage("No text editor active.");
+			window.showErrorMessage(l10n.t("No text editor active."));
 			return;
 		}
 
 		if (!editor.selection) {
-			window.showErrorMessage("Nothing selected.");
+			window.showErrorMessage(l10n.t("Nothing selected."));
 			return;
 		}
 
@@ -172,7 +173,7 @@ export class LinkCodeWithSelectedNodeService {
 		const lastActiveDrawioEditor =
 			this.editorManager.lastActiveDrawioEditor;
 		if (!lastActiveDrawioEditor) {
-			window.showErrorMessage("No active drawio instance.");
+			window.showErrorMessage(l10n.t("No active drawio instance."));
 			return;
 		}
 
@@ -194,12 +195,12 @@ export class LinkCodeWithSelectedNodeService {
 		const lastActiveDrawioEditor =
 			this.editorManager.lastActiveDrawioEditor;
 		if (!lastActiveDrawioEditor) {
-			window.showErrorMessage("No active drawio instance.");
+			window.showErrorMessage(l10n.t("No active drawio instance."));
 			return;
 		}
 		const editor = window.activeTextEditor;
 		if (editor == undefined) {
-			window.showErrorMessage("No text editor active.");
+			window.showErrorMessage(l10n.t("No text editor active."));
 			return;
 		}
 		const uri = editor.document.uri;
@@ -243,7 +244,10 @@ export class LinkCodeWithSelectedNodeService {
 			.showQuickPick(items, <QuickPickOptions>{
 				matchOnDescription: true,
 				matchOnDetail: true,
-				placeHolder: `Choose symbol from ${path.basename(uri.fsPath)}`,
+				placeHolder: l10n.t(
+					"Choose symbol from {0}",
+					path.basename(uri.fsPath)
+				),
 			})
 			.then(async (v) => {
 				if (v == undefined) return;
@@ -261,7 +265,10 @@ export class LinkCodeWithSelectedNodeService {
 					!(await resolveTopSymbol(v.detail))
 				) {
 					window.showWarningMessage(
-						`Cannot resolve symbol ${v.detail}. This likely means workspace symbols are not supported by your language. Try "Link Symbol With Selected Node" instead.`
+						l10n.t(
+							'Cannot resolve symbol {0}. This likely means workspace symbols are not supported by your language. Try "Link Symbol With Selected Node" instead.',
+							`${v.detail}`
+						)
 					);
 				}
 			});
@@ -307,7 +314,10 @@ export class LinkCodeWithSelectedNodeService {
 						await this.revealSelection(pos);
 					} else {
 						window.showErrorMessage(
-							`No symbol found with name "${symbolName}". Maybe you need to load the symbols by opening at least one of its code files?`
+							l10n.t(
+								'No symbol found with name "{0}". Maybe you need to load the symbols by opening at least one of its code files?',
+								symbolName
+							)
 						);
 					}
 				}

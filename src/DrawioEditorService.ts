@@ -1,3 +1,4 @@
+import { l10n } from "vscode";
 import { Disposable } from "@hediet/std/disposable";
 import { EventEmitter } from "@hediet/std/events";
 import { autorun, computed, observable, ObservableSet } from "mobx";
@@ -219,6 +220,10 @@ export class DrawioEditor {
 				this.handleExportCommand();
 			} else if (command === "save") {
 				this.drawioClient.triggerOnSave();
+			} else if (command === "open") {
+				commands.executeCommand(
+					"electropol-fr.drawio-diagrams-editor.openDiagram"
+				);
 			}
 		});
 	}
@@ -248,14 +253,14 @@ export class DrawioEditor {
 
 	public async convertTo(targetExtension: string): Promise<void> {
 		if (this.document.document.isDirty) {
-			await window.showErrorMessage("Save your diagram first!");
+			await window.showErrorMessage(l10n.t("Save your diagram first!"));
 			return;
 		}
 
 		const targetUri = this.getUriWithExtension(targetExtension);
 		if (await fileExists(targetUri)) {
 			await window.showErrorMessage(
-				`File "${targetUri.toString()}" already exists!`
+				l10n.t('File "{0}" already exists!', targetUri.toString())
 			);
 			return;
 		}
@@ -291,16 +296,20 @@ export class DrawioEditor {
 			[
 				{
 					label: ".drawio.svg",
-					description: "Converts the diagram to an editable SVG file",
+					description: l10n.t(
+						"Converts the diagram to an editable SVG file"
+					),
 				},
 				{
 					label: ".drawio",
-					description: "Converts the diagram to a drawio file",
+					description: l10n.t("Converts the diagram to a drawio file"),
 				},
 
 				{
 					label: ".drawio.png",
-					description: "Converts the diagram to an editable png file",
+					description: l10n.t(
+						"Converts the diagram to an editable png file"
+					),
 				},
 			].filter((x) => x.label !== this.fileExtension)
 		);
@@ -315,15 +324,15 @@ export class DrawioEditor {
 		const result = await window.showQuickPick([
 			{
 				label: ".svg",
-				description: "Exports the diagram to a SVG file",
+				description: l10n.t("Exports the diagram to a SVG file"),
 			},
 			{
 				label: ".png",
-				description: "Exports the diagram to a png file",
+				description: l10n.t("Exports the diagram to a png file"),
 			},
 			{
 				label: ".drawio",
-				description: "Exports the diagram to a drawio file",
+				description: l10n.t("Exports the diagram to a drawio file"),
 			},
 		]);
 
@@ -344,7 +353,7 @@ export class DrawioEditor {
 
 		const appearances = withFirstUnique(["automatic", "light", "dark"], originalAppearance);
 		for (const appearance of appearances) {
-			const appearanceLabel = appearance === "automatic" ? `always match VS Code theme '${curVsCodeAppearance}'` : appearance;
+			const appearanceLabel = appearance === "automatic" ? l10n.t("always match VS Code theme '{0}'", curVsCodeAppearance) : appearance;
 
 			availableOptions.push({
 				kind: QuickPickItemKind.Separator,

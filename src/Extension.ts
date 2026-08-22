@@ -1,3 +1,4 @@
+import { l10n } from "vscode";
 import * as vscode from "vscode";
 import { Disposable } from "@hediet/std/disposable";
 import { DrawioEditorProviderBinary } from "./DrawioEditorProviderBinary";
@@ -43,7 +44,7 @@ export class Extension {
 		new ToggleEditorFeature()
 	);
 	private readonly activityBarFeature = this.dispose.track(
-		new ActivityBarFeature()
+		new ActivityBarFeature(this.context.extensionUri)
 	);
 	private readonly drawioUpdateFeature = this.dispose.track(
 		new DrawioUpdateFeature(this.context.globalState)
@@ -80,9 +81,9 @@ export class Extension {
 				"electropol-fr.drawio-diagrams-editor.newDiagram",
 				async () => {
 					const targetUri = await vscode.window.showSaveDialog({
-						saveLabel: "Create",
+						saveLabel: l10n.t("Create"),
 						filters: {
-							Diagrams: ["drawio"],
+							[l10n.t("Diagrams")]: ["drawio"],
 						},
 					});
 					if (!targetUri) {
@@ -101,7 +102,10 @@ export class Extension {
 					} catch (e) {
 						console.error("Cannot create or open file", e);
 						await vscode.window.showErrorMessage(
-							`Cannot create or open file "${targetUri.toString()}"!`
+							l10n.t(
+								'Cannot create or open file "{0}"!',
+								targetUri.toString()
+							)
 						);
 					}
 				}
@@ -115,7 +119,7 @@ export class Extension {
 					const uris = await vscode.window.showOpenDialog({
 						canSelectMany: false,
 						filters: {
-							"Draw.io Diagrams": [
+							[l10n.t("Draw.io Diagrams")]: [
 								"drawio",
 								"dio",
 								"drawio.svg",

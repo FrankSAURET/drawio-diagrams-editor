@@ -1,3 +1,4 @@
+import { l10n } from "vscode";
 import * as vscode from "vscode";
 import { Disposable } from "@hediet/std/disposable";
 
@@ -87,13 +88,17 @@ export class DrawioUpdateFeature {
 		current: string,
 		latest: string
 	): void {
-		const download = `Voir Draw.io ${latest}`;
-		const requestUpdate = "Demander la mise à jour";
-		const dismiss = "Ignorer";
+		const download = l10n.t("View Draw.io {0}", latest);
+		const requestUpdate = l10n.t("Request update");
+		const dismiss = l10n.t("Dismiss");
 
 		vscode.window
 			.showWarningMessage(
-				`Draw.io ${latest} est disponible (version actuelle intégrée : ${current}). ⚠️ Attention : mettre à jour Draw.io peut provoquer des dysfonctionnements de l'extension. Si c'est le cas, réinstallez l'extension depuis le Marketplace. Vous pouvez aussi envoyer une demande de mise à jour sur GitHub.`,
+				l10n.t(
+					"Draw.io {0} is available (currently bundled version: {1}). ⚠️ Warning: updating Draw.io may break the extension. If that happens, reinstall the extension from the Marketplace. You can also request an update on GitHub.",
+					latest,
+					current
+				),
 				download,
 				requestUpdate,
 				dismiss

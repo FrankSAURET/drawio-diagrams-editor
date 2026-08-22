@@ -1,3 +1,4 @@
+import { l10n } from "vscode";
 import {
 	CancellationToken,
 	CustomTextEditorProvider,
@@ -138,7 +139,9 @@ export class DrawioEditorProviderText implements CustomTextEditorProvider {
 				try {
 					if (!(await workspace.applyEdit(workspaceEdit))) {
 						window.showErrorMessage(
-							"Could not apply Draw.io document changes to the underlying document. Try to save again!"
+							l10n.t(
+								"Could not apply Draw.io document changes to the underlying document. Try to save again!"
+							)
 						);
 					}
 				} finally {
@@ -158,7 +161,9 @@ export class DrawioEditorProviderText implements CustomTextEditorProvider {
 				changeSubscription.dispose();
 			});
 		} catch (e) {
-			window.showErrorMessage(`Failed to open diagram: ${e}`);
+			window.showErrorMessage(
+				l10n.t("Failed to open diagram: {0}", String(e))
+			);
 			throw e;
 		}
 	}

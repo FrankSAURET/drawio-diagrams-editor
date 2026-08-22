@@ -1,3 +1,4 @@
+import { l10n } from "vscode";
 import {
 	Webview,
 	OutputChannel,
@@ -145,7 +146,7 @@ export class DrawioClientFactory {
 				).toString("utf-8");
 			} catch (e) {
 				window.showErrorMessage(
-					`Could not read plugin file "${p.file}"!`
+					l10n.t('Could not read plugin file "{0}"!', `${p.file}`)
 				);
 				continue;
 			}
@@ -163,10 +164,14 @@ export class DrawioClientFactory {
 				promises.push(
 					(async () => {
 						const result = await window.showWarningMessage(
-							`Found unknown plugin "${pluginId}" with fingerprint "${fingerprint}"`,
+							l10n.t(
+								'Found unknown plugin "{0}" with fingerprint "{1}"',
+								pluginId,
+								fingerprint
+							),
 							{},
 							{
-								title: "Allow",
+								title: l10n.t("Allow"),
 								action: async () => {
 									pluginsToLoad.push({ jsCode });
 									await this.config.addKnownPlugin(
@@ -177,7 +182,7 @@ export class DrawioClientFactory {
 								},
 							},
 							{
-								title: "Disallow",
+								title: l10n.t("Disallow"),
 								action: async () => {
 									await this.config.addKnownPlugin(
 										pluginId,

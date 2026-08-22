@@ -1,3 +1,4 @@
+import { l10n } from "vscode";
 import { commands, window, Disposable } from "vscode";
 
 export function registerFailableCommand(
@@ -8,7 +9,9 @@ export function registerFailableCommand(
 		try {
 			return await commandFn(...args);
 		} catch (e : any) {
-			window.showErrorMessage("The command failed: " + e.message);
+			window.showErrorMessage(
+					l10n.t("The command failed: {0}", e.message)
+				);
 			return false;
 		}
 	});
