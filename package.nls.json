@@ -19,6 +19,7 @@
 	"commands.linkWsSymbolWithSelectedNode.title": "Link Workspace Symbol With Selected Node",
 	"commands.openAsText.title": "Open Source Code Beside",
 	"commands.openAsDiagram.title": "Open Diagram Beside",
+	"commands.associateFileType.title": "Associate .drawio Files With VS Code (Windows)",
 	"configuration.general.title": "General",
 	"configuration.offline.title": "Use Offline Mode",
 	"configuration.offline.description": "When enabled, the bundled instance of Draw.io is used.",

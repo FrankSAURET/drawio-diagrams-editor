@@ -63,16 +63,16 @@ drawio/**
 node_modules/**
 webpack.config.ts
 tsconfig.json
-tslint.json
 yarn.lock
 scripts/**
 
 # Exemples & notes de développement
 examples/**
-NOTES.md
 architecture.drawio.svg
-debug.log
-README original.md
+
+# Tri de fichiers : versionnés dans git, jamais dans le VSIX
+A Examiner/**
+Archives/**
 
 # docs/ : seule l'icône est embarquée. Les images du README sont réécrites
 # par vsce en URLs GitHub absolues (champ "repository"), inutile de les livrer.

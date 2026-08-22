@@ -10,6 +10,7 @@ import { LiveshareFeature } from "./features/LiveshareFeature";
 import { ToggleEditorFeature } from "./features/ToggleEditorFeature";
 import { ActivityBarFeature } from "./features/ActivityBarFeature";
 import { DrawioUpdateFeature } from "./features/DrawioUpdateFeature";
+import { FileAssociationFeature } from "./features/FileAssociationFeature";
 import { DrawioClientFactory } from "./DrawioClient";
 import { registerFailableCommand } from "./utils/registerFailableCommand";
 
@@ -46,6 +47,12 @@ export class Extension {
 	);
 	private readonly drawioUpdateFeature = this.dispose.track(
 		new DrawioUpdateFeature(this.context.globalState)
+	);
+	private readonly fileAssociationFeature = this.dispose.track(
+		new FileAssociationFeature(
+			this.context.globalState,
+			this.context.extensionUri
+		)
 	);
 
 	constructor(private readonly context: vscode.ExtensionContext) {
@@ -123,28 +130,29 @@ export class Extension {
 					}
 					const targetUri = uris[0];
 
-					// Custom editors require the file to be inside a
-					// workspace folder. If it isn't, add the parent
-					// folder to the workspace so VS Code can resolve it.
-					if (!vscode.workspace.getWorkspaceFolder(targetUri)) {
-						const parentUri = vscode.Uri.joinPath(targetUri, "..");
-						const added = vscode.workspace.updateWorkspaceFolders(
-							vscode.workspace.workspaceFolders?.length ?? 0,
-							0,
-							{ uri: parentUri }
-						);
-						if (!added) {
-							await vscode.window.showErrorMessage(
-								"Cannot open the file: failed to add its folder to the workspace."
-							);
-							return;
-						}
-					}
+					// Le fichier n'a pas besoin d'appartenir au workspace :
+					// les éditeurs personnalisés acceptent n'importe quel URI.
+					// On ouvre explicitement avec le bon viewType, ce qui
+					// contourne aussi un `workbench.editorAssociations`
+					// réglé sur "default" pour *.drawio.
+					const viewType = /\.(drawio|dio)\.png$/i.test(targetUri.path)
+						? "electropol-fr.drawio-diagrams-editor"
+						: "electropol-fr.drawio-diagrams-editor-text";
 
-					await vscode.commands.executeCommand(
-						"vscode.open",
-						targetUri
-					);
+					try {
+						await vscode.commands.executeCommand(
+							"vscode.openWith",
+							targetUri,
+							viewType
+						);
+					} catch (e) {
+						// Extension non gérée par un éditeur personnalisé :
+						// on retombe sur l'ouverture par défaut.
+						await vscode.commands.executeCommand(
+							"vscode.open",
+							targetUri
+						);
+					}
 				}
 			)
 		);

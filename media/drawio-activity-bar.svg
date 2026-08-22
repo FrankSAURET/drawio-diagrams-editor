@@ -1,16 +1,87 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   fill="none"
+   version="1.1"
+   id="svg6"
+   sodipodi:docname="drawio-activity-bar.svg"
+   inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs6" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="true"
+     inkscape:zoom="22.627417"
+     inkscape:cx="17.346213"
+     inkscape:cy="10.297242"
+     inkscape:window-width="1920"
+     inkscape:window-height="1057"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg6">
+    <inkscape:grid
+       id="grid6"
+       units="px"
+       originx="0"
+       originy="0"
+       spacingx="1"
+       spacingy="1"
+       empcolor="#3f3fff"
+       empopacity="0.25098039"
+       color="#3f3fff"
+       opacity="0.1254902"
+       empspacing="10"
+       enabled="true"
+       visible="true" />
+  </sodipodi:namedview>
   <!-- Top box -->
-  <rect x="8" y="2" width="8" height="6" rx="1" fill="#C2C2C2"/>
+  <rect
+     x="8"
+     y="2"
+     width="8"
+     height="6"
+     rx="1"
+     fill="#C2C2C2"
+     id="rect1" />
   <!-- Bottom-left box -->
-  <rect x="1" y="15" width="8" height="6" rx="1" fill="#C2C2C2"/>
+  <rect
+     x="1"
+     y="15"
+     width="8"
+     height="6"
+     rx="1"
+     fill="#C2C2C2"
+     id="rect2" />
   <!-- Bottom-right box -->
-  <rect x="15" y="15" width="8" height="6" rx="1" fill="#C2C2C2"/>
+  <rect
+     x="15"
+     y="15"
+     width="8"
+     height="6"
+     rx="1"
+     fill="#C2C2C2"
+     id="rect3" />
   <!-- Line from top box center-bottom to junction -->
-  <line x1="12" y1="8" x2="12" y2="12" stroke="#C2C2C2" stroke-width="1.5"/>
   <!-- Horizontal line connecting the two paths -->
-  <line x1="5" y1="12" x2="19" y2="12" stroke="#C2C2C2" stroke-width="1.5"/>
   <!-- Line down to bottom-left box -->
-  <line x1="5" y1="12" x2="5" y2="15" stroke="#C2C2C2" stroke-width="1.5"/>
   <!-- Line down to bottom-right box -->
-  <line x1="19" y1="12" x2="19" y2="15" stroke="#C2C2C2" stroke-width="1.5"/>
+  <path
+     style="fill:none;fill-opacity:0.8;stroke:#c2c2c2;stroke-width:0.9;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+     d="M 4.9819459,16.016453 4.9819459,12.000323 11.993135,11.993135 11.993135,7.0228833 12,11.993135 19.001708,11.991723 19.005614,15.991785"
+     id="path6"
+     sodipodi:nodetypes="ccccccc" />
 </svg>

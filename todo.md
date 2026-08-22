@@ -1,8 +1,21 @@
 # À faire
+1. Rajoute un menu ouvrir à fichier. Attention il devra toujours revenir à chaque update à partir du dépot de drawio
+2. Masque le volet  drawio au démarage. et ne met qu'une entrée dedans : Drawio qui lance drawio.
+3. traduit les entrées non traduites
 
-1. ⬜ Tester manuellement le VSIX 2026.7.1 installé (ouvrir un .drawio, un .drawio.png, More Shapes, insertion Mermaid, export SVG/PNG).
-2. ⬜ Décider du sort des fichiers supprimables listés dans la v2026.7.1 (aucun fichier supprimé, seulement exclus du VSIX).
-3. ⬜ Éventuel : retirer `tslint` (devDependencies + tslint.json) — lint mort (`lint` = echo).
+# v2026.7.1.1
+
+1. ✅ Historique et mémoire récupérés après le déplacement du dossier (`H:/OneDrive/…/drawio-in-vscode` → `c:/- VS Code/Extensions/drawio-diagrams-editor`) : mémoire copiée dans le dossier projet Claude actuel. ℹ️ Aucun transcript de session n'a survécu à l'ancienne purge à 30 jours ; `cleanupPeriodDays` est désormais à **365** dans `~/.claude/settings.json`.
+2. ✅ Bug « Ouvrir un diagramme » corrigé ([Extension.ts](src/Extension.ts)) : la commande ajoutait le dossier parent au workspace quand le fichier était en dehors (redémarrage de l'hôte d'extensions → erreur), puis ouvrait avec `vscode.open` — donc l'éditeur texte si `workbench.editorAssociations` vaut `default`. Elle ouvre maintenant directement avec le bon viewType (`…-text` ou binaire pour `.drawio.png`), avec repli sur `vscode.open`.
+3. ✅ Association de fichiers Windows proposée à l'utilisateur ([FileAssociationFeature.ts](src/features/FileAssociationFeature.ts)) :
+   1. ✅ Proposition unique au démarrage (Oui / Plus tard / Ne plus demander), 15 s après l'activation ; `activationEvents` passe à `onStartupFinished` pour que la question arrive à l'installation comme à la mise à jour.
+   2. ✅ Écriture dans `HKEY_CURRENT_USER\Software\Classes` via un `.reg` temporaire (UTF-16 LE + BOM) importé par `reg.exe` — aucun privilège administrateur.
+   3. ✅ ProgId `ElectropolFr.DrawioDiagram` : icône `media/drawio.ico`, commande `"Code.exe" "%1"`, extensions `.drawio` et `.dio`.
+   4. ✅ Chemin d'installation re-vérifié à chaque démarrage et corrigé en silence (il change à chaque mise à jour de l'extension).
+   5. ✅ Commande manuelle « Associate .drawio Files With VS Code (Windows) », masquée de la palette hors Windows.
+   6. ⏳ Traduction FR des nouvelles clés nls (lot de traduction avant publication).
+4. ✅ Fichiers supprimables déplacés dans `A Examiner/` (arborescence d'origine conservée, rien de supprimé) : [debug.log](A%20Examiner/debug.log), [NOTES.md](A%20Examiner/NOTES.md), [README original.md](A%20Examiner/README%20original.md), [tslint.json](A%20Examiner/tslint.json), [examples/temp/](A%20Examiner/examples/temp/). `A Examiner/**` et `Archives/**` exclus du VSIX dans [.vscodeignore](.vscodeignore) mais versionnés dans git.
+5. ✅ `tslint` retiré des `devDependencies` (lint mort : le script `lint` n'est qu'un `echo`).
 
 # v2026.7.1
 

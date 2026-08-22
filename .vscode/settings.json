@@ -12,5 +12,6 @@
 		"*.dio": "default",
 		"*.svg": "default"
 	},
-	"typescript.tsdk": "node_modules\\typescript\\lib"
+	"typescript.tsdk": "node_modules\\typescript\\lib",
+	"workbench.colorTheme": "Colored Theme (Yellow)"
 }

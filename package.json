@@ -3,6 +3,7 @@
 	"displayName": "%displayName%",
 	"description": "%description%",
 	"version": "2026.7.1",
+	"buildNumber": "2026.7.1.1",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"publisher": "electropol-fr",
 	"keywords": [
@@ -37,7 +38,9 @@
 	"categories": [
 		"Visualization"
 	],
-	"activationEvents": [],
+	"activationEvents": [
+		"onStartupFinished"
+	],
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/FrankSAURET/drawio-diagrams-editor.git"
@@ -197,6 +200,11 @@
 				"title": "%commands.openAsDiagram.title%",
 				"category": "Draw.io",
 				"icon": "$(preview)"
+			},
+			{
+				"command": "electropol-fr.drawio-diagrams-editor.associateFileType",
+				"title": "%commands.associateFileType.title%",
+				"category": "Draw.io"
 			}
 		],
 		"keybindings": [
@@ -524,6 +532,10 @@
 				{
 					"when": "false",
 					"command": "electropol-fr.drawio-diagrams-editor.linkFileWithSelectedNode"
+				},
+				{
+					"when": "isWindows",
+					"command": "electropol-fr.drawio-diagrams-editor.associateFileType"
 				}
 			],
 			"editor/title": [
@@ -574,7 +586,6 @@
 		"style-loader": "^1.1.3",
 		"ts-loader": "^9.2.3",
 		"ts-node": "^10.1.0",
-		"tslint": "^6.1.2",
 		"typescript": "^5.7.3",
 		"webpack": "^5.44.0",
 		"webpack-cli": "^4.7.2",
