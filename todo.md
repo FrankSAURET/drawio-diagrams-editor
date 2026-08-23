@@ -2,6 +2,11 @@
 
 *(vide)*
 
+# v2026.8.0.5
+
+1. ✅ **Cause des « trois clics » trouvée** : le garde-fou anti-démarrage de [ActivityBarFeature.ts](src/features/ActivityBarFeature.ts) reposait sur l'âge du processus hôte (≥ 3 s) ; un clic sur l'icône dans les trois secondes suivant le lancement de VS Code était donc avalé. Remplacé par une seule fenêtre de **400 ms mesurée depuis la création de la vue** : l'extension s'active sur `onStartupFinished`, la restauration du volet suit de quelques millisecondes, un clic humain arrive toujours après.
+2. ✅ Barre latérale refermée **avant** l'ouverture du diagramme (au lieu d'après) : plus de volet vide qui apparaît le temps du chargement.
+
 # v2026.8.0.4
 
 1. ✅ Clic sur l'icône de la barre d'activité : ouvre DIRECTEMENT un onglet Draw.io plein format, referme la barre latérale, aucune boîte de dialogue ([ActivityBarFeature.ts](src/features/ActivityBarFeature.ts) réécrite sur le modèle Kablix — `createTreeView` vide + `onDidChangeVisibility`). Le volet n'affiche plus d'entrée « Drawio » ; `"visibility": "collapsed"` retiré de [package.json](package.json) (un volet replié ne déclenche jamais l'événement de visibilité).
