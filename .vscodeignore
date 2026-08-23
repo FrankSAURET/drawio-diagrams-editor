@@ -63,6 +63,7 @@ drawio/**
 node_modules/**
 webpack.config.ts
 tsconfig.json
+.yarnrc
 yarn.lock
 scripts/**
 
