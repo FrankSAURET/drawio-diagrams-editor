@@ -1,6 +1,17 @@
 # À faire
 
-*(vide)*
+1. ⬜ Décider du sort de [examples/test.txt](examples/test.txt) : supprimé dans la copie de travail (pas par Claude), restauré en attendant ton arbitrage.
+
+# v2026.8.0.6 — préparation de la publication 2026.8.0
+
+1. ✅ Traductions passées en revue avant publication (lot unique, comme prévu) :
+   1. ✅ `package.nls.json` / `package.nls.fr.json` : les 65 clés `%…%` du manifeste sont déclarées et traduites, aucune clé morte.
+   2. ✅ [l10n/bundle.l10n.fr.json](l10n/bundle.l10n.fr.json) aligné 1:1 sur le code (36 chaînes) : ajout de « New diagram » → « Nouveau diagramme » (nom de l'onglet sans titre, item ⏳ de v2026.8.0.4), retrait de 4 clés mortes depuis la réécriture de la barre d'activité (`Create`, `Diagrams`, `Cannot create or open file "{0}"!`, `Launch Draw.io`).
+   3. ✅ Dialogue « Propriétés d'exportation » du plugin webview ([propertiesDialog.ts](drawio-custom-plugins/src/propertiesDialog.ts)) : les deux derniers libellés figés en anglais (« Export Properties », « Disable SVG 1.1 warning ») passent par un mini-dictionnaire indexé sur `mxLanguage`, avec repli anglais. Le reste du dialogue utilisait déjà `mxResources`.
+2. ✅ [CHANGELOG.md](CHANGELOG.md) : section `[2026.8.0] - 2026-08-23` (Added / Fixed / Changed) résumant les lots 2026.7.1.1 → 2026.8.0.5, plus le lien de release.
+3. ✅ [README.md](README.md) (langue de base) : commandes « New/Open Draw.io Diagram » et « Associate .drawio Files » ajoutées au tableau, nouvelle section « Windows Explorer association », rubrique « What changed in this fork » actualisée.
+4. ✅ Build extension + plugins vérifié (webpack production, exit 0) ; `tsc --noEmit` sans erreur dans `src/` et `drawio-custom-plugins/src/`.
+5. ⏳ Publication elle-même (`vsce publish`) : en attente de l'accord explicite de Frank.
 
 # v2026.8.0.5
 
@@ -19,7 +30,7 @@
 8. ✅ **Cause de l'icône absente dans l'Explorateur trouvée** : Windows gardait `Explorer\FileExts\.drawio\UserChoice = Applications\Maxthon.exe`, qui l'emporte sur le ProgId. [FileAssociationFeature.ts](src/features/FileAssociationFeature.ts) efface désormais `UserChoice`/`UserChoiceLatest` (Windows interdit de les écrire, pas de les effacer), déclare `OpenWithProgids` et notifie le shell par `SHChangeNotify` en plus de `ie4uinit`.
 9. ✅ Icône `.ico` copiée à un emplacement **stable** (`%LOCALAPPDATA%\drawio-diagrams-editor\drawio.ico`) : le registre ne pointe plus dans le dossier d'installation, qui change à chaque mise à jour et laissait un ProgId sans icône.
 10. ✅ Registre de la machine réparé dans la foulée (UserChoice Maxthon effacé, icône recopiée) — l'Explorateur affiche l'icône Draw.io sans attendre la prochaine publication.
-11. ⏳ Traduction FR de la chaîne « New diagram » (nom de l'onglet sans titre) : à faire dans le lot de traductions d'avant publication.
+11. ✅ Traduction FR de la chaîne « New diagram » (nom de l'onglet sans titre) — faite dans le lot de traductions v2026.8.0.6.
 
 # v2026.8.0.2
 

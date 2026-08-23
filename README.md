@@ -85,10 +85,23 @@ Switch themes at any time with the **`Draw.io: Change Theme`** command.
 
 | Command | Description |
 |---------|-------------|
+| `Draw.io: New Draw.io Diagram` | Create a diagram — untitled, the location is asked at the first save |
+| `Draw.io: Open Draw.io Diagram` | Open an existing diagram in the right editor |
 | `Draw.io: Convert To…` | Convert a diagram to another format |
 | `Draw.io: Export To…` | Export to PNG, SVG, PDF, … |
 | `Draw.io: Change Theme` | Switch the editor theme |
 | `Draw.io: Toggle Code Link Activation` | Enable/disable the Code Link feature |
+| `Draw.io: Associate .drawio Files With VS Code (Windows)` | Register `.drawio` / `.dio` in the Windows Explorer |
+
+The activity bar icon is a shortcut for the first two: one click opens a full editor tab, a second click brings the diagram already open back to the front.
+
+---
+
+## Windows Explorer association
+
+On Windows, the extension offers once to open `.drawio` and `.dio` files in VS Code directly from the Explorer, with the Draw.io icon. Everything is written to the current user's registry hive (`HKEY_CURRENT_USER\Software\Classes`) — no administrator privileges are needed, and nothing is written unless you accept.
+
+If you dismissed the prompt, run `Draw.io: Associate .drawio Files With VS Code (Windows)` from the command palette.
 
 ---
 
@@ -108,7 +121,11 @@ Only Draw.io-generated SVGs can be edited this way — arbitrary SVG files are n
 
 ## What changed in this fork
 
-- Activity bar panel with i18n support (🇫🇷 French / 🇬🇧 English)
+- One-click activity bar icon: opens a full Draw.io tab, no dialog, no side panel
+- `New Draw.io Diagram` creates an untitled document — nothing is written to disk until you save
+- `Open…` entry added to the File menu of the Draw.io editor itself
+- Optional Windows Explorer association for `.drawio` / `.dio`, with the Draw.io icon
+- Fully localized interface (🇬🇧 English / 🇫🇷 French), including the settings
 - Button to open XML source beside the diagram (no need for `View: Reopen Editor With…`)
 - SVG export fix
 - Updated to Draw.io v30.0.1 (new shape libraries, `math4` format)

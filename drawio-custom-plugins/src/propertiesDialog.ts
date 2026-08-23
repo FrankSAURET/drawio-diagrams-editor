@@ -1,6 +1,24 @@
 import "./styles.css";
 import * as m from "mithril";
 
+// Ces deux libellés n'ont pas d'équivalent dans le dictionnaire de Draw.io :
+// petit dictionnaire local, indexé sur la langue de l'éditeur (`mxLanguage`).
+// Les autres libellés du dialogue passent par `mxResources`.
+const extraStrings: { [lang: string]: { [key: string]: string } } = {
+	fr: {
+		exportProperties: "Propriétés d'exportation",
+		disableSvgWarning: "Masquer l'avertissement SVG 1.1",
+	},
+};
+
+function localize(key: string, fallback: string): string {
+	const lang = (typeof mxLanguage === "string" ? mxLanguage : "en")
+		.split("-")[0]
+		.toLowerCase();
+	const dict = extraStrings[lang];
+	return (dict && dict[key]) || fallback;
+}
+
 export function showDialog(ui: DrawioUI) {
 	const node = ui.fileNode;
 
@@ -46,7 +64,10 @@ export function showDialog(ui: DrawioUI) {
 						m(
 							"h2",
 							{ style: { marginTop: "4px" } },
-							"Export Properties"
+							localize(
+								"exportProperties",
+								"Export Properties"
+							)
 						),
 						m(
 							"div",
@@ -161,7 +182,10 @@ export function showDialog(ui: DrawioUI) {
 												e.target.checked;
 										},
 									}),
-									"Disable SVG 1.1 warning",
+									localize(
+										"disableSvgWarning",
+										"Disable SVG 1.1 warning"
+									),
 								]),
 							]
 						),

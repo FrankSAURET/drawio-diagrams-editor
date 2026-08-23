@@ -3,6 +3,10 @@ declare const Draw: {
 };
 
 declare const log: any;
+
+// Langue courante de l'éditeur Draw.io (définie par le paramètre `lang` de l'iframe).
+declare const mxLanguage: string | undefined;
+
 declare class mxCellHighlight {
     constructor(graph: DrawioGraph, color: string, arg: number);
 
