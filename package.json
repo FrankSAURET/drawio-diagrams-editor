@@ -3,7 +3,7 @@
 	"displayName": "%displayName%",
 	"description": "%description%",
 	"version": "2026.8.0",
-	"buildNumber": "2026.8.0.3",
+	"buildNumber": "2026.8.0.4",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"publisher": "electropol-fr",
 	"keywords": [
@@ -70,9 +70,7 @@
 			"drawio-diagrams-editor-explorer": [
 				{
 					"id": "drawio-diagrams-editor-welcome",
-					"name": "%views.drawio-diagrams-editor-explorer.drawio-diagrams-editor-welcome.name%",
-					"visibility": "collapsed",
-					"initialSize": 1
+					"name": "%views.drawio-diagrams-editor-explorer.drawio-diagrams-editor-welcome.name%"
 				}
 			]
 		},

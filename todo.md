@@ -2,6 +2,20 @@
 
 *(vide)*
 
+# v2026.8.0.4
+
+1. ✅ Clic sur l'icône de la barre d'activité : ouvre DIRECTEMENT un onglet Draw.io plein format, referme la barre latérale, aucune boîte de dialogue ([ActivityBarFeature.ts](src/features/ActivityBarFeature.ts) réécrite sur le modèle Kablix — `createTreeView` vide + `onDidChangeVisibility`). Le volet n'affiche plus d'entrée « Drawio » ; `"visibility": "collapsed"` retiré de [package.json](package.json) (un volet replié ne déclenche jamais l'événement de visibilité).
+2. ✅ Anti-réouverture au démarrage : double garde-fou (âge du processus hôte ≥ 3 s **et** ≥ 1,5 s après l'activation), et plus de rattrapage « déjà visible » — sinon une barre latérale restaurée sur Draw.io ouvrait un diagramme à chaque lancement.
+3. ✅ « Nouveau diagramme » n'écrit plus de fichier et n'affiche plus « Enregistrer sous » : le document est **sans titre** (`untitled:Nouveau diagramme.drawio`), créé via `openTextDocument` puis `vscode.openWith` ([diagramTabs.ts](src/utils/diagramTabs.ts)). L'emplacement n'est demandé qu'au premier Ctrl+S ([DrawioEditorProviderText.ts](src/DrawioEditorProviderText.ts) : `saveAs` natif si le document est sans titre).
+4. ✅ Re-clic sur l'icône : révèle le diagramme déjà ouvert au lieu d'empiler des onglets vierges (repérage par les groupes d'onglets, `TabInputCustom`).
+5. ✅ Dossier courant ([workingFolder.ts](src/utils/workingFolder.ts)) : le dossier du dernier diagramme ouvert ou enregistré devient le dossier proposé par « Ouvrir » et « Enregistrer sous ». Mis à jour par un écouteur `tabGroups.onDidChangeTabs`, donc valable aussi pour un fichier ouvert depuis l'Explorateur Windows.
+6. ✅ **Cause de l'ouverture « en mode texte » trouvée** : [.vscode/settings.json](.vscode/settings.json) du dépôt forçait `"workbench.editorAssociations": { "*.drawio": "default", "*.dio": "default", "*.svg": "default" }` (héritage du dépôt hediet). Entrées supprimées.
+7. ✅ Réglages globaux de VS Code corrigés : `files.associations` `"*.drawio": "xml"` supprimé (héritage hediet) ; `workbench.editorAssociations` complété par `*.drawio.svg`/`*.dio.svg` → éditeur texte Draw.io et `*.drawio.png`/`*.dio.png` → éditeur binaire, sans quoi les règles existantes `*.svg`/`*.png` → aperçu d'image les ouvraient en image.
+8. ✅ **Cause de l'icône absente dans l'Explorateur trouvée** : Windows gardait `Explorer\FileExts\.drawio\UserChoice = Applications\Maxthon.exe`, qui l'emporte sur le ProgId. [FileAssociationFeature.ts](src/features/FileAssociationFeature.ts) efface désormais `UserChoice`/`UserChoiceLatest` (Windows interdit de les écrire, pas de les effacer), déclare `OpenWithProgids` et notifie le shell par `SHChangeNotify` en plus de `ie4uinit`.
+9. ✅ Icône `.ico` copiée à un emplacement **stable** (`%LOCALAPPDATA%\drawio-diagrams-editor\drawio.ico`) : le registre ne pointe plus dans le dossier d'installation, qui change à chaque mise à jour et laissait un ProgId sans icône.
+10. ✅ Registre de la machine réparé dans la foulée (UserChoice Maxthon effacé, icône recopiée) — l'Explorateur affiche l'icône Draw.io sans attendre la prochaine publication.
+11. ⏳ Traduction FR de la chaîne « New diagram » (nom de l'onglet sans titre) : à faire dans le lot de traductions d'avant publication.
+
 # v2026.8.0.2
 
 1. ✅ Version publique passée au calver du mois : **2026.8.0** (prochaine publication), build interne `2026.8.0.2`.

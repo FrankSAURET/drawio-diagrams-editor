@@ -14,6 +14,12 @@ import { DrawioUpdateFeature } from "./features/DrawioUpdateFeature";
 import { FileAssociationFeature } from "./features/FileAssociationFeature";
 import { DrawioClientFactory } from "./DrawioClient";
 import { registerFailableCommand } from "./utils/registerFailableCommand";
+import { WorkingFolder } from "./utils/workingFolder";
+import {
+	isDiagramTab,
+	openNewDiagram,
+	viewTypeFor,
+} from "./utils/diagramTabs";
 
 export class Extension {
 	public readonly dispose = Disposable.fn();
@@ -44,7 +50,11 @@ export class Extension {
 		new ToggleEditorFeature()
 	);
 	private readonly activityBarFeature = this.dispose.track(
-		new ActivityBarFeature(this.context.extensionUri)
+		new ActivityBarFeature()
+	);
+	/** Dossier courant : celui du dernier diagramme ouvert ou enregistré. */
+	private readonly workingFolder = new WorkingFolder(
+		this.context.globalState
 	);
 	private readonly drawioUpdateFeature = this.dispose.track(
 		new DrawioUpdateFeature(this.context.globalState)
@@ -80,34 +90,10 @@ export class Extension {
 			registerFailableCommand(
 				"electropol-fr.drawio-diagrams-editor.newDiagram",
 				async () => {
-					const targetUri = await vscode.window.showSaveDialog({
-						saveLabel: l10n.t("Create"),
-						filters: {
-							[l10n.t("Diagrams")]: ["drawio"],
-						},
-					});
-					if (!targetUri) {
-						return;
-					}
-					try {
-						await vscode.workspace.fs.writeFile(
-							targetUri,
-							new Uint8Array()
-						);
-						await vscode.commands.executeCommand(
-							"vscode.openWith",
-							targetUri,
-							"electropol-fr.drawio-diagrams-editor-text"
-						);
-					} catch (e) {
-						console.error("Cannot create or open file", e);
-						await vscode.window.showErrorMessage(
-							l10n.t(
-								'Cannot create or open file "{0}"!',
-								targetUri.toString()
-							)
-						);
-					}
+					// Aucun fichier créé, aucune boîte de dialogue : le
+					// diagramme est un document « sans titre ». L'emplacement
+					// n'est demandé qu'au premier enregistrement.
+					await openNewDiagram();
 				}
 			)
 		);
@@ -118,6 +104,7 @@ export class Extension {
 				async () => {
 					const uris = await vscode.window.showOpenDialog({
 						canSelectMany: false,
+						defaultUri: this.workingFolder.defaultUri(),
 						filters: {
 							[l10n.t("Draw.io Diagrams")]: [
 								"drawio",
@@ -139,9 +126,7 @@ export class Extension {
 					// On ouvre explicitement avec le bon viewType, ce qui
 					// contourne aussi un `workbench.editorAssociations`
 					// réglé sur "default" pour *.drawio.
-					const viewType = /\.(drawio|dio)\.png$/i.test(targetUri.path)
-						? "electropol-fr.drawio-diagrams-editor"
-						: "electropol-fr.drawio-diagrams-editor-text";
+					const viewType = viewTypeFor(targetUri);
 
 					try {
 						await vscode.commands.executeCommand(
@@ -159,6 +144,23 @@ export class Extension {
 					}
 				}
 			)
+		);
+
+		// Dossier courant : tout diagramme qui apparaît dans un onglet fixe le
+		// dossier proposé par les dialogues suivants — qu'il vienne de la boîte
+		// « Ouvrir », de l'Explorateur Windows, ou du premier enregistrement
+		// d'un document sans titre.
+		this.dispose.track(
+			vscode.window.tabGroups.onDidChangeTabs((e) => {
+				for (const tab of [...e.opened, ...e.changed]) {
+					if (
+						isDiagramTab(tab) &&
+						tab.input instanceof vscode.TabInputCustom
+					) {
+						this.workingFolder.rememberFile(tab.input.uri);
+					}
+				}
+			})
 		);
 	}
 }

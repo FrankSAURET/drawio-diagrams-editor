@@ -1,6 +1,7 @@
 import { l10n } from "vscode";
 import {
 	CancellationToken,
+	commands,
 	CustomTextEditorProvider,
 	Range,
 	TextDocument,
@@ -150,7 +151,16 @@ export class DrawioEditorProviderText implements CustomTextEditorProvider {
 			});
 
 			drawioClient.onSave.sub(async () => {
-				await document.save();
+				if (document.isUntitled) {
+					// Diagramme jamais enregistré : `save()` n'a pas de cible.
+					// C'est VS Code qui demande l'emplacement, et le dossier
+					// retenu devient le dossier courant de l'extension.
+					await commands.executeCommand(
+						"workbench.action.files.saveAs"
+					);
+				} else {
+					await document.save();
+				}
 			});
 
 			drawioClient.onInit.sub(async () => {
