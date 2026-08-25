@@ -44,6 +44,25 @@ declare const App: {
 	MODE_DEVICE: string;
 };
 
+/** Objet global de Draw.io portant l'etat de l'editeur. */
+declare const Editor: {
+	/** Theme courant : « min », « kennedy », « atlas », « sketch »... */
+	currentTheme: string;
+};
+
+/** Bibliotheque rangee dans le stockage du navigateur (mode « browser »). */
+declare const StorageLibrary: Function | undefined;
+
+/** Acces au stockage de fichiers du navigateur (IndexedDB, repli localStorage). */
+declare const StorageFile: {
+	deleteFile(
+		ui: DrawioUI,
+		title: string,
+		success: () => void,
+		error?: () => void
+	): void;
+};
+
 
 declare interface DrawioUI {
     fileNode: Element | null;

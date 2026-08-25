@@ -40,6 +40,13 @@
 				removeItem: function (key) {
 					log("localStorage: remove " + key);
 					delete storage[key];
+					// Sans cet envoi la suppression n'etait jamais enregistree
+					// cote extension : la cle revenait au rechargement (d'ou les
+					// bibliotheques « navigateur » fantomes).
+					sendToVsCode({
+						event: "updateLocalStorage",
+						newLocalStorage: storage,
+					});
 				},
 			};
 			Object.defineProperty(window, "localStorage", {

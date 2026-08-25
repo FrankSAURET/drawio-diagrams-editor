@@ -4,6 +4,8 @@ import "./focus";
 import "./menu-entries";
 import "./localFileSave";
 import "./copySelectionAsSvg";
+import "./pasteSvgText";
+import "./libraryStorage";
 import "./versionLabel";
 
 Draw.loadPlugin((ui) => {

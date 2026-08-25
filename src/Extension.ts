@@ -167,19 +167,17 @@ export class Extension {
 }
 
 /**
- * Numéro affiché dans la barre de menus de l'éditeur : version publique seule
- * en production, version interne à quatre segments pendant le développement.
+ * Numéro affiché dans la barre de menus de l'éditeur.
+ *
+ * Les deux numéros sont montrés en permanence, à la demande expresse de Frank :
+ * le `buildNumber` est la version publique suivie du numéro de lot, donc
+ * `v2026.8.0.10` se lit « version 2026.8.0, lot 10 ».
  */
 function versionLabelFor(context: vscode.ExtensionContext): string {
 	const manifest = context.extension.packageJSON as {
 		version?: string;
 		buildNumber?: string;
 	};
-	const isProduction =
-		context.extensionMode === vscode.ExtensionMode.Production;
-	const version =
-		(isProduction ? manifest.version : manifest.buildNumber) ??
-		manifest.version ??
-		"";
+	const version = manifest.buildNumber ?? manifest.version ?? "";
 	return version ? `v${version}` : "";
 }
