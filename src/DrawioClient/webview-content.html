@@ -371,6 +371,17 @@
 
 			EditorUi.prototype.addEmbedButtons = () => { };
 
+			// VS Code renders the webview inside an iframe, so Draw.io's
+			// `window == window.top` guard always disables the async clipboard
+			// API. Without it `installImagePasteHandler` never reads
+			// `image/svg+xml` from the clipboard (Chromium does not expose that
+			// flavor on the paste event itself), so pasting an SVG does nothing.
+			// The webview iframe is granted `clipboard-read`; if the read is
+			// denied anyway, every caller falls back to the local clipboard.
+			Editor.enableNativeClipboard =
+				navigator.clipboard != null &&
+				navigator.clipboard.read != null;
+
 			patchFn(EditorUi.prototype, "init", function (old) {
 				return function (...args) {
 					editorUi = this;

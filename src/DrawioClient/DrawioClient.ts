@@ -93,18 +93,26 @@ export class DrawioClient<
 	protected async handleEvent(evt: { event: string }): Promise<void> {
 		const drawioEvt = evt as DrawioEvent;
 
+		// Draw.io echoes the originating action back in `message`, but not only
+		// on responses: plain events carry it too (`autosave` echoes the `load`
+		// action). Only an `actionId` matching a pending request identifies a
+		// response — everything else must be dispatched by event name, otherwise
+		// autosave is swallowed here and edits never reach the document.
 		if ("message" in drawioEvt) {
-			const actionId = (drawioEvt.message as any).actionId as
+			const actionId = (drawioEvt.message as any)?.actionId as
 				| string
 				| undefined;
-			if (actionId) {
+			if (actionId !== undefined) {
 				const responseHandler = this.responseHandlers.get(actionId);
-				this.responseHandlers.delete(actionId);
 				if (responseHandler) {
+					this.responseHandlers.delete(actionId);
 					responseHandler.resolve(drawioEvt);
+					return;
 				}
 			}
-		} else if (drawioEvt.event === "init") {
+		}
+
+		if (drawioEvt.event === "init") {
 			this.onInitEmitter.emit();
 		} else if (drawioEvt.event === "autosave") {
 			const oldXml = this.currentXml;
@@ -151,7 +159,10 @@ export class DrawioClient<
 				config,
 			});
 		} else {
-			this.onUnknownMessageEmitter.emit({ message: drawioEvt });
+			// Responses (`merge`, `export`…) never get here: they are resolved above.
+			this.onUnknownMessageEmitter.emit({
+				message: drawioEvt as unknown as TCustomEvent,
+			});
 		}
 	}
 
