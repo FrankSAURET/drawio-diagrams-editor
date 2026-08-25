@@ -1,6 +1,14 @@
 # À faire
-1. ⏳ Traduction FR de la chaîne « Export » (libellé du bouton de la boîte d'enregistrement des exports) — lot de traductions avant publication.
-2. ⏳ Import Gliffy (`js/gliffy/`, 609 Ko) laissé hors du VSIX : l'extension n'ouvre pas les `.gliffy`, à whitelister seulement si le besoin apparaît.
+1. ⬜ Confirmer que le numéro de version s'affiche en thème **kennedy** (recharger la fenêtre, ouvrir un diagramme). Le greffon journalise désormais sa position dans « Drawio Integration Log » : si l'étiquette reste invisible, la ligne `versionLabel: ...` dit dans quel conteneur elle a atterri et quelles dimensions elle occupe.
+2. ⏳ Traduction FR de la chaîne « Export » (libellé du bouton de la boîte d'enregistrement des exports) — lot de traductions avant publication.
+3. ⏳ Import Gliffy (`js/gliffy/`, 609 Ko) laissé hors du VSIX : l'extension n'ouvre pas les `.gliffy`, à whitelister seulement si le besoin apparaît.
+
+# v2026.8.0.11 — nom du VSIX avec le numéro de lot, étiquette de version à toute épreuve
+
+1. ✅ **Le VSIX porte désormais le numéro de lot** (nouveau [scripts/package-vsix.mjs](scripts/package-vsix.mjs), appelé par `package-extension-stable` et `-preRelease`) : `drawio-diagrams-editor-2026.8.0.11.vsix` au lieu de `...-2026.8.0.vsix`. Deux paquets d'un même mois se distinguent au premier coup d'œil, et on ne peut plus tester un ancien paquet en croyant tester le nouveau. Le nom du fichier de sortie est donné **relatif** : le chemin du projet contient des espaces et `npx` est lancé par le shell, qui recolle les arguments sans les protéger (`Invalid version VS`).
+2. ℹ️ **Pourquoi le lot v2026.8.0.10 ne changeait rien** : le paquet construit dans le projet n'était pas celui **installé** dans VS Code. L'extension installée datait de 15:47 et portait encore `buildNumber 2026.8.0.9`. Construire un `.vsix` ne remplace pas l'extension : il faut l'installer (`code --install-extension`) puis **recharger la fenêtre**. Fait dans ce lot.
+3. ✅ **Étiquette de version : mesure et repli** ([versionLabel.ts](drawio-custom-plugins/src/versionLabel.ts)). Le journal de l'extension prouve que le greffon **se charge bien** (`pluginLoaded: version-label`) et que le thème de Frank est **kennedy** ; l'étiquette était donc posée mais invisible — les conteneurs de barre de menus coupent ce qui dépasse (`overflow:hidden`) et la barre est encore remaniée après le chargement des greffons (mode compact, déplacement des boutons). Le greffon mesure maintenant l'étiquette 1,5 s après l'avoir posée : si elle n'occupe aucun pixel visible, elle bascule sur un affichage **flottant épinglé en haut à droite**, qui ne dépend d'aucun thème. Dans tous les cas la position retenue est écrite dans le journal.
+4. ✅ Build extension + greffons (webpack production) et `tsc --noEmit` : 0 erreur hors `node_modules`. Paquet construit **et installé** (2026.8.0.11).
 
 # v2026.8.0.10 — numéro de version dans les deux thèmes, collage SVG venu d'ailleurs, bibliothèques fantômes
 
