@@ -63,6 +63,13 @@ declare const StorageFile: {
 	): void;
 };
 
+/** Reglages de Draw.io ranges dans le stockage local (cle `.drawio-config`). */
+declare const mxSettings: {
+	getCustomLibraries(): string[];
+	addCustomLibrary(id: string): void;
+	removeCustomLibrary(id: string): void;
+};
+
 
 declare interface DrawioUI {
     fileNode: Element | null;

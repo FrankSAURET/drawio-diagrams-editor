@@ -1,23 +1,139 @@
 import { sendEvent } from "./vscode";
 
 /**
- * Retirer une bibliothèque « navigateur » efface aussi sa copie rangée.
+ * Cycle de vie des bibliothèques de formes.
  *
- * Draw.io range les bibliothèques du mode « navigateur » dans un stockage
- * caché (IndexedDB, ou le stockage local relayé vers VS Code). La croix de la
- * barre latérale, elle, ne fait que retirer la bibliothèque de la liste
- * affichée : le fichier rangé, lui, reste. Dans un navigateur ordinaire ce
- * n'est pas gênant — un écran liste ces fichiers. Dans VS Code, cet écran
- * n'existe pas : le fichier devient introuvable, mais son nom reste pris, et
- * un nouvel import du même nom répond « existe déjà ».
+ * Deux choses ici :
  *
- * On efface donc la copie rangée en même temps que l'entrée de la barre.
- * Le bloc-notes (`.scratchpad`) est épargné : il se referme et se rouvre.
+ * 1. **Correction** — fermer une bibliothèque laissait des restes.
+ *    - `EditorUi.closeLibrary` retire l'entrée de la barre latérale mais
+ *      oublie `ui.loadedLibraries`, la liste de ce qui a déjà été chargé.
+ *      Tant que ce drapeau reste posé, remettre la même bibliothèque dans la
+ *      même session est ignoré **sans le moindre message**.
+ *    - Une bibliothèque du mode « navigateur » garde en plus sa copie rangée
+ *      dans le stockage caché : son nom reste pris, alors que VS Code n'offre
+ *      aucun écran pour la retrouver. On efface donc cette copie.
+ *
+ * 2. **Journal** — les gestes sur les bibliothèques (ouverture, fermeture,
+ *    enregistrement) et les messages d'erreur de Draw.io sont écrits dans
+ *    « Drawio Integration Log », avec le nom, l'empreinte et le type du
+ *    fichier. Sans cela, un « le fichier existe déjà » ne dit pas d'où il
+ *    vient : les boîtes de Draw.io ne laissent aucune trace.
  */
 Draw.loadPlugin((ui) => {
 	sendEvent({ event: "pluginLoaded", pluginId: "library-storage" });
 
 	const anyUi = ui as any;
+	const anyWindow = window as any;
+
+	/** Journal de l'extension (défini par la webview). */
+	function log(...msg: any[]): void {
+		try {
+			if (typeof anyWindow.log === "function") {
+				anyWindow.log(...msg);
+			}
+		} catch (e) {
+			// Le journal ne doit jamais casser une action.
+		}
+	}
+
+	/** Description courte d'un fichier de bibliothèque. */
+	function describe(file: any): string {
+		if (file == null) {
+			return "aucun";
+		}
+
+		let type = "?";
+		try {
+			type = file.constructor != null ? file.constructor.name : "?";
+		} catch (e) {
+			// rien
+		}
+
+		let hash = "?";
+		try {
+			hash = file.getHash();
+		} catch (e) {
+			// rien
+		}
+
+		let title = "?";
+		try {
+			title = file.getTitle();
+		} catch (e) {
+			// rien
+		}
+
+		return `${type} titre="${title}" empreinte="${hash}"`;
+	}
+
+	/** Liste des bibliothèques retenues dans les réglages. */
+	function customLibraries(): string {
+		try {
+			return JSON.stringify(mxSettings.getCustomLibraries());
+		} catch (e) {
+			return "?";
+		}
+	}
+
+	/** Remplace une méthode en la journalisant. */
+	function watch(name: string, describeArgs: (args: any[]) => string): void {
+		const old = anyUi[name];
+
+		if (typeof old !== "function") {
+			return;
+		}
+
+		anyUi[name] = function (...args: any[]) {
+			log(`bibliotheque: ${name}(${describeArgs(args)})`);
+
+			try {
+				return old.apply(this, args);
+			} catch (e) {
+				log(
+					`bibliotheque: ${name} a echoue : ` +
+						((e && (e as any).message) || String(e))
+				);
+				throw e;
+			}
+		};
+	}
+
+	watch("pickLibrary", (args) => `mode=${args[0]}`);
+	watch("loadLibrary", (args) => describe(args[0]));
+	watch("libraryLoaded", (args) => describe(args[0]));
+	watch(
+		"saveLibrary",
+		(args) => `nom="${args[0]}" mode=${args[3]} ${describe(args[2])}`
+	);
+
+	// Les erreurs de Draw.io ne laissent aucune trace : on note le message et
+	// l'endroit d'où il part, sinon impossible de savoir qui se plaint.
+	const oldHandleError = anyUi.handleError;
+	if (typeof oldHandleError === "function") {
+		anyUi.handleError = function (resp: any, ...rest: any[]) {
+			try {
+				const message =
+					resp != null
+						? resp.message || resp.error || String(resp)
+						: rest[0] || "?";
+				log(
+					"drawio erreur: " +
+						message +
+						" | origine: " +
+						(new Error().stack || "?")
+							.split("\n")
+							.slice(1, 5)
+							.join(" << ")
+				);
+			} catch (e) {
+				// rien
+			}
+
+			return oldHandleError.apply(this, arguments);
+		};
+	}
+
 	const oldCloseLibrary = anyUi.closeLibrary;
 
 	if (typeof oldCloseLibrary !== "function") {
@@ -25,29 +141,45 @@ Draw.loadPlugin((ui) => {
 	}
 
 	anyUi.closeLibrary = function (file: any) {
+		log(
+			`bibliotheque: closeLibrary(${describe(file)}) reglages=` +
+				customLibraries()
+		);
+
 		const result = oldCloseLibrary.apply(this, arguments);
 
 		try {
-			if (
-				file != null &&
-				typeof StorageLibrary === "function" &&
-				file.constructor === StorageLibrary &&
-				file.getTitle() !== ".scratchpad"
-			) {
-				StorageFile.deleteFile(
-					this,
-					file.getTitle(),
-					() => {
-						/* rien à faire */
-					},
-					() => {
-						/* rien à faire */
-					}
-				);
+			if (file != null) {
+				const hash = file.getHash();
+
+				// Sans cela, remettre la même bibliothèque dans la session
+				// est ignoré en silence.
+				if (this.loadedLibraries != null && hash != null) {
+					delete this.loadedLibraries[hash];
+				}
+
+				if (
+					typeof StorageLibrary === "function" &&
+					file.constructor === StorageLibrary &&
+					file.getTitle() !== ".scratchpad"
+				) {
+					StorageFile.deleteFile(
+						this,
+						file.getTitle(),
+						() => {
+							log("bibliotheque: copie rangee effacee");
+						},
+						() => {
+							log("bibliotheque: copie rangee NON effacee");
+						}
+					);
+				}
 			}
 		} catch (e) {
 			// Une bibliothèque non effacée ne doit pas casser la fermeture.
 		}
+
+		log("bibliotheque: apres fermeture, reglages=" + customLibraries());
 
 		return result;
 	};
