@@ -1,7 +1,17 @@
 # À faire
-1. ⬜ **Bibliiothèque supprimée puis impossible à remettre** : refaire le geste une fois avec le lot **2026.8.0.12** installé (fenêtre rechargée), puis me le dire. Le greffon écrit maintenant chaque geste dans « Drawio Integration Log » (`bibliotheque: pickLibrary/loadLibrary/libraryLoaded/saveLibrary/closeLibrary`) **et** le texte de chaque boîte d'erreur de Draw.io avec l'endroit d'où elle part (`drawio erreur: ...`). C'est ce qui manque pour savoir qui dit « le fichier existe déjà ».
-2. ⏳ Traduction FR de la chaîne « Export » (libellé du bouton de la boîte d'enregistrement des exports) — lot de traductions avant publication.
-3. ⏳ Import Gliffy (`js/gliffy/`, 609 Ko) laissé hors du VSIX : l'extension n'ouvre pas les `.gliffy`, à whitelister seulement si le besoin apparaît.
+1. ⬜ **Vérifier la remise en place d'une bibliothèque** avec le lot **2026.8.0.13** (fenêtre rechargée) : **Fichier → Ouvrir une bibliothèque depuis → Périphérique…**, choisir le `.xml` de la bibliothèque fermée. Si ça marche, l'item est clos.
+2. ⬜ **Décider : les bibliothèques doivent-elles survivre au rechargement ?** Aujourd'hui non (voir v2026.8.0.12 point 4) : une bibliothèque de fichier est à rouvrir à chaque ouverture de VS Code. La faire tenir demande de la retenir côté extension (réglages VS Code ou stockage global) et de la recharger au démarrage — lot séparé, à lancer sur ta demande.
+3. ⏳ Traduction FR de la chaîne « Export » (libellé du bouton de la boîte d'enregistrement des exports) — lot de traductions avant publication.
+4. ⏳ Import Gliffy (`js/gliffy/`, 609 Ko) laissé hors du VSIX : l'extension n'ouvre pas les `.gliffy`, à whitelister seulement si le besoin apparaît.
+
+# v2026.8.0.13 — bibliothèque fermée : le menu pour la rouvrir n'existait pas
+
+1. ✅ **Cause réelle du défaut trouvée, sans attendre le journal.** Draw.io n'ajoute ses deux sous-menus de bibliothèque au menu Fichier que si l'adresse porte `libraries=1` (`Menus.js:5628-5633`, dans la branche `embed == '1'`). La webview ne passe pas ce paramètre ([webview-content.html:132-148](src/DrawioClient/webview-content.html#L132-L148)) : **ni « Nouvelle bibliothèque » ni « Ouvrir une bibliothèque depuis » n'étaient affichés**. La première avait déjà été remise à la main dans [menu-entries.ts](drawio-custom-plugins/src/menu-entries.ts) ; **la seconde manquait toujours**. Une bibliothèque fermée par sa croix n'avait donc plus aucun chemin de retour — exactement « une fois installée puis supprimée, plus moyen de la remettre ».
+2. ✅ **Sous-menu « Ouvrir une bibliothèque depuis » ajouté** au menu Fichier, sous « Nouvelle bibliothèque », avec ses deux entrées **Périphérique…** (`pickLibrary(App.MODE_DEVICE)`, sélecteur de fichier) et **Navigateur…** (`MODE_BROWSER`). Les libellés reprennent les clés du dictionnaire de Draw.io (`openLibraryFrom`, `device`, `browser`), déjà traduites : rien à traduire.
+3. ℹ️ **Pourquoi la liste du menu est coupée en deux** : un sous-menu ne peut pas figurer dans `addMenuItems`, il s'ajoute par `addSubmenu`, qui écrit à la suite. Les entrées sont donc posées en deux fois pour garder « Enregistrer » / « Enregistrer sous » après le sous-menu.
+4. ✅ Types du greffon complétés ([drawio-types.d.ts](drawio-custom-plugins/src/drawio-types.d.ts)) : `App.MODE_BROWSER`, `ui.pickLibrary`, `ui.menus.put`, constructeur `Menu`.
+5. ✅ Build extension + greffons et `tsc --noEmit` : 0 erreur hors `node_modules`. Paquet **2026.8.0.13** construit et installé.
+6. ℹ️ Le journal des gestes de bibliothèque du lot précédent est **conservé** le temps de la vérification ; à retirer une fois l'item clos.
 
 # v2026.8.0.12 — bibliothèques : drapeau oublié à la fermeture, et journal des gestes
 

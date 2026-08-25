@@ -42,6 +42,7 @@ declare const mxUtils: {
 
 declare const App: {
 	MODE_DEVICE: string;
+	MODE_BROWSER: string;
 };
 
 /** Objet global de Draw.io portant l'etat de l'editeur. */
@@ -52,6 +53,11 @@ declare const Editor: {
 
 /** Bibliotheque rangee dans le stockage du navigateur (mode « browser »). */
 declare const StorageLibrary: Function | undefined;
+
+/** Menu de Draw.io : `new Menu(function(menu, parent) { ... })`. */
+declare const Menu: {
+	new (funct: (menu: any, parent: any) => void, enabled?: boolean): any;
+};
 
 /** Acces au stockage de fichiers du navigateur (IndexedDB, repli localStorage). */
 declare const StorageFile: {
@@ -79,6 +85,8 @@ declare interface DrawioUI {
     actions: DrawioActions;
     menus: DrawioMenus;
     importLocalFile(args: boolean): void;
+    /** Ouvre une bibliotheque existante : `App.MODE_DEVICE`, `MODE_BROWSER`... */
+    pickLibrary(mode: string): void;
 
     /** Conteneur de la barre de menus (offert seulement quand `chrome=1`). */
     menubarContainer?: HTMLElement;
@@ -99,6 +107,8 @@ declare interface DrawioUI {
 
 interface DrawioMenus {
     get(name: string): any;
+    /** Enregistre un menu (ou sous-menu) sous ce nom. */
+    put(name: string, menu: any): any;
     addMenuItems(menu: any, arg: any, arg2: any): void;
     addSubmenu(name: string, menu: any, parent: any): void;
 }

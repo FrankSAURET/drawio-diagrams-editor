@@ -58,6 +58,33 @@ Draw.loadPlugin((ui) => {
 		ui.showLibraryDialog(null, null, null, null, App.MODE_DEVICE);
 	});
 
+	// « Ouvrir une bibliotheque depuis » : en mode integre (`embed=1`),
+	// Draw.io n'ajoute ses sous-menus de bibliotheque que si `libraries=1`
+	// figure dans l'adresse — ce que la webview ne fait pas. Sans cette
+	// entree, une bibliotheque fermee par sa croix ne peut plus jamais etre
+	// rouverte : c'est le seul chemin pour la remettre.
+	const openLibraryMenuName = "vscode.openLibraryFrom";
+	mxResources.parse(
+		`${openLibraryMenuName}=${label("openLibraryFrom", "Open Library from")}`
+	);
+	ui.menus.put(
+		openLibraryMenuName,
+		new Menu((menu: any, parent: any) => {
+			menu.addItem(
+				`${label("device", "Device")}...`,
+				null,
+				() => ui.pickLibrary(App.MODE_DEVICE),
+				parent
+			);
+			menu.addItem(
+				`${label("browser", "Browser")}...`,
+				null,
+				() => ui.pickLibrary(App.MODE_BROWSER),
+				parent
+			);
+		})
+	);
+
 	// « Themes » : reprend le selecteur de l'extension, qui ecrit le theme dans
 	// les reglages VS Code — celui de Draw.io serait perdu au rechargement.
 	const themeActionName = "vscode.theme";
@@ -86,10 +113,15 @@ Draw.loadPlugin((ui) => {
 				exportActionName,
 				convertActionName,
 				newLibraryActionName,
-				"-",
-				saveActionName,
-				saveAsActionName,
 			],
+			parent
+		);
+		// Un sous-menu ne peut pas figurer dans `addMenuItems` : il s'ajoute
+		// a part, d'ou la liste coupee en deux pour garder l'ordre voulu.
+		ui.menus.addSubmenu(openLibraryMenuName, menu, parent);
+		ui.menus.addMenuItems(
+			menu,
+			["-", saveActionName, saveAsActionName],
 			parent
 		);
 	};
