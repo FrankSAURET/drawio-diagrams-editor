@@ -119,6 +119,9 @@
 		var appearance = parseInt($$appearance$$),
 			theme = $$theme$$;
 
+		// Numéro de version affiché dans la barre de menus (plugin versionLabel).
+		window.vsCodeDrawioVersionLabel = $$versionLabel$$;
+
 		var urlParams = {
 			embed: "1",
 			configure: "1",
@@ -324,10 +327,11 @@
 
 			patchFn(Menus.prototype, "addSubmenu", function (old) {
 				return function (...args) {
-					if (
-						args[0] === "exportAs" ||
-						args[0] === "importFrom"
-					) {
+					// `exportAs` est rétabli : ses téléchargements passent
+					// désormais par la boîte d'enregistrement de VS Code
+					// (plugin `localFileSave`). `importFrom` reste masqué,
+					// l'entrée « Importer… » de l'extension le remplace.
+					if (args[0] === "importFrom") {
 						return;
 					}
 					//console.log("addSubmenu: ", args[0]);

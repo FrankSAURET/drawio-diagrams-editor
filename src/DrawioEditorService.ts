@@ -20,6 +20,7 @@ import {
 } from "./DrawioClient";
 import { DrawioBinaryDocument } from "./DrawioEditorProviderBinary";
 import { registerFailableCommand } from "./utils/registerFailableCommand";
+import { BufferImpl } from "./utils/buffer";
 
 const drawioChangeThemeCommand = "electropol-fr.drawio-diagrams-editor.changeTheme";
 
@@ -224,8 +225,45 @@ export class DrawioEditor {
 				commands.executeCommand(
 					"electropol-fr.drawio-diagrams-editor.openDiagram"
 				);
+			} else if (command === "saveAs") {
+				commands.executeCommand("workbench.action.files.saveAs");
+			} else if (command === "changeTheme") {
+				this.handleChangeThemeCommand();
 			}
 		});
+
+		drawioClient.onSaveLocalFile.sub((file) => {
+			this.saveLocalFile(file);
+		});
+	}
+
+	/**
+	 * Exports et bibliothèques de Draw.io : la webview ne peut pas télécharger,
+	 * c'est donc l'extension qui demande l'emplacement et écrit le fichier.
+	 */
+	private async saveLocalFile(file: {
+		filename: string;
+		mimeType: string | null;
+		base64Encoded: boolean;
+		data: string;
+	}): Promise<void> {
+		const bytes = BufferImpl.from(
+			file.data,
+			file.base64Encoded ? "base64" : "utf8"
+		);
+
+		const targetUri = await window.showSaveDialog({
+			defaultUri:
+				this.uri.scheme === "file"
+					? Uri.joinPath(this.uri, "..", file.filename)
+					: undefined,
+			saveLabel: l10n.t("Export"),
+		});
+
+		if (!targetUri) {
+			return;
+		}
+		await workspace.fs.writeFile(targetUri, bytes);
 	}
 
 	public get isActive(): boolean {

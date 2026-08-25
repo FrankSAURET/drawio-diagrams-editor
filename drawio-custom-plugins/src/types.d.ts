@@ -2,11 +2,25 @@
 declare type CustomDrawioAction = UpdateVerticesAction | AddVerticesAction | GetVerticesAction
     | LinkSelectedNodeWithDataAction | NodeSelectionEnabledAction | UpdateLiveshareViewState;
 declare type CustomDrawioEvent = NodeSelectedEvent | GetVerticesResultEvent
-    | UpdateLocalStorage | PluginLoaded | CursorChangedEvent | SelectionChangedEvent | FocusChangedEvent | InvokeCommandEvent | SelectionRectangleChangedEvent;
+    | UpdateLocalStorage | PluginLoaded | CursorChangedEvent | SelectionChangedEvent | FocusChangedEvent | InvokeCommandEvent | SelectionRectangleChangedEvent
+    | SaveLocalFileEvent;
 
 declare interface InvokeCommandEvent {
     event: "invokeCommand";
-    command: "export" | "save" | "convert" | "open";
+    command: "export" | "save" | "convert" | "open" | "saveAs" | "changeTheme";
+}
+
+/**
+ * Draw.io telecharge ses exports avec un <a download> : inutilisable dans une
+ * webview. L'extension recoit les octets et ouvre la boite d'enregistrement
+ * native de VS Code a la place.
+ */
+declare interface SaveLocalFileEvent {
+    event: "saveLocalFile";
+    filename: string;
+    mimeType: string | null;
+    base64Encoded: boolean;
+    data: string;
 }
 
 declare interface FocusChangedEvent {

@@ -48,6 +48,14 @@ export class CustomizedDrawioClient extends DrawioClient<
 	}>();
 	public readonly onInvokeCommand = this.onInvokeCommandEmitter.asEvent();
 
+	private readonly onSaveLocalFileEmitter = new EventEmitter<{
+		filename: string;
+		mimeType: string | null;
+		base64Encoded: boolean;
+		data: string;
+	}>();
+	public readonly onSaveLocalFile = this.onSaveLocalFileEmitter.asEvent();
+
 	public linkSelectedNodeWithData(linkedData: unknown) {
 		this.sendCustomAction({
 			action: "linkSelectedNodeWithData",
@@ -116,6 +124,13 @@ export class CustomizedDrawioClient extends DrawioClient<
 			});
 		} else if (evt.event === "invokeCommand") {
 			this.onInvokeCommandEmitter.emit({ command: evt.command });
+		} else if (evt.event === "saveLocalFile") {
+			this.onSaveLocalFileEmitter.emit({
+				filename: evt.filename,
+				mimeType: evt.mimeType,
+				base64Encoded: evt.base64Encoded,
+				data: evt.data,
+			});
 		} else if (evt.event === "selectedRectangleChanged") {
 			this.onSelectedRectangleChangedEmitter.emit({
 				rectangle: evt.rect,

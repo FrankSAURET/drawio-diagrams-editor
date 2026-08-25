@@ -40,15 +40,41 @@ Draw.loadPlugin((ui) => {
 		sendEvent({ event: "invokeCommand", command: "save" });
 	});
 
+	// « Enregistrer sous » : c'est VS Code qui possede le document, donc c'est
+	// sa boite native qu'il faut ouvrir, pas celle de Draw.io.
+	const saveAsActionName = "vscode.saveAs";
+	mxResources.parse(`${saveAsActionName}=${label("saveAs", "Save as")}...`);
+	ui.actions.addAction(saveAsActionName, () => {
+		sendEvent({ event: "invokeCommand", command: "saveAs" });
+	});
+
+	// « Nouvelle bibliotheque » : le sous-menu amont ne liste que des services
+	// en ligne indisponibles hors ligne, on va droit au dialogue local.
+	const newLibraryActionName = "vscode.newLibrary";
+	mxResources.parse(
+		`${newLibraryActionName}=${label("newLibrary", "New Library")}...`
+	);
+	ui.actions.addAction(newLibraryActionName, () => {
+		ui.showLibraryDialog(null, null, null, null, App.MODE_DEVICE);
+	});
+
+	// « Themes » : reprend le selecteur de l'extension, qui ecrit le theme dans
+	// les reglages VS Code — celui de Draw.io serait perdu au rechargement.
+	const themeActionName = "vscode.theme";
+	mxResources.parse(`${themeActionName}=${label("theme", "Theme")}...`);
+	ui.actions.addAction(themeActionName, () => {
+		sendEvent({ event: "invokeCommand", command: "changeTheme" });
+	});
+
 	const propertiesActionName = "properties";
 	ui.actions.addAction(propertiesActionName, () => {
 		showDialog(ui);
 	});
 
-	const menu = ui.menus.get("file");
-	const oldFunct = menu.funct;
-	menu.funct = function (menu: any, parent: any) {
-		oldFunct.apply(this, arguments);
+	const fileMenu = ui.menus.get("file");
+	const oldFileFunct = fileMenu.funct;
+	fileMenu.funct = function (menu: any, parent: any) {
+		oldFileFunct.apply(this, arguments);
 		ui.menus.addMenuItems(
 			menu,
 			[
@@ -59,10 +85,21 @@ Draw.loadPlugin((ui) => {
 				importActionName,
 				exportActionName,
 				convertActionName,
+				newLibraryActionName,
 				"-",
 				saveActionName,
+				saveAsActionName,
 			],
 			parent
 		);
 	};
+
+	const extrasMenu = ui.menus.get("extras");
+	if (extrasMenu != null) {
+		const oldExtrasFunct = extrasMenu.funct;
+		extrasMenu.funct = function (menu: any, parent: any) {
+			oldExtrasFunct.apply(this, arguments);
+			ui.menus.addMenuItems(menu, ["-", themeActionName], parent);
+		};
+	}
 });

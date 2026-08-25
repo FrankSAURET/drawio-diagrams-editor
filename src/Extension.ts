@@ -31,7 +31,8 @@ export class Extension {
 	private readonly drawioClientFactory = new DrawioClientFactory(
 		this.config,
 		this.log,
-		this.context.extensionUri
+		this.context.extensionUri,
+		versionLabelFor(this.context)
 	);
 	private readonly editorService = new DrawioEditorService(
 		this.config,
@@ -163,4 +164,22 @@ export class Extension {
 			})
 		);
 	}
+}
+
+/**
+ * Numéro affiché dans la barre de menus de l'éditeur : version publique seule
+ * en production, version interne à quatre segments pendant le développement.
+ */
+function versionLabelFor(context: vscode.ExtensionContext): string {
+	const manifest = context.extension.packageJSON as {
+		version?: string;
+		buildNumber?: string;
+	};
+	const isProduction =
+		context.extensionMode === vscode.ExtensionMode.Production;
+	const version =
+		(isProduction ? manifest.version : manifest.buildNumber) ??
+		manifest.version ??
+		"";
+	return version ? `v${version}` : "";
 }

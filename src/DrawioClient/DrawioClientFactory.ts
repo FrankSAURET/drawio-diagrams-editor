@@ -20,7 +20,9 @@ export class DrawioClientFactory {
 	constructor(
 		private readonly config: Config,
 		private readonly log: OutputChannel,
-		private readonly extensionUri: Uri
+		private readonly extensionUri: Uri,
+		/** Numéro affiché dans la barre de menus de la webview. */
+		private readonly versionLabel: string
 	) { }
 
 	public async createDrawioClientInWebview(
@@ -244,6 +246,7 @@ export class DrawioClientFactory {
 			.replace("$$theme$$", JSON.stringify(config.resolvedTheme.themeName))
 			.replace("$$appearance$$", JSON.stringify(config.resolvedTheme.getAppearanceDrawioValue()))
 			.replace("$$lang$$", JSON.stringify(config.drawioLanguage))
+			.replace("$$versionLabel$$", JSON.stringify(this.versionLabel))
 			.replace("$$simpleLabels$$", JSON.stringify(config.simpleLabels))
 			.replace(
 				"$$chrome$$",

@@ -36,6 +36,12 @@ declare const mxEvent: {
 declare const mxUtils: {
 	isNode(node: any): node is HTMLElement;
 	createXmlDocument(): XMLDocument;
+	sortCells(cells: DrawioCell[]): DrawioCell[];
+	getXml(node: any): string;
+};
+
+declare const App: {
+	MODE_DEVICE: string;
 };
 
 
@@ -47,16 +53,33 @@ declare interface DrawioUI {
     actions: DrawioActions;
     menus: DrawioMenus;
     importLocalFile(args: boolean): void;
+
+    /** Conteneur de la barre de menus (offert seulement quand `chrome=1`). */
+    menubarContainer?: HTMLElement;
+    /** Boite de dialogue « nouvelle bibliotheque ». */
+    showLibraryDialog(
+        name: any,
+        sidebar: any,
+        images: any,
+        file: any,
+        mode: string
+    ): void;
+    /** Copie les cellules donnees dans le presse-papiers systeme, en SVG. */
+    copySvg(cells: DrawioCell[], xml?: string | null, scale?: number): void;
+    /** Chemin de telechargement de Draw.io, redirige vers VS Code. */
+    saveLocalFile: (...args: any[]) => void;
+    doSaveLocalFile: (...args: any[]) => void;
 }
 
 interface DrawioMenus {
     get(name: string): any;
     addMenuItems(menu: any, arg: any, arg2: any): void;
+    addSubmenu(name: string, menu: any, parent: any): void;
 }
 
 interface DrawioActions {
     addAction(name: string, action: () => void): void;
-    get(name: string): { funct: () => void };
+    get(name: string): { funct: (...args: any[]) => void };
 }
 
 declare interface DrawioEditor {
@@ -65,6 +88,12 @@ declare interface DrawioEditor {
 
 declare interface DrawioGraph {
 	defaultThemeName: string;
+	getSelectionCells(): DrawioCell[];
+	isSelectionEmpty(): boolean;
+	isEnabled(): boolean;
+	isEditing(): boolean;
+	getExportableCells(cells: DrawioCell[]): DrawioCell[];
+	encodeCells(cells: DrawioCell[]): any;
 	insertVertex(arg0: undefined, arg1: null, label: string, arg3: number, arg4: number, arg5: number, arg6: number, arg7: string): void;
 	addListener: any;
 	model: DrawioGraphModel;
@@ -99,6 +128,7 @@ declare interface DrawioCell {
 }
 
 declare interface DrawioGraphModel {
+    getTopmostCells(cells: DrawioCell[]): DrawioCell[];
     setValue(c: DrawioCell, label: string | any): void;
     beginUpdate(): void;
     endUpdate(): void;
