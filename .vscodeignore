@@ -28,8 +28,10 @@ dist/**/*.map
 
 # Sous-module drawio : tout exclure puis réinclure UNIQUEMENT le runtime
 # chargé par la webview offline (webview-content.html) et les chargements
-# dynamiques de app.min.js (mermaid, orgchart, jquery, deflate, simplepeer,
-# jszip, MathJax/math4, stencils, ressources i18n, images).
+# dynamiques de app.min.js (mermaid, plantuml, orgchart, jquery, deflate,
+# simplepeer, jszip, MathJax/math4, stencils, ressources i18n, images).
+# Depuis drawio v31, ELK, Mermaid et libavoid sont inclus dans extensions.min.js ;
+# seul PlantUML reste un script separe (preloade par webview-content.html).
 # Exclus volontairement : sources dev (js/diagramly, js/grapheditor,
 # mxgraph/src, shapes/), bundles inutilisés (integrate.min.js, viewer*.min.js),
 # WEB-INF (serveur), templates (dialogue inaccessible en mode embed),
@@ -45,6 +47,7 @@ drawio/**
 !drawio/src/main/webapp/js/orgchart.min.js
 !drawio/src/main/webapp/js/orgchart/**
 !drawio/src/main/webapp/js/mermaid/**
+!drawio/src/main/webapp/js/plantuml/**
 !drawio/src/main/webapp/js/jquery/**
 !drawio/src/main/webapp/js/deflate/**
 !drawio/src/main/webapp/js/jszip/**

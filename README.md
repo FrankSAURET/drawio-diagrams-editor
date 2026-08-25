@@ -128,7 +128,7 @@ Only Draw.io-generated SVGs can be edited this way — arbitrary SVG files are n
 - Fully localized interface (🇬🇧 English / 🇫🇷 French), including the settings
 - Button to open XML source beside the diagram (no need for `View: Reopen Editor With…`)
 - SVG export fix
-- Updated to Draw.io v30.0.1 (new shape libraries, `math4` format)
+- Updated to Draw.io v31.3.2 (libavoid auto-routing, built-in ELK layouts, offline PlantUML rendering)
 - Ongoing bug fixes not yet merged in the original project
 
 ---

@@ -1,6 +1,21 @@
 # À faire
+1. **⏸️ PAUSE — à toi** : drawio est passé en v31.3.2, reconstruis/relance et dis si les problèmes ci-dessous persistent.
+2. Les menus en ligne sont beaucoup plus fournis. Pourquoi ?
+3. Enregistrer ne fonctionne pas, Les modifications ne passent pas l'onglet en non enregistré. Je suis obligé de faire CTRL+S -> il passe en non enregistré puis une deuxième fois et il est enregistré.
+4. Coller un svg ne marche pas
+5. ⏳ Import Gliffy (`js/gliffy/`, 609 Ko) laissé hors du VSIX : l'extension n'ouvre pas les `.gliffy`, à whitelister seulement si le besoin apparaît.
+6. ✅ Décider du sort de [examples/test.txt](examples/test.txt) : supprimé dans la copie de travail (pas par Claude), restauré en attendant ton arbitrage.
 
-1. ⬜ Décider du sort de [examples/test.txt](examples/test.txt) : supprimé dans la copie de travail (pas par Claude), restauré en attendant ton arbitrage.
+# v2026.8.0.7 — mise à jour du sous-module Draw.io v30.0.1 → v31.3.2
+
+1. ✅ Sous-module [drawio](drawio) passé de **v30.0.1** à **v31.3.2** (589 fichiers du webapp modifiés). Aucun patch local à reporter : le sous-module était propre.
+2. ✅ API patchées par la webview vérifiées une à une dans le nouvel `app.min.js` (`Menus.addSubmenu` / `addMenuItem` / `put` / `defaultMenuItems`, `EditorUi.init` / `addEmbedButtons` / `createFileData`, `Graph.getSvg`, `mxUtils.getXml`) : toutes toujours présentes, aucun patch à réécrire.
+3. ✅ **PlantUML préchargé** dans [webview-content.html](src/DrawioClient/webview-content.html) : depuis v31, `bootstrap.js` charge `js/plantuml/drawio-plantuml.min.js` avant `PostConfig.js` en production, et `PLANT_URL` a disparu de `PreConfig.js` — le rendu PlantUML est désormais **local**, plus de serveur distant. La webview a sa propre séquence de `<script>`, il fallait l'aligner.
+4. ✅ [.vscodeignore](.vscodeignore) : `js/plantuml/**` ajouté à la whitelist (+348 Ko). Vérification faite module par module de ce qui est désormais **inliné dans `extensions.min.js`** (ELK 895 Ko, Mermaid 683 Ko, libavoid 559 Ko) et n'a donc pas besoin d'être embarqué séparément ; `js/elk/` et `js/libavoid-js/` restés exclus à ce titre.
+5. ✅ Tous les chemins whitelistés revalidés sur la nouvelle arborescence (`js/shapes-14-6-5.min.js`, `styles/`, `stencils/`, `math4/`, `resources/`, `mxgraph/css`+`images`, `plugins/`…) : rien de renommé ni de disparu.
+6. ✅ Build vérifié : `build-extension` et `build-plugins` (webpack production) OK, `tsc --noEmit` → **0 erreur** hors `node_modules` (les erreurs `@types/mithril` sont préexistantes, lib DOM absente du tsconfig).
+7. ✅ [README.md](README.md) : ligne « Updated to Draw.io v30.0.1 » remplacée par v31.3.2 (auto-routage libavoid, layouts ELK intégrés, PlantUML hors ligne).
+8. ℹ️ [CHANGELOG.md](CHANGELOG.md) : trois lignes de notes collées par erreur dans la section `[2026.8.0]` (mise à jour drawio, bug Ctrl+S, coller SVG) retirées — elles étaient déjà dans la liste « À faire » ci-dessus.
 
 # v2026.8.0.6 — préparation de la publication 2026.8.0
 
