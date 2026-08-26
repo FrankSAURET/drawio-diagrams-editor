@@ -1,9 +1,28 @@
 
 declare type CustomDrawioAction = UpdateVerticesAction | AddVerticesAction | GetVerticesAction
-    | LinkSelectedNodeWithDataAction | NodeSelectionEnabledAction | UpdateLiveshareViewState;
+    | LinkSelectedNodeWithDataAction | NodeSelectionEnabledAction | UpdateLiveshareViewState
+    | LibraryFilePickedAction;
 declare type CustomDrawioEvent = NodeSelectedEvent | GetVerticesResultEvent
     | UpdateLocalStorage | PluginLoaded | CursorChangedEvent | SelectionChangedEvent | FocusChangedEvent | InvokeCommandEvent | SelectionRectangleChangedEvent
-    | SaveLocalFileEvent;
+    | SaveLocalFileEvent | PickLibraryFileEvent;
+
+/**
+ * « Ouvrir une bibliotheque depuis > Peripherique ». Draw.io passe par un
+ * <input type=file> cache qu'il garde en memoire et reinitialise a la volee :
+ * en webview le second appel ne rend plus rien. C'est VS Code qui ouvre la
+ * boite de selection et lit le fichier.
+ */
+declare interface PickLibraryFileEvent {
+    event: "pickLibraryFile";
+}
+
+/** Reponse a `pickLibraryFile` : contenu du fichier choisi par l'utilisateur. */
+declare interface LibraryFilePickedAction {
+    action: "libraryFilePicked";
+    /** Nom du fichier, extension comprise — sert d'empreinte a Draw.io. */
+    name: string;
+    xml: string;
+}
 
 declare interface InvokeCommandEvent {
     event: "invokeCommand";
@@ -21,6 +40,11 @@ declare interface SaveLocalFileEvent {
     mimeType: string | null;
     base64Encoded: boolean;
     data: string;
+    /**
+     * Bibliotheque de formes plutot qu'un export : l'extension propose alors
+     * le premier dossier de bibliotheques configure comme destination.
+     */
+    isLibrary?: boolean;
 }
 
 declare interface FocusChangedEvent {

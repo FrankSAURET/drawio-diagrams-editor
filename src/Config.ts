@@ -5,6 +5,7 @@ import {
 	commands,
 	ConfigurationTarget,
 	env,
+	FileType,
 	Memento,
 	Uri,
 	window,
@@ -616,6 +617,146 @@ export class DiagramConfig {
 			this._customLibraries.get().map((lib) => normalizeLib(lib))
 		);
 	}
+
+	// #endregion
+
+	// #region Library Folders
+
+	private readonly _libraryFolders = new VsCodeSetting<string[]>(
+		`${extensionId}.libraryFolders`,
+		{
+			scope: this.uri,
+			serializer: serializerWithDefault<string[]>([]),
+		}
+	);
+
+	/** Chemins des dossiers de bibliothèques, `${workspaceFolder}` résolu. */
+	public get libraryFolderPaths(): string[] {
+		const folders = new Array<string>();
+		for (const folder of this._libraryFolders.get()) {
+			try {
+				folders.push(this.evaluateTemplate(folder, "library folders"));
+			} catch (e) {
+				// Un dossier qui ne peut pas être résolu (pas d'espace de
+				// travail ouvert, par exemple) ne doit pas empêcher les autres.
+				console.error(e);
+			}
+		}
+		return folders;
+	}
+
+	/**
+	 * Bibliothèques trouvées en parcourant les dossiers configurés.
+	 *
+	 * Chaque fichier `.xml` contenant un `<mxlibrary>` devient une entrée
+	 * distincte de la boîte « Plus de formes », nommée d'après le fichier et
+	 * suivie d'une étoile pour la distinguer des jeux de formes livrés avec
+	 * Draw.io. L'identifiant reprend le chemin relatif : il reste stable d'une
+	 * session à l'autre, ce qui permet à Draw.io de retenir les cases cochées.
+	 */
+	@computed
+	public get libraryFolders(): Promise<DrawioLibraryData[]> {
+		const roots = this.libraryFolderPaths;
+
+		const readLibrary = async (
+			file: Uri,
+			entryId: string,
+			libName: string
+		): Promise<DrawioLibraryData | undefined> => {
+			try {
+				const buffer = await workspace.fs.readFile(file);
+				const content = BufferImpl.from(buffer).toString("utf-8");
+
+				// Coupe court avant le parseur : un dossier de travail contient
+				// souvent des .xml qui n'ont rien de bibliothèques.
+				if (content.indexOf("<mxlibrary") < 0) {
+					return undefined;
+				}
+
+				const parse = require("xml-parser-xo");
+				const root = parse(content).root;
+
+				if (root == null || root.name !== "mxlibrary") {
+					return undefined;
+				}
+
+				const text = (root.children || []).find(
+					(c: { type: string }) => c.type === "Text"
+				);
+
+				return {
+					entryId,
+					libName,
+					data: {
+						kind: "value",
+						value: JSON.parse(text != null ? text.content : "[]"),
+					},
+				};
+			} catch (e) {
+				console.error(`Could not read shape library "${file}"`, e);
+				return undefined;
+			}
+		};
+
+		const collect = async (
+			dir: Uri,
+			prefix: string,
+			depth: number
+		): Promise<DrawioLibraryData[]> => {
+			let entries: [string, FileType][];
+			try {
+				entries = await workspace.fs.readDirectory(dir);
+			} catch (e) {
+				// Dossier absent ou illisible : on l'ignore en silence, le
+				// réglage peut désigner un disque non branché.
+				return [];
+			}
+
+			entries.sort((a, b) => a[0].localeCompare(b[0]));
+
+			const found = new Array<DrawioLibraryData>();
+			for (const [name, type] of entries) {
+				if (type === FileType.Directory) {
+					// Garde-fou contre les arborescences profondes et les
+					// dossiers techniques (.git, node_modules…).
+					if (
+						depth < DiagramConfig.maxLibraryFolderDepth &&
+						!name.startsWith(".") &&
+						name !== "node_modules"
+					) {
+						found.push(
+							...(await collect(
+								Uri.joinPath(dir, name),
+								prefix + name + "/",
+								depth + 1
+							))
+						);
+					}
+				} else if (/\.xml$/i.test(name)) {
+					const baseName = name.substring(0, name.length - 4);
+					const lib = await readLibrary(
+						Uri.joinPath(dir, name),
+						`libraryFolder/${prefix}${baseName}`,
+						`${baseName} ★`
+					);
+					if (lib) {
+						found.push(lib);
+					}
+				}
+			}
+			return found;
+		};
+
+		return (async () => {
+			const all = new Array<DrawioLibraryData>();
+			for (const root of roots) {
+				all.push(...(await collect(Uri.file(root), "", 0)));
+			}
+			return all;
+		})();
+	}
+
+	private static readonly maxLibraryFolderDepth = 8;
 
 	private evaluateTemplate(template: string, context: string): string {
 		const tpl = new SimpleTemplate(template);

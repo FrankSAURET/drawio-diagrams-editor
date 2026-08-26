@@ -54,6 +54,11 @@ declare const Editor: {
 /** Bibliotheque rangee dans le stockage du navigateur (mode « browser »). */
 declare const StorageLibrary: Function | undefined;
 
+/** Bibliotheque venue d'un fichier de l'appareil (mode « device »). */
+declare const LocalLibrary: {
+	new (ui: DrawioUI, data: string, title: string): any;
+};
+
 /** Menu de Draw.io : `new Menu(function(menu, parent) { ... })`. */
 declare const Menu: {
 	new (funct: (menu: any, parent: any) => void, enabled?: boolean): any;
@@ -87,6 +92,12 @@ declare interface DrawioUI {
     importLocalFile(args: boolean): void;
     /** Ouvre une bibliotheque existante : `App.MODE_DEVICE`, `MODE_BROWSER`... */
     pickLibrary(mode: string): void;
+    /** Charge une bibliotheque deja construite dans la barre laterale. */
+    loadLibrary(file: any, expand?: boolean): void;
+    /** Deplie la barre laterale des formes. */
+    showSidebar(): void;
+    /** Boite d'erreur de Draw.io. */
+    handleError(resp: any, title?: string | null): void;
 
     /** Conteneur de la barre de menus (offert seulement quand `chrome=1`). */
     menubarContainer?: HTMLElement;

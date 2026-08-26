@@ -30,12 +30,19 @@ Draw.loadPlugin((ui) => {
 			filename = filename + "." + (defaultExtension || "drawio");
 		}
 
+		// Une bibliotheque de formes se reconnait a sa racine XML. Pas besoin
+		// de suivre un drapeau au travers des enregistrements asynchrones :
+		// l'extension saura proposer le dossier de bibliotheques.
+		const isLibrary =
+			!base64Encoded && /^\s*(<\?xml[^>]*\?>\s*)?<mxlibrary/.test(data);
+
 		sendEvent({
 			event: "saveLocalFile",
 			filename,
 			mimeType,
 			base64Encoded: !!base64Encoded,
 			data,
+			isLibrary,
 		});
 	}
 

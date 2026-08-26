@@ -7,7 +7,11 @@ import {
 	WebviewPanel,
 	workspace,
 } from "vscode";
-import { CustomizedDrawioClient, simpleDrawioLibrary } from ".";
+import {
+	CustomizedDrawioClient,
+	folderDrawioLibrary,
+	simpleDrawioLibrary,
+} from ".";
 import { Config, DiagramConfig } from "../Config";
 import html from "./webview-content.html";
 import { formatValue } from "../utils/formatValue";
@@ -45,6 +49,7 @@ export class DrawioClientFactory {
 				reloadId.id;
 				// these getters triggers a reload on change
 				config.customLibraries;
+				config.libraryFolders;
 				config.customFonts;
 				config.presetColors;
 				config.customColorSchemes;
@@ -86,6 +91,7 @@ export class DrawioClientFactory {
 			},
 			async () => {
 				const libs = await config.customLibraries;
+				const folderLibs = await config.libraryFolders;
 				return {
 					compressXml: false,
 					customFonts: config.customFonts,
@@ -97,7 +103,10 @@ export class DrawioClientFactory {
 					colorNames: config.colorNames,
 					simpleLabels: config.simpleLabels,
 					defaultLibraries: "general",
-					libraries: simpleDrawioLibrary(libs),
+					libraries: [
+						...simpleDrawioLibrary(libs),
+						...folderDrawioLibrary(folderLibs),
+					],
 					zoomFactor: config.zoomFactor,
 					globalVars: config.globalVars,
 				};

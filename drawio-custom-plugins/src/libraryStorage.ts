@@ -99,7 +99,68 @@ Draw.loadPlugin((ui) => {
 		};
 	}
 
-	watch("pickLibrary", (args) => `mode=${args[0]}`);
+	// « Ouvrir une bibliotheque depuis > Peripherique » : Draw.io fabrique un
+	// <input type=file> cache, le garde sur `ui.libFileInputElt` et le
+	// reinitialise (`type=''` puis `type='file'`) apres chaque choix. En
+	// webview, cet element ne rend plus rien au second appel : la boite
+	// s'ouvre, le fichier est choisi, et aucune donnee n'arrive — d'ou la
+	// bibliotheque qui « se charge » mais reste vide. On demande le fichier a
+	// VS Code, qui a une vraie boite d'ouverture et lit le disque lui-meme.
+	const oldPickLibrary = anyUi.pickLibrary;
+	if (typeof oldPickLibrary === "function") {
+		anyUi.pickLibrary = function (mode: string) {
+			if (mode === App.MODE_DEVICE) {
+				log("bibliotheque: pickLibrary(peripherique) via VS Code");
+				sendEvent({ event: "pickLibraryFile" });
+				return;
+			}
+
+			return oldPickLibrary.apply(this, arguments);
+		};
+	}
+
+	window.addEventListener("message", (evt) => {
+		if (evt.source !== window.opener) {
+			return;
+		}
+
+		let data: CustomDrawioAction;
+		try {
+			data = JSON.parse(evt.data) as CustomDrawioAction;
+		} catch (e) {
+			return;
+		}
+
+		if (data.action !== "libraryFilePicked") {
+			return;
+		}
+
+		try {
+			const file = new LocalLibrary(ui, data.xml, data.name);
+			log(`bibliotheque: fichier choisi ${describe(file)}`);
+
+			// Le drapeau « deja chargee » survit a une fermeture par la croix
+			// (defaut amont) : sans ce nettoyage, rouvrir le meme fichier dans
+			// la meme session est ignore sans le moindre message.
+			const hash = file.getHash();
+			if (anyUi.loadedLibraries != null && hash != null) {
+				delete anyUi.loadedLibraries[hash];
+			}
+
+			ui.loadLibrary(file);
+			ui.showSidebar();
+		} catch (e) {
+			log(
+				"bibliotheque: chargement refuse : " +
+					((e && (e as any).message) || String(e))
+			);
+			ui.handleError(e, mxResources.get("errorLoadingFile"));
+		}
+
+		evt.preventDefault();
+		evt.stopPropagation();
+	});
+
 	watch("loadLibrary", (args) => describe(args[0]));
 	watch("libraryLoaded", (args) => describe(args[0]));
 	watch(

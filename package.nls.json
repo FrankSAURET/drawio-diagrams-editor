@@ -45,6 +45,8 @@
 	"configuration.knownPlugins.description": "List of allowed or denied plugins. The extension will read and write to this list based on what the user decides when loading specific plugins. See [plugins documentation](https://github.com/hediet/vscode-drawio/blob/master/docs/plugins.md).",
 	"configuration.customLibraries.title": "Custom Libraries",
 	"configuration.customLibraries.description": "Configures the Draw.io editor to use custom libraries.",
+	"configuration.libraryFolders.title": "Library Folders",
+	"configuration.libraryFolders.description": "Folders scanned recursively for shape libraries (`.xml` files containing `<mxlibrary>`). Every library found is listed in the **More Shapes** dialog under its file name followed by a star, and can be switched on or off there like any other shape set. Paths must be absolute; `${workspaceFolder}` is supported.",
 	"configuration.themeAndStyles.title": "Theme and styles",
 	"configuration.styles.title": "Styles",
 	"configuration.styles.description": "Defines an array of objects that contain the colours (fontColor, fillColor, strokeColor and gradientColor) for the Style tab of the format panel if the selection is empty.",

@@ -53,8 +53,21 @@ export class CustomizedDrawioClient extends DrawioClient<
 		mimeType: string | null;
 		base64Encoded: boolean;
 		data: string;
+		isLibrary: boolean;
 	}>();
 	public readonly onSaveLocalFile = this.onSaveLocalFileEmitter.asEvent();
+
+	private readonly onPickLibraryFileEmitter = new EventEmitter<{}>();
+	public readonly onPickLibraryFile = this.onPickLibraryFileEmitter.asEvent();
+
+	/** Repond a `pickLibraryFile` avec le fichier choisi par l'utilisateur. */
+	public libraryFilePicked(name: string, xml: string): void {
+		this.sendCustomAction({
+			action: "libraryFilePicked",
+			name,
+			xml,
+		});
+	}
 
 	public linkSelectedNodeWithData(linkedData: unknown) {
 		this.sendCustomAction({
@@ -130,7 +143,10 @@ export class CustomizedDrawioClient extends DrawioClient<
 				mimeType: evt.mimeType,
 				base64Encoded: evt.base64Encoded,
 				data: evt.data,
+				isLibrary: !!evt.isLibrary,
 			});
+		} else if (evt.event === "pickLibraryFile") {
+			this.onPickLibraryFileEmitter.emit({});
 		} else if (evt.event === "selectedRectangleChanged") {
 			this.onSelectedRectangleChangedEmitter.emit({
 				rectangle: evt.rect,

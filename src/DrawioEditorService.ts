@@ -235,6 +235,58 @@ export class DrawioEditor {
 		drawioClient.onSaveLocalFile.sub((file) => {
 			this.saveLocalFile(file);
 		});
+
+		drawioClient.onPickLibraryFile.sub(() => {
+			this.pickLibraryFile();
+		});
+	}
+
+	/**
+	 * « Ouvrir une bibliothèque depuis → Périphérique… ». Draw.io réutilise un
+	 * champ de fichier caché qui ne rend plus rien au second appel dans une
+	 * webview ; c'est donc VS Code qui demande le fichier et le lit.
+	 */
+	private async pickLibraryFile(): Promise<void> {
+		const folders = this.config.libraryFolderPaths;
+
+		const chosen = await window.showOpenDialog({
+			canSelectMany: false,
+			defaultUri:
+				folders.length > 0
+					? Uri.file(folders[0])
+					: this.uri.scheme === "file"
+						? Uri.joinPath(this.uri, "..")
+						: undefined,
+			filters: { [l10n.t("Shape Library")]: ["xml"] },
+			openLabel: l10n.t("Open Library"),
+		});
+
+		if (!chosen || chosen.length === 0) {
+			return;
+		}
+
+		const file = chosen[0];
+		let content: string;
+		try {
+			content = BufferImpl.from(
+				await workspace.fs.readFile(file)
+			).toString("utf-8");
+		} catch (e) {
+			await window.showErrorMessage(
+				l10n.t('Could not read library file "{0}"!', file.fsPath)
+			);
+			return;
+		}
+
+		if (content.indexOf("<mxlibrary") < 0) {
+			await window.showErrorMessage(
+				l10n.t('"{0}" is not a shape library!', file.fsPath)
+			);
+			return;
+		}
+
+		const name = file.path.substring(file.path.lastIndexOf("/") + 1);
+		this.drawioClient.libraryFilePicked(name, content);
 	}
 
 	/**
@@ -246,18 +298,28 @@ export class DrawioEditor {
 		mimeType: string | null;
 		base64Encoded: boolean;
 		data: string;
+		isLibrary: boolean;
 	}): Promise<void> {
 		const bytes = BufferImpl.from(
 			file.data,
 			file.base64Encoded ? "base64" : "utf8"
 		);
 
-		const targetUri = await window.showSaveDialog({
-			defaultUri:
-				this.uri.scheme === "file"
+		// Une bibliothèque va de préférence dans le dossier suivi : elle y sera
+		// relue au prochain chargement et proposée dans « Plus de formes ».
+		const libraryFolders = file.isLibrary
+			? this.config.libraryFolderPaths
+			: [];
+		const defaultUri =
+			libraryFolders.length > 0
+				? Uri.joinPath(Uri.file(libraryFolders[0]), file.filename)
+				: this.uri.scheme === "file"
 					? Uri.joinPath(this.uri, "..", file.filename)
-					: undefined,
-			saveLabel: l10n.t("Export"),
+					: undefined;
+
+		const targetUri = await window.showSaveDialog({
+			defaultUri,
+			saveLabel: file.isLibrary ? l10n.t("Save Library") : l10n.t("Export"),
 		});
 
 		if (!targetUri) {

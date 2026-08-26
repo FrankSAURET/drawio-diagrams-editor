@@ -3,7 +3,7 @@
 	"displayName": "%displayName%",
 	"description": "%description%",
 	"version": "2026.8.0",
-	"buildNumber": "2026.8.0.13",
+	"buildNumber": "2026.8.0.14",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"publisher": "electropol-fr",
 	"keywords": [
@@ -385,6 +385,16 @@
 						"title": "%configuration.customLibraries.title%",
 						"description": "%configuration.customLibraries.description%",
 						"order": 50
+					},
+					"electropol-fr.drawio-diagrams-editor.libraryFolders": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"default": [],
+						"title": "%configuration.libraryFolders.title%",
+						"markdownDescription": "%configuration.libraryFolders.description%",
+						"order": 55
 					}
 				}
 			},
