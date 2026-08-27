@@ -34,5 +34,11 @@
 	".drawio and .dio files are now associated with VS Code. If Windows still opens another application, right-click a file, choose \"Open with\" then \"Choose another app\" and select Visual Studio Code.": "Les fichiers .drawio et .dio sont associés à VS Code. Si Windows ouvre encore une autre application, faites un clic droit sur un fichier → « Ouvrir avec » → « Choisir une autre application » et sélectionnez Visual Studio Code.",
 	"Association failed: {0}": "Association impossible : {0}",
 	"Draw.io Diagram": "Diagramme Draw.io",
-	"New diagram": "Nouveau diagramme"
+	"New diagram": "Nouveau diagramme",
+	"Shape Library": "Bibliothèque de formes",
+	"Open Library": "Ouvrir la bibliothèque",
+	"Save Library": "Enregistrer la bibliothèque",
+	"Export": "Exporter",
+	"Could not read library file \"{0}\"!": "Impossible de lire le fichier de bibliothèque « {0} » !",
+	"\"{0}\" is not a shape library!": "« {0} » n'est pas une bibliothèque de formes !"
 }

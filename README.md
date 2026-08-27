@@ -62,6 +62,30 @@ Works with any language that supports VS Code workspace symbol search (TypeScrip
 
 ---
 
+## Shape libraries
+
+Point the extension at your own shape libraries and they show up next to the built-in ones.
+
+```json
+"electropol-fr.drawio-diagrams-editor.libraryFolders": [
+    "C:/Diagrams/Shapes",
+    "${workspaceFolder}/shapes"
+]
+```
+
+Each folder is scanned recursively for `.xml` files containing `<mxlibrary>`. Every library found is listed in the **More Shapes** dialog:
+
+- one category per folder, named after that folder — two folders sharing a name stay separate;
+- each library under its file name followed by a **★**;
+- a checkbox like any other shape set, and the checked state survives a reload;
+- a preview panel that draws the actual shapes.
+
+Paths must be absolute; `${workspaceFolder}` is supported.
+
+Libraries can also be opened one at a time with **File → Open Library From → Device**, and saving a library (or any export) goes through the native VS Code save dialog, opening on the first configured library folder.
+
+---
+
 ## Themes
 
 Switch themes at any time with the **`Draw.io: Change Theme`** command.
@@ -127,6 +151,11 @@ Only Draw.io-generated SVGs can be edited this way — arbitrary SVG files are n
 - Optional Windows Explorer association for `.drawio` / `.dio`, with the Draw.io icon
 - Fully localized interface (🇬🇧 English / 🇫🇷 French), including the settings
 - Button to open XML source beside the diagram (no need for `View: Reopen Editor With…`)
+- Shape library folders (`libraryFolders`), with one More Shapes category per folder and a working preview
+- `File → Open Library From → Device`, `Save As…` and the `Export as` submenu all routed through the native VS Code dialogs — exports and library saves actually write a file
+- Copy a selection as SVG (pasteable into Word, PowerPoint, Outlook — and still editable back in Draw.io)
+- Paste an SVG copied from another application instead of getting a long text label
+- Version number shown in the editor menu bar
 - SVG export fix
 - Updated to Draw.io v31.3.2 (libavoid auto-routing, built-in ELK layouts, offline PlantUML rendering)
 - Ongoing bug fixes not yet merged in the original project

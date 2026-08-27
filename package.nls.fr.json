@@ -45,6 +45,8 @@
 	"configuration.knownPlugins.description": "Liste des plugins autorisés ou refusés. Voir la [documentation des plugins](https://github.com/hediet/vscode-drawio/blob/master/docs/plugins.md).",
 	"configuration.customLibraries.title": "Bibliothèques personnalisées",
 	"configuration.customLibraries.description": "Configure l'éditeur Draw.io pour utiliser des bibliothèques personnalisées.",
+	"configuration.libraryFolders.title": "Dossiers de bibliothèques",
+	"configuration.libraryFolders.description": "Dossiers explorés récursivement à la recherche de bibliothèques de formes (fichiers `.xml` contenant `<mxlibrary>`). Chaque bibliothèque trouvée apparaît dans la boîte **Plus de formes** sous son nom de fichier suivi d'une étoile, regroupée en une catégorie par dossier, et peut y être activée ou désactivée comme n'importe quel autre jeu de formes. Les chemins doivent être absolus ; `${workspaceFolder}` est pris en charge.",
 	"configuration.themeAndStyles.title": "Thème et styles",
 	"configuration.styles.title": "Styles",
 	"configuration.styles.description": "Définit un tableau d'objets contenant les couleurs pour l'onglet Style du panneau de format.",

@@ -3,6 +3,37 @@
 All notable changes to this project will be documented in this file.
 New format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) — Versioning: [CalVer](https://calver.org/) (`YYYY.M.micro`).
 
+## [2026.8.1] - 2026-08-27
+
+### Added
+
+-   **Shape library folders**: the new `electropol-fr.drawio-diagrams-editor.libraryFolders` setting lists folders scanned recursively (8 levels, hidden folders and `node_modules` skipped) for `.xml` files containing `<mxlibrary>`. Every library found appears in the **More Shapes** dialog under its file name followed by a star, in **one category per folder** named after that folder, and can be switched on or off like any other shape set — the checked state survives a reload. Absolute paths only; `${workspaceFolder}` is supported. Two folders sharing a name stay two distinct categories (the title then shows one more path segment, `Shapes/Electronics`).
+-   **Preview of our libraries in the More Shapes dialog**: the shapes are drawn in the right-hand panel, for both `libraryFolders` and `customLibraries` entries. A library referenced by URL is only downloaded when it is actually looked at, and the preview stops past 300 shapes so the window never freezes.
+-   **Open Library From → Device** now opens the native VS Code file dialog, filtered on `.xml` and positioned on the first configured library folder. It can be used any number of times in a session.
+-   **File → Save As…** added to the Draw.io File menu (routed to VS Code, which owns the document), and the **Export as** submenu restored.
+-   **Exports and library saves now work**: instead of a blob download that a webview cannot perform, `saveLocalFile` is routed to the extension, which opens the native VS Code save dialog and writes the file. Applies to the whole `Export as` submenu (PNG, JPEG, SVG, PDF, HTML, XML, JSON…) and to shape libraries, which default to the first configured library folder.
+-   **Copy a selection as SVG**: the clipboard receives `text/html` with the SVG as a `data:` URI (what Word, PowerPoint and Outlook read), the `image/svg+xml` flavour, and the SVG `content` attribute carrying the cell XML — so a paste back into Draw.io stays editable.
+-   **Paste an SVG copied from another application** (Inkscape, Kablix, Draw.io…): a complete SVG document is now recognised and imported as an image instead of being pasted as a long text label.
+-   **Extras → Theme…** now calls the extension theme picker, so the choice is written to the VS Code settings and survives a webview reload.
+-   **Version number shown in the editor menu bar**, aligned to the right, in every theme.
+
+### Fixed
+
+-   **Ctrl+S had to be pressed twice.** Draw.io copies the originating action into the `message` field of its events, including `autosave`; the extension took every such event for a request answer and swallowed it, so no change ever reached the document. Answers are now matched against pending requests only.
+-   **Pasting an SVG did nothing.** `Editor.enableNativeClipboard` is defined as `window == window.top`, which is never true in a VS Code webview, so Draw.io never read the clipboard. The flag now depends on the availability of `navigator.clipboard.read`, with the internal clipboard as a fallback. Side effect: `Copy as Image` / `Copy as PNG` reappear in the menus.
+-   **A library removed then re-imported was refused ("file already exists")** — two causes: the copy kept in browser storage was left behind by the sidebar close button, and the webview `localStorage` bridge relayed writes to the extension but not deletions, so deleted keys came back on reload.
+-   **A library closed by its cross could not be reopened in the same session**: `EditorUi.closeLibrary` forgets to clear `ui.loadedLibraries`, and `App.loadLibraries` then silently refuses the library. The flag is now cleared.
+-   **The "Open Library From" submenu was missing** from the File menu: Draw.io only adds it when the URL carries `libraries=1`, which the webview does not pass. Both entries (Device…, Browser…) are added by the extension.
+-   **Version label invisible in the kennedy theme**: it was attached to a container that is only the visible bar in the `min` theme. The parent is now chosen per theme, with a floating fallback if the label ends up clipped.
+-   **PlantUML rendering**: since Draw.io v31 the renderer is bundled and local, and the webview script sequence had to be aligned — no remote server is contacted any more.
+
+### Changed
+
+-   **Draw.io submodule updated from v30.0.1 to v31.3.2**: libavoid auto-routing, built-in ELK layouts, offline PlantUML rendering. All the APIs patched by the webview were re-verified against the new build.
+-   **"New Library…" removed from the File menu**: `Open Library From → Device` covers the need, and saving a library goes through the VS Code dialog anyway.
+-   French translation completed for the new settings and dialog labels.
+-   The generated VSIX file name now carries the build number, so two packages from the same month can be told apart.
+
 ## [2026.8.0] - 2026-08-23
 
 ### Added
@@ -62,6 +93,7 @@ has not merged pull requests for over a year. This fork continues development un
 
 -   Mise à jour du sous-module Draw.io vers la version **30.0.1** 
 
+[2026.8.1]: https://github.com/FrankSAURET/drawio-diagrams-editor/releases/tag/v2026.8.1
 [2026.8.0]: https://github.com/FrankSAURET/drawio-diagrams-editor/releases/tag/v2026.8.0
 [2026.7.1]: https://github.com/FrankSAURET/drawio-diagrams-editor/releases/tag/v2026.7.1
 [2026.7.0]: https://github.com/FrankSAURET/drawio-diagrams-editor/releases/tag/v2026.7.0

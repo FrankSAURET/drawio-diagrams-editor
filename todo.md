@@ -1,8 +1,20 @@
 # À faire
-1. ⬜ **Vérifier le lot 2026.8.0.16** (fenêtre rechargée) : dans « + de formes », plus de catégorie « Library Folders » — une catégorie par dossier, titrée du nom du dossier.
-1. ⏳ Traduction FR des chaînes du lot 2026.8.0.14 (`configuration.libraryFolders.title` / `.description` dans `package.nls.fr.json` ; « Shape Library », « Open Library », « Save Library », `Could not read library file "{0}"!`, `"{0}" is not a shape library!` dans `l10n/bundle.l10n.fr.json`) — lot de traductions avant publication.
-1. ⏳ Traduction FR de la chaîne « Export » (libellé du bouton de la boîte d'enregistrement des exports) — lot de traductions avant publication.
-1. ⏳ Import Gliffy (`js/gliffy/`, 609 Ko) laissé hors du VSIX : l'extension n'ouvre pas les `.gliffy`, à whitelister seulement si le besoin apparaît.
+1. ⬜ **Vérifier le lot 2026.8.1.17** (fenêtre rechargée) : interface en français pour les bibliothèques (« Bibliothèque de formes », « Ouvrir la bibliothèque », « Enregistrer la bibliothèque », « Exporter »), réglage « Dossiers de bibliothèques » traduit, et étiquette de version qui n'affiche plus que `v2026.8.1` dans un VSIX installé.
+2. ⬜ **Publication 2026.8.1** : `vsce publish` (éditeur `electropol-fr`) — en attente de l'accord explicite de Frank. VSIX à construire sur demande.
+3. ⏳ Journal des gestes de bibliothèque (lot 2026.8.0.12) toujours en place dans [libraryStorage.ts](drawio-custom-plugins/src/libraryStorage.ts) : à retirer une fois les défauts de bibliothèque confirmés corrigés.
+4. ⏳ Import Gliffy (`js/gliffy/`, 609 Ko) laissé hors du VSIX : l'extension n'ouvre pas les `.gliffy`, à whitelister seulement si le besoin apparaît.
+
+# v2026.8.1.17 — traductions FR, passage en 2026.8.1, changelog et readme
+
+1. ✅ **Toutes les chaînes de l'interface sont traduites.** Les 6 chaînes laissées en langue de base par les lots 2026.8.0.9 et .14 sont entrées dans [bundle.l10n.fr.json](l10n/bundle.l10n.fr.json) : « Bibliothèque de formes », « Ouvrir la bibliothèque », « Enregistrer la bibliothèque », « Exporter », « Impossible de lire le fichier de bibliothèque « {0} » ! », « « {0} » n'est pas une bibliothèque de formes ! ».
+2. ✅ **Réglage `libraryFolders` traduit** ([package.nls.fr.json](package.nls.fr.json)) : titre « Dossiers de bibliothèques » et description complète, catégorie par dossier comprise.
+3. ✅ **Contrôle automatique des deux dictionnaires** : un script parcourt `src/` et relève tous les appels `l10n.t(...)` — **42 chaînes trouvées, 42 traduites, 0 clé morte**. Côté manifeste, `package.nls.json` et `package.nls.fr.json` ont exactement les mêmes clés.
+4. ✅ **Version publique passée à 2026.8.1** ([package.json](package.json)), lot interne `2026.8.1.17`. Même mois que la version courante, donc incrément simple (règle calver).
+5. ✅ **L'étiquette de version redevient conforme à la règle des deux numéros** ([Extension.ts](src/Extension.ts), `versionLabelFor`) : le numéro de lot n'apparaît **plus en production**, l'utilisateur final ne voit que `v2026.8.1`. Hors production (F5, extension de développement) le numéro à quatre segments reste affiché. ⚠️ Ceci annule l'écart assumé au lot 2026.8.0.10, qui prévoyait lui-même « à remettre en état avant publication ».
+6. ✅ **[CHANGELOG.md](CHANGELOG.md) : section `[2026.8.1] - 2026-08-27`** (Added / Fixed / Changed) résumant les lots 2026.8.0.7 → .16 : dossiers de bibliothèques, aperçu dans « + de formes », ouverture et enregistrement par les boîtes de VS Code, exports qui écrivent enfin un fichier, copie et collage SVG, Ctrl+S en une fois, bibliothèques fantômes, sous-module Draw.io v31.3.2. Lien de release ajouté.
+7. ✅ **[README.md](README.md)** : nouvelle section « Shape libraries » (réglage `libraryFolders` avec exemple, catégorie par dossier, étoile, case à cocher persistante, aperçu, ouverture et enregistrement) et rubrique « What changed in this fork » complétée (bibliothèques, boîtes natives, copie/collage SVG, numéro de version).
+8. ✅ Build extension + greffons (webpack production) et `tsc --noEmit` : 0 erreur hors `node_modules`.
+9. ℹ️ Pas de VSIX construit dans ce lot (règle : artefact seulement sur demande expresse). Publication non lancée : elle attend l'accord explicite de Frank.
 
 # v2026.8.0.16 — une catégorie par dossier dans « + de formes »
 
