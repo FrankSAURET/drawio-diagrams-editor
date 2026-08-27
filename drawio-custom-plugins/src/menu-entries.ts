@@ -48,16 +48,6 @@ Draw.loadPlugin((ui) => {
 		sendEvent({ event: "invokeCommand", command: "saveAs" });
 	});
 
-	// « Nouvelle bibliotheque » : le sous-menu amont ne liste que des services
-	// en ligne indisponibles hors ligne, on va droit au dialogue local.
-	const newLibraryActionName = "vscode.newLibrary";
-	mxResources.parse(
-		`${newLibraryActionName}=${label("newLibrary", "New Library")}...`
-	);
-	ui.actions.addAction(newLibraryActionName, () => {
-		ui.showLibraryDialog(null, null, null, null, App.MODE_DEVICE);
-	});
-
 	// « Ouvrir une bibliotheque depuis » : en mode integre (`embed=1`),
 	// Draw.io n'ajoute ses sous-menus de bibliotheque que si `libraries=1`
 	// figure dans l'adresse — ce que la webview ne fait pas. Sans cette
@@ -112,7 +102,6 @@ Draw.loadPlugin((ui) => {
 				importActionName,
 				exportActionName,
 				convertActionName,
-				newLibraryActionName,
 			],
 			parent
 		);

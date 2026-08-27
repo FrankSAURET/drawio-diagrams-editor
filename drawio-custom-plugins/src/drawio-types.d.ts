@@ -38,6 +38,8 @@ declare const mxUtils: {
 	createXmlDocument(): XMLDocument;
 	sortCells(cells: DrawioCell[]): DrawioCell[];
 	getXml(node: any): string;
+	parseXml(xml: string): XMLDocument;
+	getTextContent(node: any): string;
 };
 
 declare const App: {
@@ -114,6 +116,22 @@ declare interface DrawioUI {
     /** Chemin de telechargement de Draw.io, redirige vers VS Code. */
     saveLocalFile: (...args: any[]) => void;
     doSaveLocalFile: (...args: any[]) => void;
+
+    /** Barre laterale des formes, porteuse des sections configurees. */
+    sidebar: DrawioSidebar;
+    /** Dessine les vignettes d'une bibliotheque dans le conteneur donne. */
+    addLibraryEntries(images: any[], content: HTMLElement): void;
+    /** Choisit la traduction courante d'un libelle multilingue. */
+    getResource(obj: any): string;
+}
+
+interface DrawioSidebar {
+    /** Sections venues de la configuration (`libraries`). */
+    customEntries: any[] | null;
+    /** Jeux de formes livres avec Draw.io. */
+    entries: any[];
+    /** Liste blanche facultative d'identifiants de jeux de formes. */
+    enabledLibraries: string[] | null;
 }
 
 interface DrawioMenus {
@@ -131,6 +149,12 @@ interface DrawioActions {
 
 declare interface DrawioEditor {
 	graph: DrawioGraph;
+	/** Telecharge une adresse, en passant par le mandataire si besoin. */
+	loadUrl(
+		url: string,
+		success: (data: string) => void,
+		error?: (e: any) => void
+	): void;
 }
 
 declare interface DrawioGraph {

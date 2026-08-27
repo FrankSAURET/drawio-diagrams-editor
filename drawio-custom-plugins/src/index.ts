@@ -6,6 +6,7 @@ import "./localFileSave";
 import "./copySelectionAsSvg";
 import "./pasteSvgText";
 import "./libraryStorage";
+import "./libraryPreview";
 import "./versionLabel";
 
 Draw.loadPlugin((ui) => {

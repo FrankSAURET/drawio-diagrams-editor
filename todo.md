@@ -1,9 +1,17 @@
 # À faire
-1. ⬜ **Vérifier les bibliothèques** avec le lot **2026.8.0.14** (fenêtre rechargée) : (a) **Fichier → Ouvrir une bibliothèque depuis → Périphérique…** deux fois de suite sur le même `.xml` — les formes doivent apparaître à chaque fois ; (b) renseigner le réglage **Library Folders** avec un dossier contenant des `.xml` de bibliothèque, recharger, ouvrir **+ de formes** : chaque fichier doit y figurer sous son nom suivi d'une **★**, cochable/décochable, l'état retenu après rechargement.
-2. — lot séparé, à lancer sur ta demande.
-3. ⏳ Traduction FR des chaînes du lot 2026.8.0.14 (`configuration.libraryFolders.title` / `.description` dans `package.nls.fr.json` ; « Shape Library », « Open Library », « Save Library », `Could not read library file "{0}"!`, `"{0}" is not a shape library!` dans `l10n/bundle.l10n.fr.json`) — lot de traductions avant publication.
-4. ⏳ Traduction FR de la chaîne « Export » (libellé du bouton de la boîte d'enregistrement des exports) — lot de traductions avant publication.
-5. ⏳ Import Gliffy (`js/gliffy/`, 609 Ko) laissé hors du VSIX : l'extension n'ouvre pas les `.gliffy`, à whitelister seulement si le besoin apparaît.
+1. ⬜ **Vérifier les deux corrections** avec le lot **2026.8.0.15** (fenêtre rechargée) : le menu « Nouvelle bibliothèque… » a disparu du menu Fichier, et un clic sur une bibliothèque dans « + de formes » montre bien ses formes.
+1. ⏳ Traduction FR des chaînes du lot 2026.8.0.14 (`configuration.libraryFolders.title` / `.description` dans `package.nls.fr.json` ; « Shape Library », « Open Library », « Save Library », `Could not read library file "{0}"!`, `"{0}" is not a shape library!` dans `l10n/bundle.l10n.fr.json`) — lot de traductions avant publication.
+1. ⏳ Traduction FR de la chaîne « Export » (libellé du bouton de la boîte d'enregistrement des exports) — lot de traductions avant publication.
+1. ⏳ Import Gliffy (`js/gliffy/`, 609 Ko) laissé hors du VSIX : l'extension n'ouvre pas les `.gliffy`, à whitelister seulement si le besoin apparaît.
+
+# v2026.8.0.15 — menu retiré, aperçu des bibliothèques dans « + de formes »
+
+1. ✅ **Menu « Nouvelle bibliothèque… » retiré** du menu Fichier ([menu-entries.ts](drawio-custom-plugins/src/menu-entries.ts)) : depuis le lot précédent, « Ouvrir une bibliothèque depuis → Périphérique » couvre le besoin, et l'enregistrement d'une bibliothèque retombe de toute façon sur la boîte de VS Code. L'action `vscode.newLibrary` est supprimée avec son entrée.
+2. ✅ **Cause du « l'aperçu ne fonctionne pas » trouvée.** La boîte « Plus de formes » sait remplir son panneau de deux façons : une image toute faite (`entry.image`) ou un habillage qui dessine lui-même (`entry.imageCallback`, `Dialogs.js:15305-15320`). Mais elle recopie les sections venues de la configuration — donc **toutes nos bibliothèques** — en ne gardant que `id`, `title`, `desc` et `preview` (`Dialogs.js:15203-15223`) : `imageCallback` est **jeté**, et comme nos entrées n'ont pas d'image, le panneau reste vide.
+3. ✅ **Nouveau greffon [libraryPreview.ts](drawio-custom-plugins/src/libraryPreview.ts)** : il remplace la fonction globale `MoreShapesDialog`, reconstruit nos sections avec un `imageCallback` qui dessine les formes (`ui.addLibraryEntries`, le même code que la barre latérale), puis les passe par le **troisième argument** du dialogue — le seul chemin où les entrées sont recopiées telles quelles. Les sections d'origine sont neutralisées le temps de la construction, sinon elles apparaîtraient deux fois.
+4. ✅ Vaut pour les **deux** sortes : les bibliothèques des dossiers configurés (`libraryFolders`) et celles du réglage `customLibraries`. Une bibliothèque désignée par une adresse n'est téléchargée qu'au moment où on la regarde ; au-delà de **300 formes**, l'aperçu s'arrête et annonce le reste, pour ne pas figer la fenêtre.
+5. ✅ Build extension + greffons (webpack production) et `tsc --noEmit` : 0 erreur hors `node_modules`.
+6. ℹ️ Pas de VSIX construit dans ce lot (règle : artefact seulement sur demande expresse).
 
 # v2026.8.0.14 — ouvrir une bibliothèque depuis un fichier, dossiers de bibliothèques
 
