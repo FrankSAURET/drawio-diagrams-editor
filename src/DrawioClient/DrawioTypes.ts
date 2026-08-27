@@ -208,6 +208,12 @@ export interface DrawioLibraryData {
 	entryId: string;
 	libName: string;
 	data: { kind: "value"; value: unknown } | { kind: "url"; url: string };
+	/**
+	 * Catégorie de la boîte « Plus de formes » où ranger l'entrée : le dossier
+	 * qui contient le fichier. `id` est l'adresse complète du dossier (deux
+	 * dossiers de même nom restent donc séparés), `title` le nom affiché.
+	 */
+	group?: { id: string; title: string };
 }
 
 export function res(name: string): DrawioResource {

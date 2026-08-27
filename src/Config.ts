@@ -653,6 +653,9 @@ export class DiagramConfig {
 	 * suivie d'une étoile pour la distinguer des jeux de formes livrés avec
 	 * Draw.io. L'identifiant reprend le chemin relatif : il reste stable d'une
 	 * session à l'autre, ce qui permet à Draw.io de retenir les cases cochées.
+	 *
+	 * Chaque entrée porte aussi le dossier qui la contient (`group`) : la boîte
+	 * en fait une catégorie par dossier, titrée du nom du dossier.
 	 */
 	@computed
 	public get libraryFolders(): Promise<DrawioLibraryData[]> {
@@ -661,7 +664,8 @@ export class DiagramConfig {
 		const readLibrary = async (
 			file: Uri,
 			entryId: string,
-			libName: string
+			libName: string,
+			group: { id: string; title: string }
 		): Promise<DrawioLibraryData | undefined> => {
 			try {
 				const buffer = await workspace.fs.readFile(file);
@@ -687,6 +691,7 @@ export class DiagramConfig {
 				return {
 					entryId,
 					libName,
+					group,
 					data: {
 						kind: "value",
 						value: JSON.parse(text != null ? text.content : "[]"),
@@ -701,7 +706,8 @@ export class DiagramConfig {
 		const collect = async (
 			dir: Uri,
 			prefix: string,
-			depth: number
+			depth: number,
+			group: { id: string; title: string }
 		): Promise<DrawioLibraryData[]> => {
 			let entries: [string, FileType][];
 			try {
@@ -724,11 +730,13 @@ export class DiagramConfig {
 						!name.startsWith(".") &&
 						name !== "node_modules"
 					) {
+						const child = Uri.joinPath(dir, name);
 						found.push(
 							...(await collect(
-								Uri.joinPath(dir, name),
+								child,
 								prefix + name + "/",
-								depth + 1
+								depth + 1,
+								{ id: child.toString(), title: name }
 							))
 						);
 					}
@@ -737,7 +745,8 @@ export class DiagramConfig {
 					const lib = await readLibrary(
 						Uri.joinPath(dir, name),
 						`libraryFolder/${prefix}${baseName}`,
-						`${baseName} ★`
+						`${baseName} ★`,
+						group
 					);
 					if (lib) {
 						found.push(lib);
@@ -750,7 +759,18 @@ export class DiagramConfig {
 		return (async () => {
 			const all = new Array<DrawioLibraryData>();
 			for (const root of roots) {
-				all.push(...(await collect(Uri.file(root), "", 0)));
+				const rootUri = Uri.file(root);
+				// Les fichiers posés à la racine d'un dossier configuré sont
+				// rangés sous le nom de ce dossier.
+				const rootName =
+					rootUri.path.split("/").filter((p) => p.length > 0).pop() ||
+					root;
+				all.push(
+					...(await collect(rootUri, "", 0, {
+						id: rootUri.toString(),
+						title: rootName,
+					}))
+				);
 			}
 			return all;
 		})();

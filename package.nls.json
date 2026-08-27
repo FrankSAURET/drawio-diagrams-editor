@@ -46,7 +46,7 @@
 	"configuration.customLibraries.title": "Custom Libraries",
 	"configuration.customLibraries.description": "Configures the Draw.io editor to use custom libraries.",
 	"configuration.libraryFolders.title": "Library Folders",
-	"configuration.libraryFolders.description": "Folders scanned recursively for shape libraries (`.xml` files containing `<mxlibrary>`). Every library found is listed in the **More Shapes** dialog under its file name followed by a star, and can be switched on or off there like any other shape set. Paths must be absolute; `${workspaceFolder}` is supported.",
+	"configuration.libraryFolders.description": "Folders scanned recursively for shape libraries (`.xml` files containing `<mxlibrary>`). Every library found is listed in the **More Shapes** dialog under its file name followed by a star, grouped into one category per folder, and can be switched on or off there like any other shape set. Paths must be absolute; `${workspaceFolder}` is supported.",
 	"configuration.themeAndStyles.title": "Theme and styles",
 	"configuration.styles.title": "Styles",
 	"configuration.styles.description": "Defines an array of objects that contain the colours (fontColor, fillColor, strokeColor and gradientColor) for the Style tab of the format panel if the selection is empty.",

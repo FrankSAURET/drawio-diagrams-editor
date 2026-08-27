@@ -1,8 +1,18 @@
 # À faire
-1. ⬜ **Vérifier les deux corrections** avec le lot **2026.8.0.15** (fenêtre rechargée) : le menu « Nouvelle bibliothèque… » a disparu du menu Fichier, et un clic sur une bibliothèque dans « + de formes » montre bien ses formes.
+1. ⬜ **Vérifier le lot 2026.8.0.16** (fenêtre rechargée) : dans « + de formes », plus de catégorie « Library Folders » — une catégorie par dossier, titrée du nom du dossier.
 1. ⏳ Traduction FR des chaînes du lot 2026.8.0.14 (`configuration.libraryFolders.title` / `.description` dans `package.nls.fr.json` ; « Shape Library », « Open Library », « Save Library », `Could not read library file "{0}"!`, `"{0}" is not a shape library!` dans `l10n/bundle.l10n.fr.json`) — lot de traductions avant publication.
 1. ⏳ Traduction FR de la chaîne « Export » (libellé du bouton de la boîte d'enregistrement des exports) — lot de traductions avant publication.
 1. ⏳ Import Gliffy (`js/gliffy/`, 609 Ko) laissé hors du VSIX : l'extension n'ouvre pas les `.gliffy`, à whitelister seulement si le besoin apparaît.
+
+# v2026.8.0.16 — une catégorie par dossier dans « + de formes »
+
+1. ✅ **Le titre « Library Folders » disparaît.** Toutes les bibliothèques des dossiers configurés étaient entassées dans une seule catégorie portant ce nom ([simpleDrawioLibrary.ts](src/DrawioClient/simpleDrawioLibrary.ts)). Elles sont maintenant réparties en **une catégorie par dossier**, dont le titre est le **nom du dossier** ; les fichiers posés à la racine d'un dossier configuré vont sous le nom de ce dossier.
+2. ✅ **Chaque bibliothèque sait d'où elle vient** : le parcours des dossiers ([Config.ts](src/Config.ts)) attache à chaque entrée le dossier qui la contient (`group` : adresse complète + nom affiché, nouveau champ facultatif de `DrawioLibraryData` dans [DrawioTypes.ts](src/DrawioClient/DrawioTypes.ts)). L'adresse complète sert de clé : deux dossiers de même nom dans deux racines différentes restent **deux catégories distinctes**.
+3. ✅ **Deux dossiers homonymes ne donnent plus deux titres identiques** : quand un nom revient, le titre remonte d'un cran dans le chemin (`Formes/Électronique`). Sinon le nom seul est affiché.
+4. ℹ️ **Les identifiants d'entrée ne bougent pas** (`libraryFolder/chemin/nom`) : c'est la clé sous laquelle Draw.io retient les cases cochées d'une session à l'autre. Seul l'affichage change, les bibliothèques déjà cochées le restent.
+5. ✅ Description du réglage `libraryFolders` mise à jour en langue de base ([package.nls.json](package.nls.json)) : la catégorie par dossier y est annoncée. Traduction FR au lot d'avant publication.
+6. ✅ Build extension (webpack production) et `tsc --noEmit` : 0 erreur hors `node_modules`. Greffons inchangés, non reconstruits.
+7. ℹ️ Pas de VSIX construit dans ce lot (règle : artefact seulement sur demande expresse).
 
 # v2026.8.0.15 — menu retiré, aperçu des bibliothèques dans « + de formes »
 
