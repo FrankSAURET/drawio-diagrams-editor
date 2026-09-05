@@ -65,5 +65,11 @@
 	"configuration.theme.title": "Draw.io Theme",
 	"configuration.theme.description": "The theme to use for the Draw.io editor. Use \"automatic\" to automatically choose a Draw.io theme that matches your current VS Code theme.",
 	"configuration.appearance.title": "Draw.io Appearance",
-	"configuration.appearance.description": "The appearance to use for the Draw.io editor. Use \"automatic\" to automatically choose a Draw.io theme that matches your current VS Code theme."
+	"configuration.appearance.description": "The appearance to use for the Draw.io editor. Use \"automatic\" to automatically choose a Draw.io theme that matches your current VS Code theme.",
+	"configuration.showLinkIcons.title": "Show Link Icons",
+	"configuration.showLinkIcons.description": "Permanently shows a small link icon on every shape that carries a link, instead of only on hover.",
+	"configuration.showTooltipIcons.title": "Show Tooltip Icons",
+	"configuration.showTooltipIcons.description": "Permanently shows a small marker on every shape that carries a tooltip, instead of only on hover.",
+	"configuration.showConnectHandle.title": "Show Connect Handle",
+	"configuration.showConnectHandle.description": "Shows the connection handle (the blue arrow used to draw an edge) on the selected shape."
 }

@@ -340,6 +340,49 @@ export class DiagramConfig {
 
 	//#endregion
 
+	//#region Display Icons
+
+	private readonly _showLinkIcons = new VsCodeSetting(
+		`${extensionId}.showLinkIcons`,
+		{
+			scope: this.uri,
+			serializer: serializerWithDefault<boolean>(false),
+		}
+	);
+
+	@computed
+	public get showLinkIcons(): boolean {
+		return this._showLinkIcons.get();
+	}
+
+	private readonly _showTooltipIcons = new VsCodeSetting(
+		`${extensionId}.showTooltipIcons`,
+		{
+			scope: this.uri,
+			serializer: serializerWithDefault<boolean>(false),
+		}
+	);
+
+	@computed
+	public get showTooltipIcons(): boolean {
+		return this._showTooltipIcons.get();
+	}
+
+	private readonly _showConnectHandle = new VsCodeSetting(
+		`${extensionId}.showConnectHandle`,
+		{
+			scope: this.uri,
+			serializer: serializerWithDefault<boolean>(false),
+		}
+	);
+
+	@computed
+	public get showConnectHandle(): boolean {
+		return this._showConnectHandle.get();
+	}
+
+	//#endregion
+
 	//#region Preset Colors
 
 	private readonly _presetColors = new VsCodeSetting(

@@ -3,7 +3,7 @@
 	"displayName": "%displayName%",
 	"description": "%description%",
 	"version": "2026.8.1",
-	"buildNumber": "2026.8.1.17",
+	"buildNumber": "2026.8.1.18",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"publisher": "electropol-fr",
 	"keywords": [
@@ -519,6 +519,24 @@
 							"high-contrast"
 						],
 						"description": "%configuration.appearance.description%"
+					},
+					"electropol-fr.drawio-diagrams-editor.showLinkIcons": {
+						"type": "boolean",
+						"default": false,
+						"title": "%configuration.showLinkIcons.title%",
+						"description": "%configuration.showLinkIcons.description%"
+					},
+					"electropol-fr.drawio-diagrams-editor.showTooltipIcons": {
+						"type": "boolean",
+						"default": false,
+						"title": "%configuration.showTooltipIcons.title%",
+						"description": "%configuration.showTooltipIcons.description%"
+					},
+					"electropol-fr.drawio-diagrams-editor.showConnectHandle": {
+						"type": "boolean",
+						"default": false,
+						"title": "%configuration.showConnectHandle.title%",
+						"description": "%configuration.showConnectHandle.description%"
 					}
 				}
 			}
@@ -566,6 +584,8 @@
 		"package-extension": "yarn package-extension-stable",
 		"package-extension-stable": "node ./scripts/package-vsix.mjs",
 		"package-extension-preRelease": "node ./scripts/package-vsix.mjs --pre-release",
+		"check-drawio": "node ./scripts/update-drawio.mjs --check",
+		"update-drawio": "node ./scripts/update-drawio.mjs",
 		"dev": "webpack --mode development --watch",
 		"dev-drawio-plugins": "webpack --mode development --watch --config ./drawio-custom-plugins/webpack.config.ts",
 		"dev-drawio-plugins-web": "webpack-dev-server --hot --config ./drawio-custom-plugins/webpack.config.ts"

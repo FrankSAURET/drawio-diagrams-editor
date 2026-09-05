@@ -58,6 +58,9 @@ export class DrawioClientFactory {
 				config.defaultEdgeStyle;
 				config.colorNames;
 				config.simpleLabels;
+				config.showLinkIcons;
+				config.showTooltipIcons;
+				config.showConnectHandle;
 				config.zoomFactor;
 				config.globalVars;
 				config.resizeImages;
@@ -102,6 +105,9 @@ export class DrawioClientFactory {
 					defaultEdgeStyle: config.defaultEdgeStyle,
 					colorNames: config.colorNames,
 					simpleLabels: config.simpleLabels,
+					showLinkIcons: config.showLinkIcons,
+					showTooltipIcons: config.showTooltipIcons,
+					showConnectHandle: config.showConnectHandle,
 					defaultLibraries: "general",
 					libraries: [
 						...simpleDrawioLibrary(libs),

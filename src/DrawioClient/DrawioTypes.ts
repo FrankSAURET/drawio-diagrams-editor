@@ -125,6 +125,21 @@ export interface DrawioConfig {
 	simpleLabels?: boolean;
 
 	/**
+	 * Shows a permanent link icon on shapes that carry a link (default false).
+	 */
+	showLinkIcons?: boolean;
+
+	/**
+	 * Shows a permanent marker on shapes that carry a tooltip (default false).
+	 */
+	showTooltipIcons?: boolean;
+
+	/**
+	 * Shows the connection handle (blue arrow) on the selected shape (default false).
+	 */
+	showConnectHandle?: boolean;
+
+	/**
 	 * Defines a string with CSS rules to be used to configure the diagrams.net user interface.
 	 * For example, to change the background colour of the menu bar, use the following:
 	 * ```css

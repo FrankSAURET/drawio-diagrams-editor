@@ -1,8 +1,19 @@
 # À faire
-1. ⬜ **Vérifier le lot 2026.8.1.17** (fenêtre rechargée) : interface en français pour les bibliothèques (« Bibliothèque de formes », « Ouvrir la bibliothèque », « Enregistrer la bibliothèque », « Exporter »), réglage « Dossiers de bibliothèques » traduit, et étiquette de version qui n'affiche plus que `v2026.8.1` dans un VSIX installé.
-2. ⬜ **Publication 2026.8.1** : `vsce publish` (éditeur `electropol-fr`) — en attente de l'accord explicite de Frank. VSIX à construire sur demande.
-3. ⏳ Journal des gestes de bibliothèque (lot 2026.8.0.12) toujours en place dans [libraryStorage.ts](drawio-custom-plugins/src/libraryStorage.ts) : à retirer une fois les défauts de bibliothèque confirmés corrigés.
-4. ⏳ Import Gliffy (`js/gliffy/`, 609 Ko) laissé hors du VSIX : l'extension n'ouvre pas les `.gliffy`, à whitelister seulement si le besoin apparaît.
+1. ⬜ **Vérifier le lot 2026.8.1.18** (fenêtre rechargée) : les trois réglages d'affichage (`showLinkIcons`, `showTooltipIcons`, `showConnectHandle`) dans « Thème et styles », et le sous-module Draw.io passé en v31.4.2 (ouverture d'un diagramme, bibliothèques, « + de formes », enregistrement).
+2. ⬜ **Vérifier le lot 2026.8.1.17** (fenêtre rechargée) : interface en français pour les bibliothèques (« Bibliothèque de formes », « Ouvrir la bibliothèque », « Enregistrer la bibliothèque », « Exporter »), réglage « Dossiers de bibliothèques » traduit, et étiquette de version qui n'affiche plus que `v2026.8.1` dans un VSIX installé.
+3. ⏳ Traduction FR des trois nouveaux réglages d'affichage : au lot d'avant publication, avec le reste.
+
+# v2026.8.1.18 — trois options d'affichage natives, chaîne d'intégration du sous-module, Draw.io v31.4.2
+
+1. ✅ **Trois options d'affichage de Draw.io exposées**, toutes à `false` par défaut : `showLinkIcons` (icône de lien permanente sur les formes qui portent un lien), `showTooltipIcons` (marqueur permanent sur les formes qui ont une bulle d'aide), `showConnectHandle` (poignée de connexion — la flèche bleue — sur la forme sélectionnée). Le code natif était déjà là (`Editor.js:3001-3051` lit ces clés dans la configuration) : il ne manquait que le pont.
+2. ✅ Pont complet : trois `VsCodeSetting` dans [Config.ts](src/Config.ts) (section « Display Icons »), trois lignes dans la configuration passée au client **et** trois dépendances dans l'`autorun` de rechargement ([DrawioClientFactory.ts](src/DrawioClient/DrawioClientFactory.ts)), trois champs facultatifs dans [DrawioTypes.ts](src/DrawioClient/DrawioTypes.ts), trois entrées de manifeste dans la section « Thème et styles » ([package.json](package.json)) avec leurs libellés en langue de base ([package.nls.json](package.nls.json)).
+3. ✅ **Chaîne d'intégration du sous-module Draw.io** : nouveau script [update-drawio.mjs](scripts/update-drawio.mjs), exposé en `yarn check-drawio` (ne modifie rien) et `yarn update-drawio` (met à jour ; `--to X.Y.Z` pour viser une version précise). Il relève la dernière étiquette `vX.Y.Z` publiée en amont — triée **par numéro**, pas alphabétiquement, et les étiquettes de test écartées —, refuse d'agir si le sous-module porte des modifications locales, puis sort la version voulue.
+4. ✅ **Le vrai apport du script est le contrôle des ressources.** La webview hors ligne charge une liste de fichiers écrite à la main ([webview-content.html](src/DrawioClient/webview-content.html)) et le paquet garde une liste d'exclusions ([.vscodeignore](.vscodeignore)) : une version amont qui renomme ou déplace un bundle **passe la construction sans erreur** et ne casse qu'à l'exécution. Le script relit les deux fichiers et vérifie que chaque chemin cité existe réellement dans le sous-module ; sortie en échec (code 1) et liste des manquants sinon.
+5. ✅ **Sous-module amené de v31.3.2 à v31.4.2** (dernière publiée). Contrôle des ressources : aucun chemin manquant. Les points d'accroche de nos greffons (`MoreShapesDialog`, `pickLibrary`, `addLibraryEntries`, `libFileInputElt`, `saveLocalFile`, `App.MODE_DEVICE`, `App.MODE_BROWSER`) sont tous encore présents dans `app.min.js`.
+6. ℹ️ **Ce qui a bougé en amont** entre les deux versions, dans les fichiers que nous détournons : `Dialogs.js` (+152 lignes, mais uniquement `ConnectionPointsDialog` — `MoreShapesDialog` est intact) et `Editor.js` (+123). Aucun de nos greffons n'est concerné.
+7. ✅ Build extension + greffons (webpack production) et `tsc --noEmit` : 0 erreur hors `node_modules`.
+8. ℹ️ Pas de VSIX construit dans ce lot (règle : artefact seulement sur demande expresse).
+9. ⏳ Les libellés des trois nouveaux réglages restent en **langue de base** : traduction FR au lot d'avant publication.
 
 # v2026.8.1.17 — traductions FR, passage en 2026.8.1, changelog et readme
 
