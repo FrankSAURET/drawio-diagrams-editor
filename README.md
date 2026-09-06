@@ -86,6 +86,20 @@ Libraries can also be opened one at a time with **File → Open Library From →
 
 ---
 
+## Display options
+
+Three Draw.io display options are exposed, all off by default:
+
+| Setting | Effect |
+|---------|--------|
+| `electropol-fr.drawio-diagrams-editor.showLinkIcons` | Permanently shows a small link icon on every shape carrying a link, instead of only on hover |
+| `electropol-fr.drawio-diagrams-editor.showTooltipIcons` | Permanently shows a small marker on every shape carrying a tooltip, instead of only on hover |
+| `electropol-fr.drawio-diagrams-editor.showConnectHandle` | Shows the connection handle — the blue arrow used to draw an edge — on the selected shape |
+
+They are also available as check boxes in the format panel, under **Diagram → Options**, next to the native ones. Toggling one there applies immediately and writes the corresponding VS Code setting, so the panel and the settings page always agree and the choice survives closing the document.
+
+---
+
 ## Themes
 
 Switch themes at any time with the **`Draw.io: Change Theme`** command.
@@ -157,7 +171,8 @@ Only Draw.io-generated SVGs can be edited this way — arbitrary SVG files are n
 - Paste an SVG copied from another application instead of getting a long text label
 - Version number shown in the editor menu bar
 - SVG export fix
-- Updated to Draw.io v31.3.2 (libavoid auto-routing, built-in ELK layouts, offline PlantUML rendering)
+- Three display options (link icons, tooltip icons, connect handle) as settings and as live check boxes in the format panel
+- Updated to Draw.io v31.4.2 (libavoid auto-routing, built-in ELK layouts, offline PlantUML rendering)
 - Ongoing bug fixes not yet merged in the original project
 
 ---

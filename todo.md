@@ -1,5 +1,19 @@
 # À faire
-1. **Vérifier le lot 2026.8.1.21** (fenêtre rechargée) : (a) panneau de droite, onglet « Diagramme », catégorie « Options » — cocher une des trois cases ne doit **plus recharger l'éditeur** (la position et le zoom restent), et le survol doit montrer une **description** et non le seul libellé ; (b) « + de formes » — une bibliothèque déjà installée doit apparaître **cochée** dans la liste, et un seul décochage doit suffire à la désinstaller.
+1. **Relire cette préparation puis donner l'accord de publication** — rien n'est envoyé sans un « publie » explicite. Au feu vert : `yarn build` (VSIX), puis `vsce publish` sous le compte `electropol-fr`, puis étiquette `v2026.9.0`.
+
+
+# v2026.9.0.22 — préparation de la publication
+
+1. ✅ **Version publique passée à `2026.9.0`** ([package.json](package.json)). La courante était `2026.8.1` et on est en **septembre** : la règle calver impose `ANNÉE.MOISDUJOUR.0`, donc l'incrément repart à 0 — pas de `2026.8.2`. Lot interne `2026.9.0.22`, compteur qui ne repart jamais à zéro.
+2. ✅ **[CHANGELOG.md](CHANGELOG.md) : section `[2026.9.0] - 2026-09-06`** (Added / Fixed / Changed), résumé des lots .18 → .21 : les trois options d'affichage en réglages **et** en cases du panneau de droite, la chaîne d'intégration du sous-module, le rechargement parasite supprimé, les bibliothèques qui s'affichaient décochées, Draw.io v31.4.2. Lien de release ajouté en pied de fichier.
+3. ✅ **[README.md](README.md) : nouvelle section « Display options »** placée avant « Themes » — tableau des trois réglages avec leur préfixe complet, et le fait qu'ils existent aussi en cases dans **Diagramme → Options**, appliquées à chaud et écrites dans les réglages. Rubrique « What changed in this fork » complétée, mention Draw.io corrigée de v31.3.2 en **v31.4.2**.
+4. ✅ **Contrôle des traductions, les deux niveaux** : `l10n.t` parcouru dans `src/` → **42 chaînes, 42 traduites, 0 clé morte** ; `package.nls.json` / `package.nls.fr.json` → **73 clés, 0 manquante en FR, 0 clé morte**, et chaque `%clé%` du manifeste existe bien dans le dictionnaire (0 libellé non résolu). C'est ce dernier contrôle qui manquait au lot .18 et faisait **disparaître** les réglages en français.
+5. ℹ️ **Les descriptions des cases du panneau restent dans le greffon**, en langue de base et en français ([displayOptions.ts](drawio-custom-plugins/src/displayOptions.ts)) : une webview n'a pas accès à `l10n.t`, et le dictionnaire de Draw.io ne porte que les trois titres. Rien à traduire ailleurs pour ce lot.
+6. ✅ **Contrôle des ressources du sous-module** (`yarn check-drawio`) : sous-module à jour en **31.4.2**, dernière publiée en amont ; tous les chemins cités par [webview-content.html](src/DrawioClient/webview-content.html) et [.vscodeignore](.vscodeignore) existent réellement.
+7. ✅ **Contrôle du manifeste avant envoi** : `publisher` = **`electropol-fr`** (le bon compte), icône présente, `engines.vscode ^1.73.0`, catégories, dépôt, licence, bannière et mots-clés en place. `A Examiner/**` et `Archives/**` sont exclus du paquet ([.vscodeignore:78-79](.vscodeignore#L78-L79)) tout en restant versionnés.
+8. ✅ **L'étiquette de version de l'éditeur est conforme** ([Extension.ts:176-188](src/Extension.ts#L176-L188)) : en production l'utilisateur ne voit que `v2026.9.0` ; le numéro à quatre segments n'apparaît qu'en développement.
+9. ✅ Build extension + greffons (webpack production) et `tsc --noEmit` sur les deux projets : 0 erreur hors `node_modules`.
+10. ⏳ **Pas de VSIX et aucune publication dans ce lot.** Le paquet ne se construit que sur demande expresse, et `vsce publish` attend l'accord explicite de Frank dans la conversation — une version prête n'en tient pas lieu.
 
 
 # v2026.8.1.21 — le rechargement parasite et les cases décochées

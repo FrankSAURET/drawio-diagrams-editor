@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 New format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) — Versioning: [CalVer](https://calver.org/) (`YYYY.M.micro`).
 
+## [2026.9.0] - 2026-09-06
+
+### Added
+
+-   **Three display options exposed as settings**, all off by default: `showLinkIcons` (a permanent link icon on every shape carrying a link), `showTooltipIcons` (a permanent marker on every shape carrying a tooltip) and `showConnectHandle` (the blue connection arrow on the selected shape). The Draw.io code was already there — only the bridge to the VS Code settings was missing.
+-   **The same three options as check boxes in the format panel** (right-hand side, *Diagram* tab, *Options* section), next to the native ones. They toggle live, without waiting for the next hover, and each click is written back to the VS Code settings — panel and settings page always agree, and the choice survives closing the document. Hovering a box shows what it actually does, not just its label.
+-   **Draw.io submodule integration chain**: `yarn check-drawio` reports the latest published upstream release without touching anything, `yarn update-drawio` moves the submodule to it (`--to X.Y.Z` to aim at a given version). Beyond the version bump, it re-reads the resource lists written by hand in the offline webview and in the packaging exclusions, and fails if any referenced file no longer exists upstream — a renamed bundle used to pass the build and only break at runtime.
+
+### Fixed
+
+-   **The editor reloaded on every click in the format panel.** The three display settings are dependencies of the reload watcher, so each toggle rebuilt the whole webview (lost position, flicker). The guard now lives on the shared configuration object and is time-based, so several open diagrams are covered, not just the first one.
+-   **Installed libraries showed up unchecked in the More Shapes dialog**, and had to be checked then unchecked to be removed. Our own preview plugin emptied the custom entry list while building the dialog, which is exactly when Draw.io asks that list whether each entry is visible — so every one of our libraries was reported as not installed.
+
+### Changed
+
+-   **Draw.io submodule updated from v31.3.2 to v31.4.2** (latest published). Resource check clean, and every API our plugins patch is still present.
+-   French translation completed for the new settings and for the format panel tooltips.
+
 ## [2026.8.1] - 2026-08-27
 
 ### Added
@@ -93,6 +111,7 @@ has not merged pull requests for over a year. This fork continues development un
 
 -   Mise à jour du sous-module Draw.io vers la version **30.0.1** 
 
+[2026.9.0]: https://github.com/FrankSAURET/drawio-diagrams-editor/releases/tag/v2026.9.0
 [2026.8.1]: https://github.com/FrankSAURET/drawio-diagrams-editor/releases/tag/v2026.8.1
 [2026.8.0]: https://github.com/FrankSAURET/drawio-diagrams-editor/releases/tag/v2026.8.0
 [2026.7.1]: https://github.com/FrankSAURET/drawio-diagrams-editor/releases/tag/v2026.7.1
