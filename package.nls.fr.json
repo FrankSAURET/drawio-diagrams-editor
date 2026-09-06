@@ -65,5 +65,11 @@
 	"configuration.theme.title": "Thème Draw.io",
 	"configuration.theme.description": "Le thème à utiliser pour l'éditeur Draw.io. Utilisez « automatic » pour choisir automatiquement un thème Draw.io correspondant à votre thème VS Code actuel.",
 	"configuration.appearance.title": "Apparence Draw.io",
-	"configuration.appearance.description": "L'apparence à utiliser pour l'éditeur Draw.io. Utilisez « automatic » pour choisir automatiquement un thème Draw.io correspondant à votre thème VS Code actuel."
+	"configuration.appearance.description": "L'apparence à utiliser pour l'éditeur Draw.io. Utilisez « automatic » pour choisir automatiquement un thème Draw.io correspondant à votre thème VS Code actuel.",
+	"configuration.showLinkIcons.title": "Afficher les icônes de lien",
+	"configuration.showLinkIcons.description": "Affiche en permanence une petite icône de lien sur chaque forme qui porte un lien, au lieu de ne la montrer qu'au survol.",
+	"configuration.showTooltipIcons.title": "Afficher les icônes de bulle d'aide",
+	"configuration.showTooltipIcons.description": "Affiche en permanence un petit marqueur sur chaque forme qui porte une bulle d'aide, au lieu de ne le montrer qu'au survol.",
+	"configuration.showConnectHandle.title": "Afficher la poignée de connexion",
+	"configuration.showConnectHandle.description": "Affiche la poignée de connexion (la flèche bleue qui sert à tirer un lien) sur la forme sélectionnée."
 }

@@ -1,7 +1,13 @@
 # À faire
-1. ⬜ **Vérifier le lot 2026.8.1.18** (fenêtre rechargée) : les trois réglages d'affichage (`showLinkIcons`, `showTooltipIcons`, `showConnectHandle`) dans « Thème et styles », et le sous-module Draw.io passé en v31.4.2 (ouverture d'un diagramme, bibliothèques, « + de formes », enregistrement).
+1. ⬜ **Vérifier le lot 2026.8.1.19** (fenêtre rechargée) : les trois réglages d'affichage apparaissent bien dans « Thème et styles » avec leurs libellés français.
 2. ⬜ **Vérifier le lot 2026.8.1.17** (fenêtre rechargée) : interface en français pour les bibliothèques (« Bibliothèque de formes », « Ouvrir la bibliothèque », « Enregistrer la bibliothèque », « Exporter »), réglage « Dossiers de bibliothèques » traduit, et étiquette de version qui n'affiche plus que `v2026.8.1` dans un VSIX installé.
-3. ⏳ Traduction FR des trois nouveaux réglages d'affichage : au lot d'avant publication, avec le reste.
+
+# v2026.8.1.19 — les trois réglages d'affichage étaient invisibles en français
+
+1. ✅ **Cause trouvée : ce n'était pas un défaut de manifeste mais une traduction manquante.** Les trois entrées du lot précédent portent des libellés indirects (`%configuration.showLinkIcons.title%`…). Les clés existaient dans [package.nls.json](package.nls.json) mais **pas** dans [package.nls.fr.json](package.nls.fr.json) : sur une interface en français, VS Code ne résout plus le libellé et **les réglages ne se trouvent pas** dans la page des paramètres.
+2. ✅ **Les six clés sont traduites** ([package.nls.fr.json](package.nls.fr.json)) : « Afficher les icônes de lien », « Afficher les icônes de bulle d'aide », « Afficher la poignée de connexion », avec leurs descriptions.
+3. ℹ️ **Correction de la règle « traductions avant publication » pour ce cas précis** : un libellé de manifeste absent du dictionnaire de la langue active ne dégrade pas l'affichage, il **fait disparaître le réglage**. Une nouvelle entrée `package.nls.json` doit donc être traduite dans le même lot, contrairement aux chaînes d'interface (`l10n.t`) qui, elles, retombent proprement sur la langue de base.
+4. ✅ Contrôle automatique des deux dictionnaires : 0 clé manquante, 0 clé morte.
 
 # v2026.8.1.18 — trois options d'affichage natives, chaîne d'intégration du sous-module, Draw.io v31.4.2
 
