@@ -78,6 +78,30 @@ export class Config {
 		return new DiagramConfig(uri, this, this.globalState);
 	}
 
+	/**
+	 * Cases a cocher « Diagramme > Options » : la webview a deja applique
+	 * l'effet elle-meme, l'autorun ne doit pas remplacer le HTML.
+	 *
+	 * L'etat vit ici et non sur `DiagramConfig` : `getDiagramConfig` fabrique
+	 * un objet neuf a chaque appel, et celui qui l'arme (DrawioEditor) n'est
+	 * pas celui que lit l'autorun (DrawioClientFactory).
+	 *
+	 * C'est une date et non un booleen : plusieurs diagrammes ouverts font
+	 * autant d'autoruns, et un drapeau a consommation unique n'aurait epargne
+	 * que le premier — les autres se seraient recharges.
+	 */
+	private displayOptionUpdatedAt = 0;
+
+	/** A appeler juste avant d'ecrire un des trois reglages d'affichage. */
+	public markDisplayOptionUpdate(): void {
+		this.displayOptionUpdatedAt = Date.now();
+	}
+
+	/** Vrai si le dernier changement vient des cases du panneau. */
+	public get isDisplayOptionUpdating(): boolean {
+		return Date.now() - this.displayOptionUpdatedAt < 1000;
+	}
+
 	private readonly _experimentalFeatures = new VsCodeSetting(
 		`${extensionId}.enableExperimentalFeatures`,
 		{
@@ -385,11 +409,14 @@ export class DiagramConfig {
 	 * Les trois options sont aussi des cases a cocher dans le panneau
 	 * « Diagramme > Options » de Draw.io. Quand le changement vient de la
 	 * webview, la page a deja applique l'effet elle-meme : recharger le HTML
-	 * ne ferait que perdre la position et faire clignoter l'editeur. Ce
-	 * drapeau demande a l'autorun de sauter ce rechargement — meme procede
-	 * que `isResizeImageUpdating`.
+	 * ne ferait que perdre la position et faire clignoter l'editeur. L'etat
+	 * qui fait sauter ce rechargement est porte par le `Config` global —
+	 * chaque `getDiagramConfig` rend un objet neuf, un drapeau pose ici ne
+	 * serait jamais lu par l'autorun.
 	 */
-	public isDisplayOptionUpdating = false;
+	public get isDisplayOptionUpdating(): boolean {
+		return this.config.isDisplayOptionUpdating;
+	}
 
 	/** Ecrit un des trois reglages sans recharger la webview. */
 	public async setDisplayOption(
@@ -403,19 +430,13 @@ export class DiagramConfig {
 		};
 		const target = settings[setting];
 
-		// Valeur deja a jour : ne rien ecrire, sinon le drapeau resterait arme
-		// et avalerait le prochain rechargement legitime.
+		// Valeur deja a jour : rien a ecrire, et donc aucun autorun a epargner.
 		if (target.get() === value) {
 			return;
 		}
 
-		this.isDisplayOptionUpdating = true;
-		try {
-			await target.set(value);
-		} catch (e) {
-			this.isDisplayOptionUpdating = false;
-			throw e;
-		}
+		this.config.markDisplayOptionUpdate();
+		await target.set(value);
 	}
 
 	//#endregion

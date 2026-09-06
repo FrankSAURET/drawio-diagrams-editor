@@ -36,6 +36,17 @@ Draw.loadPlugin((ui) => {
 		}
 	}
 
+	/**
+	 * L'interface est-elle en français ? Les libellés viennent du
+	 * dictionnaire de Draw.io, mais pas les descriptions : celui-ci ne connaît
+	 * que les trois titres, sans texte explicatif.
+	 */
+	const isFrench = String(
+		anyWindow.mxLanguage || anyWindow.mxClient?.language || ""
+	)
+		.toLowerCase()
+		.startsWith("fr");
+
 	/** Les trois options, dans l'ordre où elles s'affichent. */
 	const options: {
 		/** Nom du réglage VS Code, sans le préfixe de l'extension. */
@@ -44,6 +55,9 @@ Draw.loadPlugin((ui) => {
 		labelKey: string;
 		/** Libellé de repli si le dictionnaire ne connaît pas la clé. */
 		fallback: string;
+		/** Info-bulle : ce que la case fait réellement. */
+		hint: string;
+		hintFr: string;
 		/**
 		 * Champ recopié dans `graph` à l'initialisation. Absent pour la
 		 * poignée de connexion, relue directement sur `Editor`.
@@ -54,18 +68,27 @@ Draw.loadPlugin((ui) => {
 			setting: "showLinkIcons",
 			labelKey: "linkIcons",
 			fallback: "Link Icons",
+			hint: "Permanently shows a small link icon on every shape that carries a link, instead of only on hover.",
+			hintFr:
+				"Affiche en permanence une petite icône de lien sur chaque forme qui porte un lien, au lieu de ne la montrer qu'au survol.",
 			graphField: "showLinkIcons",
 		},
 		{
 			setting: "showTooltipIcons",
 			labelKey: "tooltipIcons",
 			fallback: "Tooltip Icons",
+			hint: "Permanently shows a small marker on every shape that carries a tooltip, instead of only on hover.",
+			hintFr:
+				"Affiche en permanence un petit marqueur sur chaque forme qui porte une bulle d'aide, au lieu de ne le montrer qu'au survol.",
 			graphField: "showTooltipIcons",
 		},
 		{
 			setting: "showConnectHandle",
 			labelKey: "cfgShowConnectHandle",
 			fallback: "Show Connect Handle",
+			hint: "Shows the connection handle (the blue arrow used to draw an edge) on the selected shape.",
+			hintFr:
+				"Affiche la poignée de connexion (la flèche bleue qui sert à tirer un lien) sur la forme sélectionnée.",
 		},
 	];
 
@@ -99,6 +122,9 @@ Draw.loadPlugin((ui) => {
 
 		for (const o of options) {
 			const label = mxResources.get(o.labelKey, null, o.fallback);
+			// Sans cela, `createOption` met le libellé lui-même en info-bulle,
+			// ce qui n'apprend rien : on y met la description.
+			const hint = label + " — " + (isFrench ? o.hintFr : o.hint);
 
 			div.appendChild(
 				this.createOption(
@@ -123,7 +149,19 @@ Draw.loadPlugin((ui) => {
 							"displayOptions: " + o.setting + " = " + checked
 						);
 					},
-					null
+					null,
+					function (optionDiv: HTMLElement) {
+						optionDiv.setAttribute("title", hint);
+
+						// La case et son libellé portent aussi le titre posé
+						// par `createOption` : sans cela, survoler l'un ou
+						// l'autre montrerait encore l'ancienne info-bulle.
+						const children =
+							optionDiv.querySelectorAll("[title]");
+						for (let i = 0; i < children.length; i++) {
+							children[i].setAttribute("title", hint);
+						}
+					}
 				)
 			);
 		}

@@ -173,6 +173,28 @@ Draw.loadPlugin((ui) => {
 			);
 		}
 
+		// `isEntryVisible` cherche l'entrée dans `customEntries` pour savoir si
+		// sa palette est affichee ; comme on vient de vider ce champ, il
+		// repondrait « non » et **toutes nos cases s'afficheraient decochees**.
+		// Le bouton « Appliquer » reconstruit la liste a partir des cases :
+		// une bibliotheque installee serait donc desinstallee au premier
+		// passage. On lui rend donc la vraie liste, le temps de la
+		// construction.
+		const originalIsEntryVisible = sidebar.isEntryVisible;
+		const hadOwnIsEntryVisible = Object.prototype.hasOwnProperty.call(
+			sidebar,
+			"isEntryVisible"
+		);
+		sidebar.isEntryVisible = function (key: string) {
+			const saved = sidebar.customEntries;
+			sidebar.customEntries = customEntries;
+			try {
+				return originalIsEntryVisible.call(sidebar, key);
+			} finally {
+				sidebar.customEntries = saved;
+			}
+		};
+
 		try {
 			return new originalDialog(
 				editorUi,
@@ -182,6 +204,14 @@ Draw.loadPlugin((ui) => {
 		} finally {
 			sidebar.customEntries = customEntries;
 			sidebar.enabledLibraries = enabled;
+
+			if (hadOwnIsEntryVisible) {
+				sidebar.isEntryVisible = originalIsEntryVisible;
+			} else {
+				// Elle venait du prototype : la recopier sur l'instance
+				// masquerait un remplacement pose plus tard.
+				delete sidebar.isEntryVisible;
+			}
 		}
 	};
 });

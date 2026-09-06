@@ -72,7 +72,6 @@ export class DrawioClientFactory {
 					config.isResizeImageUpdating = false;
 				} else if (config.isDisplayOptionUpdating) {
 					// Bascule venue des cases du panneau : deja appliquee dans la page.
-					config.isDisplayOptionUpdating = false;
 				} else {
 					webview.html = html;
 				}
