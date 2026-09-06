@@ -239,6 +239,12 @@ export class DrawioEditor {
 		drawioClient.onPickLibraryFile.sub(() => {
 			this.pickLibraryFile();
 		});
+
+		// Cases a cocher « Diagramme > Options » : la page a deja bascule
+		// l'affichage, on ne fait que rendre le choix persistant.
+		drawioClient.onSetDisplayOption.sub(({ setting, value }) => {
+			this.config.setDisplayOption(setting, value);
+		});
 	}
 
 	/**

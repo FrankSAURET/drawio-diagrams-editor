@@ -381,6 +381,43 @@ export class DiagramConfig {
 		return this._showConnectHandle.get();
 	}
 
+	/**
+	 * Les trois options sont aussi des cases a cocher dans le panneau
+	 * « Diagramme > Options » de Draw.io. Quand le changement vient de la
+	 * webview, la page a deja applique l'effet elle-meme : recharger le HTML
+	 * ne ferait que perdre la position et faire clignoter l'editeur. Ce
+	 * drapeau demande a l'autorun de sauter ce rechargement — meme procede
+	 * que `isResizeImageUpdating`.
+	 */
+	public isDisplayOptionUpdating = false;
+
+	/** Ecrit un des trois reglages sans recharger la webview. */
+	public async setDisplayOption(
+		setting: "showLinkIcons" | "showTooltipIcons" | "showConnectHandle",
+		value: boolean
+	): Promise<void> {
+		const settings = {
+			showLinkIcons: this._showLinkIcons,
+			showTooltipIcons: this._showTooltipIcons,
+			showConnectHandle: this._showConnectHandle,
+		};
+		const target = settings[setting];
+
+		// Valeur deja a jour : ne rien ecrire, sinon le drapeau resterait arme
+		// et avalerait le prochain rechargement legitime.
+		if (target.get() === value) {
+			return;
+		}
+
+		this.isDisplayOptionUpdating = true;
+		try {
+			await target.set(value);
+		} catch (e) {
+			this.isDisplayOptionUpdating = false;
+			throw e;
+		}
+	}
+
 	//#endregion
 
 	//#region Preset Colors

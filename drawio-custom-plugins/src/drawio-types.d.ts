@@ -51,6 +51,30 @@ declare const App: {
 declare const Editor: {
 	/** Theme courant : « min », « kennedy », « atlas », « sketch »... */
 	currentTheme: string;
+	/** Icone de lien permanente sur les formes qui portent un lien. */
+	showLinkIcons: boolean;
+	/** Marqueur permanent sur les formes qui portent une bulle d'aide. */
+	showTooltipIcons: boolean;
+	/** Poignee de connexion (la fleche bleue) sur la forme selectionnee. */
+	showConnectHandle: boolean;
+};
+
+/**
+ * Panneau « Diagramme » de la barre de droite. `addOptions` construit la
+ * categorie « Options » (fleches de connexion, points de connexion, guides).
+ */
+declare const DiagramFormatPanel: {
+	prototype: {
+		addOptions(div: HTMLElement): HTMLElement;
+		/** Cree une case a cocher au format du panneau. */
+		createOption(
+			label: string,
+			isCheckedFn: () => boolean,
+			setCheckedFn: (checked: boolean) => void,
+			listener?: any
+		): HTMLElement;
+		editorUi: DrawioUI;
+	};
 };
 
 /** Bibliotheque rangee dans le stockage du navigateur (mode « browser »). */
@@ -177,6 +201,15 @@ declare interface DrawioGraph {
         mouseDown?: (graph: DrawioGraph, event: mxMouseEvent) => void
         mouseUp?: (graph: DrawioGraph, event: mxMouseEvent) => void;
     }): void;
+
+    /** Redessine le graphe : ce qui n'est pose qu'au survol reapparait. */
+    refresh(): void;
+    /**
+     * Recopies depuis `Editor.*` a l'initialisation seulement : c'est ce que
+     * le rendu consulte, il faut donc les tenir a jour avec `Editor`.
+     */
+    showLinkIcons: boolean;
+    showTooltipIcons: boolean;
 }
 
 declare interface DrawioGraphView {

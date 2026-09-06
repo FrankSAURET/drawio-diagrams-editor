@@ -4,7 +4,21 @@ declare type CustomDrawioAction = UpdateVerticesAction | AddVerticesAction | Get
     | LibraryFilePickedAction;
 declare type CustomDrawioEvent = NodeSelectedEvent | GetVerticesResultEvent
     | UpdateLocalStorage | PluginLoaded | CursorChangedEvent | SelectionChangedEvent | FocusChangedEvent | InvokeCommandEvent | SelectionRectangleChangedEvent
-    | SaveLocalFileEvent | PickLibraryFileEvent;
+    | SaveLocalFileEvent | PickLibraryFileEvent | SetDisplayOptionEvent;
+
+/** Nom d'un des trois reglages d'affichage, sans le prefixe de l'extension. */
+declare type DisplayOptionName = "showLinkIcons" | "showTooltipIcons" | "showConnectHandle";
+
+/**
+ * Une des trois cases a cocher du panneau « Diagramme > Options » a change.
+ * L'extension ecrit le reglage VS Code correspondant, sans recharger la
+ * webview (la page a deja applique le changement elle-meme).
+ */
+declare interface SetDisplayOptionEvent {
+    event: "setDisplayOption";
+    setting: DisplayOptionName;
+    value: boolean;
+}
 
 /**
  * « Ouvrir une bibliotheque depuis > Peripherique ». Draw.io passe par un

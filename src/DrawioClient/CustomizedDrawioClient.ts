@@ -60,6 +60,13 @@ export class CustomizedDrawioClient extends DrawioClient<
 	private readonly onPickLibraryFileEmitter = new EventEmitter<{}>();
 	public readonly onPickLibraryFile = this.onPickLibraryFileEmitter.asEvent();
 
+	private readonly onSetDisplayOptionEmitter = new EventEmitter<{
+		setting: DisplayOptionName;
+		value: boolean;
+	}>();
+	public readonly onSetDisplayOption =
+		this.onSetDisplayOptionEmitter.asEvent();
+
 	/** Repond a `pickLibraryFile` avec le fichier choisi par l'utilisateur. */
 	public libraryFilePicked(name: string, xml: string): void {
 		this.sendCustomAction({
@@ -147,6 +154,11 @@ export class CustomizedDrawioClient extends DrawioClient<
 			});
 		} else if (evt.event === "pickLibraryFile") {
 			this.onPickLibraryFileEmitter.emit({});
+		} else if (evt.event === "setDisplayOption") {
+			this.onSetDisplayOptionEmitter.emit({
+				setting: evt.setting,
+				value: evt.value,
+			});
 		} else if (evt.event === "selectedRectangleChanged") {
 			this.onSelectedRectangleChangedEmitter.emit({
 				rectangle: evt.rect,
