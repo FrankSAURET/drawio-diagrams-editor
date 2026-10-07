@@ -26,3 +26,5 @@ jobs:
       - run: yarn install --frozen-lockfile
       - run: yarn lint
       - run: yarn build
+      # Charge draw.io + greffons dans un vrai navigateur (Chrome des executeurs).
+      - run: yarn test-webview

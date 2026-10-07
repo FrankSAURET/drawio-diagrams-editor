@@ -2,6 +2,15 @@
 1. **Relire cette préparation puis donner l'accord de publication** — rien n'est envoyé sans un « publie » explicite. Au feu vert : `yarn build` (VSIX), puis `vsce publish` sous le compte `electropol-fr`, puis étiquette `v2026.9.0`.
 
 
+# v2026.9.0.23 — test de fumée de la webview
+
+1. ✅ **Nouveau [test-webview.mjs](scripts/test-webview.mjs)** (`yarn test-webview`, après `yarn build-plugins`) : sert le vrai `webview-content.html` (mêmes marqueurs remplacés que `getOfflineHtml`), le vrai draw.io du sous-module et les vrais greffons construits, dans un navigateur piloté par `playwright-core` (Chrome installé, sinon Chromium de Playwright). Joue la poignée de main `configure → init → load`.
+2. ✅ **Ce qu'il vérifie** : les 11 greffons s'annoncent (`pluginLoaded`) ; les actions `vscode.open`, `vscode.theme`, `properties` existent ; menu Fichier présent ; étiquette de version dans la barre de menus ; la forme chargée est dans le modèle et dans le XML réécrit ; aucune exception de page non rattrapée.
+3. ℹ️ **Bruit amont écarté** : « OrgChart.Annotations.CanBeNullAttribute is already defined » (module défini à la fois dans `extensions.min.js` et `orgchart.min.js`). Présent en 31.4.2 comme en 32.3.0.
+4. ✅ **Essai sur draw.io 32.3.0** (sous-module amené puis **remis en 31.4.2**) : test OK. Aucun greffon cassé. Limite : le test ne couvre ni le rendu visuel ni les boîtes de dialogue.
+5. ✅ Ajouté à [test.yml](.github/workflows/test.yml) après `yarn build` (Chrome préinstallé sur les exécuteurs GitHub).
+6. ⏳ Pas encore de mise à jour automatique (PR hebdomadaire) : à décider.
+
 # v2026.9.0.22 — préparation de la publication
 
 1. ✅ **Version publique passée à `2026.9.0`** ([package.json](package.json)). La courante était `2026.8.1` et on est en **septembre** : la règle calver impose `ANNÉE.MOISDUJOUR.0`, donc l'incrément repart à 0 — pas de `2026.8.2`. Lot interne `2026.9.0.22`, compteur qui ne repart jamais à zéro.
