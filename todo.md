@@ -2,6 +2,11 @@
 1. **Relire cette préparation puis donner l'accord de publication** — rien n'est envoyé sans un « publie » explicite. Au feu vert : `yarn build` (VSIX), puis `vsce publish` sous le compte `electropol-fr`, puis étiquette `v2026.9.0`.
 
 
+# v2026.9.0.24 — Publication en une commande
+
+1. ✅ **`npm run publier`** : [publier.mjs](scripts/publier.mjs) construit un `.vsix` (`--yarn --githubBranch main`) puis l'envoie au Marketplace et à Open VSX. Garde-fou CHANGELOG, `OVSX_PAT` exigé, `--dry-run`. `"private": true` ajouté.
+2. ℹ️ Sans effet pour l'utilisateur : pas d'entrée CHANGELOG.
+
 # v2026.9.0.23 — test de fumée de la webview
 
 1. ✅ **Nouveau [test-webview.mjs](scripts/test-webview.mjs)** (`yarn test-webview`, après `yarn build-plugins`) : sert le vrai `webview-content.html` (mêmes marqueurs remplacés que `getOfflineHtml`), le vrai draw.io du sous-module et les vrais greffons construits, dans un navigateur piloté par `playwright-core` (Chrome installé, sinon Chromium de Playwright). Joue la poignée de main `configure → init → load`.

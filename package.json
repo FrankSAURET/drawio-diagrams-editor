@@ -2,8 +2,9 @@
 	"name": "drawio-diagrams-editor",
 	"displayName": "%displayName%",
 	"description": "%description%",
+	"private": true,
 	"version": "2026.9.0",
-	"buildNumber": "2026.9.0.23",
+	"buildNumber": "2026.9.0.24",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"publisher": "electropol-fr",
 	"keywords": [
@@ -575,6 +576,7 @@
 	},
 	"scripts": {
 		"vscode:prepublish": "yarn build-extension && yarn build-plugins",
+		"publier": "node scripts/publier.mjs",
 		"run-script": "node ./scripts/run-script",
 		"lint": "echo 'add linting'",
 		"_lint": "yarn run-script check-version && prettier --check ./src",
