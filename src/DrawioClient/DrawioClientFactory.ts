@@ -282,11 +282,26 @@ export class DrawioClientFactory {
 	}
 
 	private getOnlineHtml(config: DiagramConfig, drawioUrl: string): string {
+		// Le relais ne parle qu'à l'origine de l'application configurée : les
+		// données du diagramme ne peuvent pas partir vers une page où le cadre
+		// aurait navigué. Une URL sans origine http(s) garde le relais ouvert.
+		// frame-src reste ouvert (application auto-hébergée derrière une page
+		// de connexion sur une autre origine).
+		let drawioOrigin = "*";
+		try {
+			const url = new URL(drawioUrl);
+			if (url.protocol === "https:" || url.protocol === "http:") {
+				drawioOrigin = url.origin;
+			}
+		} catch {
+			// URL non absolue
+		}
+		const nonce = getNonce();
 		return `
 			<html>
 			<head>
 			<meta charset="UTF-8">
-			<meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * 'unsafe-inline'; worker-src * data: 'unsafe-inline' 'unsafe-eval'; font-src * 'unsafe-inline' 'unsafe-eval';">
+			<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'nonce-${nonce}'; style-src 'unsafe-inline'; frame-src *;">
 			<style>
 				html { height: 100%; width: 100%; padding: 0; margin: 0; }
 				body { height: 100%; width: 100%; padding: 0; margin: 0; }
@@ -294,16 +309,19 @@ export class DrawioClientFactory {
 			</style>
 			</head>
 			<body>
-				<script>
+				<script nonce="${nonce}">
 					const api = window.VsCodeApi = acquireVsCodeApi();
+					const drawioOrigin = ${JSON.stringify(drawioOrigin)};
 					window.addEventListener('message', event => {
-						
+
 						if (event.source === window.frames[0]) {
 							//console.log("frame -> vscode", event.data);
-							api.postMessage(event.data);
+							if (drawioOrigin === "*" || event.origin === drawioOrigin) {
+								api.postMessage(event.data);
+							}
 						} else {
 							//console.log("vscode -> frame", event.data);
-							window.frames[0].postMessage(event.data, "*");
+							window.frames[0].postMessage(event.data, drawioOrigin);
 						}
 					});
 				</script>
@@ -321,6 +339,15 @@ export class DrawioClientFactory {
 
 export interface DrawioClientOptions {
 	isReadOnly: boolean;
+}
+
+function getNonce(): string {
+	let text = "";
+	const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	for (let i = 0; i < 32; i++) {
+		text += chars.charAt(Math.floor(Math.random() * chars.length));
+	}
+	return text;
 }
 
 function prettify(msg: unknown): string {

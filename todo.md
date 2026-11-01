@@ -2,6 +2,14 @@
 1. **Relire cette préparation puis donner l'accord de publication** — rien n'est envoyé sans un « publie » explicite. Au feu vert : `yarn build` (VSIX), puis `vsce publish` sous le compte `electropol-fr`, puis étiquette `v2026.9.0`.
 
 
+# v2026.9.0.25 — Reprise de l'amont hediet 1.18 : sécurité et Draw.io v32.6.9
+
+1. ✅ **Mode restreint** ([package.json](package.json)) : `untrustedWorkspaces.supported` passe à `"limited"`, avec `restrictedConfigurations` = `customLibraries`, `libraryFolders` (absent chez hediet, ajouté car il lit aussi des fichiers locaux), `plugins`, `offline`, `online-url`. Description traduite ([package.nls.json](package.nls.json), [package.nls.fr.json](package.nls.fr.json)). Repris de hediet `211c603`.
+2. ✅ **Relais du mode en ligne attaché à l'origine** ([DrawioClientFactory.ts](src/DrawioClient/DrawioClientFactory.ts), `getOnlineHtml`) : envoi vers l'origine de `online-url` uniquement, messages d'autres origines ignorés, CSP réduite au seul script à nonce. Repris de hediet `a7d4b73`.
+3. ✅ **Sous-module Draw.io v31.4.2 → v32.6.9** (`yarn update-drawio --to 32.6.9`) : ressources OK, points d'accroche des greffons présents dans `app.min.js`, construction OK, `yarn test-webview` OK.
+4. ✅ **`DRAWIO_SERVER_URL` + rappel d'erreur de `mxscript`** ([webview-content.html](src/DrawioClient/webview-content.html)) : modules chargés à la demande pris au bon endroit, plus de sablier infini en cas d'échec. Repris de hediet `b926b31`.
+5. ⏳ Reste de l'amont non repris : export PNG de la page visible (`08f3b51`), menu Fichier Kennedy (`6290db4`), `svgAppearance` (`679bfbe`), éditeur intégré au Markdown, commande `export`. Dernier amont examiné : `54e7d70` (1.18.0).
+
 # v2026.9.0.24 — Publication en une commande
 
 1. ✅ **`npm run publier`** : [publier.mjs](scripts/publier.mjs) construit un `.vsix` (`--yarn --githubBranch main`) puis l'envoie au Marketplace et à Open VSX. Garde-fou CHANGELOG, `OVSX_PAT` exigé, `--dry-run`. `"private": true` ajouté.

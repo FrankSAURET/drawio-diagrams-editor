@@ -1,6 +1,7 @@
 {
 	"displayName": "Éditer des diagrammes avec draw.io",
 	"description": "Éditez vos diagrammes draw.io (app.diagrams.net).",
+	"capabilities.untrustedWorkspaces.description": "En mode restreint, les réglages de l'espace de travail ne peuvent ni charger de bibliothèques, de dossiers de bibliothèques ou de greffons personnalisés, ni changer l'application Draw.io chargée par l'éditeur.",
 	"viewsContainers.activitybar.drawio-diagrams-editor-explorer.title": "Draw.io",
 	"views.drawio-diagrams-editor-explorer.drawio-diagrams-editor-welcome.name": "Draw.io",
 	"customEditors.drawio.displayName": "Draw.io (Binaire)",

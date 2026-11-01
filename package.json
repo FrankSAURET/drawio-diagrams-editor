@@ -4,7 +4,7 @@
 	"description": "%description%",
 	"private": true,
 	"version": "2026.9.0",
-	"buildNumber": "2026.9.0.24",
+	"buildNumber": "2026.9.0.25",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"publisher": "electropol-fr",
 	"keywords": [
@@ -54,7 +54,15 @@
 	"main": "./dist/extension/index",
 	"capabilities": {
 		"untrustedWorkspaces": {
-			"supported": true
+			"supported": "limited",
+			"description": "%capabilities.untrustedWorkspaces.description%",
+			"restrictedConfigurations": [
+				"electropol-fr.drawio-diagrams-editor.customLibraries",
+				"electropol-fr.drawio-diagrams-editor.libraryFolders",
+				"electropol-fr.drawio-diagrams-editor.plugins",
+				"electropol-fr.drawio-diagrams-editor.offline",
+				"electropol-fr.drawio-diagrams-editor.online-url"
+			]
 		}
 	},
 	"contributes": {

@@ -152,7 +152,12 @@
 		// Checks for local storage
 		var isLocalStorage = true;
 
-		function mxscript(src, onLoad, id, dataAppKey, noWrite) {
+		// Draw.io déduit cette adresse de window.location, qui pointe sur le
+		// cadre hôte vscode-webview:// et non sur le dossier webapp. Les
+		// paquets chargés à la demande (Gliffy, PlantUML…) partent d'ici.
+		window.DRAWIO_SERVER_URL = "$$literal-vsuri$$/";
+
+		function mxscript(src, onLoad, id, dataAppKey, noWrite, onError) {
 			if (onLoad != null || noWrite) {
 				var s = document.createElement("script");
 				s.setAttribute("type", "text/javascript");
@@ -177,6 +182,13 @@
 							r = true;
 							onLoad();
 						}
+					};
+				}
+
+				// Sans ce rappel, un échec de chargement laisse le sablier tourner
+				if (onError != null) {
+					s.onerror = function (e) {
+						onError("Failed to load " + src, e);
 					};
 				}
 

@@ -1,6 +1,7 @@
 {
 	"displayName": "Edit Diagrams with draw.io",
 	"description": "Edit your draw.io diagrams (app.diagrams.net).",
+	"capabilities.untrustedWorkspaces.description": "In Restricted Mode, workspace settings cannot load custom libraries, library folders or plugins, or change which Draw.io app the editor loads.",
 	"viewsContainers.activitybar.drawio-diagrams-editor-explorer.title": "Draw.io",
 	"views.drawio-diagrams-editor-explorer.drawio-diagrams-editor-welcome.name": "Draw.io",
 	"customEditors.drawio.displayName": "Draw.io (Binary)",

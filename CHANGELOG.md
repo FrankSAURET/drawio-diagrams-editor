@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.  
 New format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) — Versioning: [CalVer](https://calver.org/) (`YYYY.M.micro`).
 
+## 2026.11.0 (prochaine publication)
+
+### Modification
+
+- **Draw.io passe de la v31.4.2 à la v32.6.9.** Tous les greffons de l'extension fonctionnent à l'identique.
+- **Mode restreint (espace de travail non approuvé)** : VS Code ignore désormais les valeurs de l'espace de travail pour `customLibraries`, `libraryFolders`, `plugins`, `offline` et `online-url`, et n'utilise que vos réglages personnels. Un dépôt téléchargé ne peut plus charger de fichiers locaux arbitraires ni changer l'application Draw.io chargée. Rien ne change dans un espace approuvé.
+
+### Correction
+
+- **Mode en ligne** : l'éditeur échangeait des messages avec n'importe quelle page affichée dans son cadre Draw.io. Il ne parle plus qu'à l'origine de l'`online-url` configurée.
+- Un module Draw.io chargé à la demande (import Gliffy, PlantUML…) était cherché à la mauvaise adresse, et un échec de chargement laissait le sablier tourner sans fin.
+
 ## [2026.9.0](https://github.com/FrankSAURET/drawio-diagrams-editor/releases/tag/v2026.9.0) - 2026-09-06
 
 ### Added
