@@ -1,20 +1,32 @@
 import { sendEvent } from "./vscode";
 
 /**
- * Copier une sélection doit produire du SVG, pas seulement du XML Draw.io.
+ * Copier une sélection produit un SVG, avec le XML Draw.io dedans.
  *
- * Draw.io sait déjà le faire (`copySvg`, câblé sur Ctrl+Alt+Maj+X) : on le
- * branche sur les deux gestes usuels, l'action `copy` (menu Édition et clic
- * droit) et l'événement `copy` du navigateur (Ctrl+C).
+ * Branché sur les deux gestes usuels : l'action `copy` (menu Édition et clic
+ * droit) et l'événement `copy` du navigateur (Ctrl+C). « Copier en SVG »
+ * devient inutile et disparaît des menus.
  *
- * L'écriture système contient trois saveurs : `text/html` avec le SVG en
- * `data:` (ce que lisent Word, PowerPoint, Outlook…), `image/svg+xml` pour les
- * applications qui la gèrent, et l'attribut `content` du SVG qui porte le XML
- * des cellules — un rappel dans Draw.io reste donc éditable.
+ * Saveurs écrites :
+ * - `image/svg+xml` : le dessin, lu par Word, PowerPoint, Inkscape… ;
+ * - `text/plain` : la même source SVG, pour les programmes qui ne lisent que du
+ *   texte, et pour le retour dans Draw.io (Chromium n'expose pas l'image à
+ *   l'événement `paste` ; pasteSvgText.ts reprend ce texte). L'attribut
+ *   `content` du SVG porte le XML des cellules : le dessin recollé reste
+ *   modifiable.
+ *
+ * Pas de `text/html` (ce que fait Draw.io : `<img src="data:…">`) : Word lit
+ * cette saveur en premier, ne sait pas charger l'image en `data:` et colle un
+ * cadre vide. Word garde bien l'image quand `image/svg+xml` et `text/plain`
+ * sont présents ensemble (vérifié par automatisation de Word).
+ *
+ * Thème clair imposé : Draw.io prenait le thème sombre dès que VS Code l'était,
+ * et le dessin collé dans un document arrivait en couleurs inversées.
  */
 Draw.loadPlugin((ui) => {
 	sendEvent({ event: "pluginLoaded", pluginId: "copy-selection-as-svg" });
 
+	const anyUi = ui as any;
 	const graph = ui.editor.graph;
 
 	/** Cellules copiables de la sélection courante, sommets les plus hauts. */
@@ -31,11 +43,55 @@ Draw.loadPlugin((ui) => {
 			graph.isEnabled() &&
 			!graph.isSelectionEmpty() &&
 			// Une boîte de dialogue ouverte : le presse-papiers y appartient.
-			(ui as any).dialog == null &&
+			anyUi.dialog == null &&
 			// Une étiquette en cours d'édition : c'est du texte qu'on copie.
 			!graph.isEditing()
 		);
 	}
+
+	/** SVG des cellules, au thème clair, sans l'avertissement de texte. */
+	function createSvg(cells: DrawioCell[], xml?: string | null, scale?: number): string {
+		const g = graph as any;
+		// « Text is not SVG - cannot display » : lien de secours que Word et
+		// Inkscape affichent par-dessus le dessin. Draw.io le retire aussi
+		// quand il intègre un SVG ailleurs.
+		const oldWarning = g.addForeignObjectWarning;
+		g.addForeignObjectWarning = function () {};
+		try {
+			const svgRoot: Element = g.getSvg(
+				null, scale, null, null, null, null, null, null, null, null,
+				null, "light", null, cells.length > 0 ? cells : null
+			);
+			if (xml != null) {
+				svgRoot.setAttribute("content", xml);
+			}
+			return mxUtils.getXml(svgRoot);
+		} finally {
+			g.addForeignObjectWarning = oldWarning;
+		}
+	}
+
+	// Remplace EditorUi.copySvg : sert aussi le raccourci Ctrl+Alt+Maj+X.
+	anyUi.copySvg = function (cells: DrawioCell[], xml?: string | null, scale?: number) {
+		try {
+			const ClipboardItemCtor = (window as any).ClipboardItem;
+			if (navigator.clipboard == null || typeof ClipboardItemCtor !== "function") {
+				return;
+			}
+			const svg = createSvg(cells, xml, scale);
+			const data: Record<string, Blob> = {
+				"text/plain": new Blob([svg], { type: "text/plain" }),
+			};
+			if (ClipboardItemCtor.supports == null || ClipboardItemCtor.supports("image/svg+xml")) {
+				data["image/svg+xml"] = new Blob([svg], { type: "image/svg+xml" });
+			}
+			navigator.clipboard
+				.write([new ClipboardItemCtor(data)])
+				.catch((e: any) => anyUi.handleError(e));
+		} catch (e) {
+			anyUi.handleError(e);
+		}
+	};
 
 	function copyAsSvg(): void {
 		const cells = selectedCells();
@@ -51,7 +107,7 @@ Draw.loadPlugin((ui) => {
 			// retour dans Draw.io.
 		}
 
-		ui.copySvg(cells, xml);
+		anyUi.copySvg(cells, xml);
 	}
 
 	// 1. Action `copy` : menu Édition et menu contextuel du clic droit.
@@ -67,6 +123,13 @@ Draw.loadPlugin((ui) => {
 		};
 	}
 
+	// « Copier en SVG » fait double emploi avec « Copier » : retiré des menus
+	// (Édition et clic droit), qui sautent les actions invisibles.
+	const copyAsSvgAction = ui.actions.get("copyAsSvg");
+	if (copyAsSvgAction != null) {
+		(copyAsSvgAction as any).visible = false;
+	}
+
 	// 2. Ctrl+C : Draw.io passe par l'événement `copy` d'un champ caché, dont
 	//    le comportement par défaut écrase le presse-papiers avec le seul XML.
 	//    On l'annule en phase de capture (donc avant le gestionnaire de
@@ -78,7 +141,7 @@ Draw.loadPlugin((ui) => {
 			// `clipboardElt` est le champ caché que Draw.io focalise pour ses
 			// raccourcis presse-papiers : s'en servir de repère évite de
 			// détourner une copie de texte faite ailleurs dans l'interface.
-			const clipboardElt = (ui as any).clipboardElt as Node | undefined;
+			const clipboardElt = anyUi.clipboardElt as Node | undefined;
 			if (
 				!evt.isTrusted ||
 				clipboardElt == null ||

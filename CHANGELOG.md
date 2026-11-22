@@ -10,11 +10,13 @@ New format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) — Version
 - **Draw.io passe de la v31.4.2 à la v32.7.4.** Tous les greffons de l'extension fonctionnent à l'identique.
 - **Mode restreint (espace de travail non approuvé)** : VS Code ignore désormais les valeurs de l'espace de travail pour `customLibraries`, `libraryFolders`, `plugins`, `offline` et `online-url`, et n'utilise que vos réglages personnels. Un dépôt téléchargé ne peut plus charger de fichiers locaux arbitraires ni changer l'application Draw.io chargée. Rien ne change dans un espace approuvé.
 - Le numéro de version affiché en haut à droite de l'éditeur inclut désormais le numéro de lot (`v2026.9.0.26`).
+- **« Copier » copie directement un SVG**, qui garde le diagramme Draw.io : recollé dans Draw.io, il reste modifiable. L'entrée « Copier en SVG », devenue inutile, disparaît des menus Édition et clic droit.
 
 ### Correction
 
 - **Export SVG : l'ombre des formes est conservée** dans Word, PowerPoint, Inkscape, LibreOffice… Elle était écrite sous une forme que seul un navigateur sait lire.
-- **Copier (Ctrl+C, menu Copier, « Copier en SVG ») : collage fidèle dans les autres logiciels.** Les couleurs ne sont plus perdues ou noircies, et le dessin n'arrive plus en couleurs sombres quand VS Code utilise un thème sombre.
+- **Copier (Ctrl+C, menu Copier) : collage fidèle dans les autres logiciels.** Les couleurs ne sont plus perdues ou noircies, et le dessin n'arrive plus en couleurs sombres quand VS Code utilise un thème sombre.
+- **Copier puis coller dans Word ne donnait plus qu'un cadre vide.** Le dessin arrive désormais en image SVG native, ombre comprise, sans le message « Text is not SVG - cannot display ».
 - **Mode en ligne** : l'éditeur échangeait des messages avec n'importe quelle page affichée dans son cadre Draw.io. Il ne parle plus qu'à l'origine de l'`online-url` configurée.
 - Un module Draw.io chargé à la demande (import Gliffy, PlantUML…) était cherché à la mauvaise adresse, et un échec de chargement laissait le sablier tourner sans fin.
 

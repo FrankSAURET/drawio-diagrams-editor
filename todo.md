@@ -6,6 +6,15 @@
 4. ✅ Le numéro de version affiché en haut à droite incluera le numéro de build — v2026.9.0.26.
 5. ✅ Mise à jour vers dernière version de draw.io si c'est opportun — v32.7.4 en v2026.9.0.27.
 6. ⬜ Amont hediet 1.19.0 (06/11) : réglage « configuration Draw.io » + dialogue Configuration (clés API en stockage secret), retrait d'un réglage de thème inutilisé — à examiner, conflit probable avec nos réglages. **Attend l'accord de Frank** (rien fusionné). Dernier amont examiné : `ab3627e`.
+7. ✅ Copier / copier en SVG ne donnait plus rien dans Word ; copier = SVG par défaut, « Copier en SVG » retiré — v2026.9.0.28, **à vérifier par Frank** dans Word.
+
+# v2026.9.0.28 — Copier = SVG, collage Word rétabli
+
+1. ✅ **Cause du collage vide dans Word** (reproduite par automatisation de Word) : `writeImageToClipboard` de Draw.io écrit `text/html` (`<img src="data:image/svg+xml;base64,…">`) + `image/svg+xml`. Word lit le HTML en premier, ne charge pas l'image `data:` et colle un rectangle vide. Le SVG seul, ou SVG + `text/plain`, se colle parfaitement (image SVG native, ombre comprise).
+2. ✅ **`ui.copySvg` déplacé de [svgCompat.ts](drawio-custom-plugins/src/svgCompat.ts) vers [copySelectionAsSvg.ts](drawio-custom-plugins/src/copySelectionAsSvg.ts)** et réécrit : `navigator.clipboard.write` direct avec `image/svg+xml` + `text/plain` (source SVG, reprise par [pasteSvgText.ts](drawio-custom-plugins/src/pasteSvgText.ts) au retour dans Draw.io, `content` garde les cellules). Plus de `text/html`. Thème clair toujours imposé.
+3. ✅ **Avertissement « Text is not SVG - cannot display » retiré de la copie** (`addForeignObjectWarning` neutralisé le temps du `getSvg`, comme Draw.io le fait pour ses intégrations). L'export SVG le garde.
+4. ✅ **« Copier en SVG » masqué** (`action.visible = false`) : menus Édition et clic droit. Le raccourci Ctrl+Alt+Maj+X reste et fait la même chose que Copier.
+5. ✅ [test-webview.mjs](scripts/test-webview.mjs) : contexte avec droits presse-papiers, test 5 — « Copier » écrit `image/svg+xml` avec `content`, `text/plain` = source SVG, pas de `text/html`, pas d'avertissement, `copyAsSvg` invisible. Vérifié aussi en bout de chaîne : Chrome visible → presse-papiers Windows → `Range.Paste()` dans Word → PDF.
 
 # v2026.9.0.27 — Draw.io v32.7.4
 

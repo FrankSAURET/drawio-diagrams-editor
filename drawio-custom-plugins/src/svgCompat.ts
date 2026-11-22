@@ -17,9 +17,9 @@ import { sendEvent } from "./vscode";
  * 2. quand le thème demandé est fixé (« light » ou « dark », pas « auto ») :
  *    `light-dark()` est résolu vers la bonne couleur et `var()` vers sa valeur
  *    de repli. En « auto » ces couleurs adaptatives sont laissées telles quelles.
- * 3. La copie (Ctrl+C, menu Copier, « Copier en SVG ») force le thème clair :
- *    Draw.io prenait le thème sombre dès que VS Code l'était, et le dessin collé
- *    dans un document arrivait en couleurs inversées.
+ *
+ * La copie elle-même (thème clair imposé, saveurs écrites) est dans
+ * copySelectionAsSvg.ts.
  */
 
 const SVG_NS = "http://www.w3.org/2000/svg";
@@ -309,37 +309,5 @@ Draw.loadPlugin((ui) => {
 			console.error("svgCompat", e);
 		}
 		return root;
-	};
-
-	// Copie : même code que EditorUi.copySvg, au thème clair imposé.
-	ui.copySvg = function (cells: DrawioCell[], xml?: string | null, scale?: number) {
-		const self = this as any;
-		try {
-			if (
-				navigator.clipboard == null ||
-				typeof (window as any).ClipboardItem !== "function"
-			) {
-				return;
-			}
-			const graph = self.editor.graph;
-			const svgRoot: Element = graph.getSvg(
-				null, scale, null, null, null, null, null, null, null, null,
-				null, "light", null, cells.length > 0 ? cells : null
-			);
-			if (xml != null) {
-				svgRoot.setAttribute("content", xml);
-			}
-			const dataUrl = (window as any).Editor.createSvgDataUri(
-				mxUtils.getXml(svgRoot)
-			);
-			const w = parseInt(svgRoot.getAttribute("width") || "", 10);
-			const h = parseInt(svgRoot.getAttribute("height") || "", 10);
-			self.writeImageToClipboard(
-				dataUrl, w, h, "image/svg+xml", null,
-				(e: any) => self.handleError(e)
-			);
-		} catch (e) {
-			self.handleError(e);
-		}
 	};
 });

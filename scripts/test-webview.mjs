@@ -94,7 +94,11 @@ const failures = [];
 const check = (ok, msg) => { if (!ok) failures.push(msg); };
 
 try {
-	const page = await browser.newPage();
+	// Presse-papiers autorisé : le test 5 relit ce que « Copier » y a écrit.
+	const context = await browser.newContext({
+		permissions: ["clipboard-read", "clipboard-write"],
+	});
+	const page = await context.newPage();
 	const pageErrors = [];
 	page.on("pageerror", (e) => pageErrors.push(e.message));
 
@@ -167,7 +171,42 @@ try {
 	check(!/light-dark\(|var\(--ge-/.test(svg), "SVG : couleurs adaptatives non resolues");
 	check(/#dae8fc|rgb\(218, 232, 252\)/i.test(svg), "SVG : couleur de remplissage perdue");
 
-	// 5. Aucune exception non rattrapee.
+	// 5. « Copier » écrit un SVG (avec le XML Draw.io) dans le presse-papiers.
+	const clip = await page.evaluate(async () => {
+		const errors = [];
+		const oldHandleError = editorUi.handleError;
+		editorUi.handleError = function (e) {
+			errors.push(String(e && (e.message || e)));
+			return oldHandleError.apply(this, arguments);
+		};
+		await navigator.clipboard.writeText("vide");
+		editorUi.actions.get("copy").funct();
+		await new Promise((ok) => setTimeout(ok, 1500));
+		const out = {
+			errors, types: [], text: "", svg: "",
+			copyAsSvgVisible: editorUi.actions.get("copyAsSvg")?.visible,
+		};
+		for (const item of await navigator.clipboard.read()) {
+			for (const t of item.types) {
+				out.types.push(t);
+				const text = await (await item.getType(t)).text();
+				if (t === "text/plain") out.text = text;
+				if (t === "image/svg+xml") out.svg = text;
+			}
+		}
+		return out;
+	});
+	const types = clip.types.join(", ");
+	check(clip.errors.length === 0, `copie : erreur ${clip.errors.join(" | ")}`);
+	check(clip.types.includes("image/svg+xml"), `copie : pas d'image/svg+xml (types : ${types})`);
+	// text/html (<img src="data:…">) : Word le lit en premier et colle un cadre vide.
+	check(!clip.types.includes("text/html"), `copie : text/html present (types : ${types})`);
+	check(/^<svg[\s>]/.test(clip.text), "copie : text/plain n'est pas la source SVG");
+	check(/<svg[^>]*\scontent="/.test(clip.svg), "copie : SVG sans le XML Draw.io (attribut content)");
+	check(!/Text is not SVG/.test(clip.svg), "copie : avertissement « Text is not SVG » present");
+	check(clip.copyAsSvgVisible === false, "« Copier en SVG » encore visible dans les menus");
+
+	// 6. Aucune exception non rattrapee.
 	// Bruit amont connu : le module OrgChart (Bridge.NET) est defini a la fois
 	// dans extensions.min.js et dans orgchart.min.js, charge a la volee.
 	const KNOWN_NOISE = [/OrgChart\.Annotations\.CanBeNullAttribute' is already defined/];
