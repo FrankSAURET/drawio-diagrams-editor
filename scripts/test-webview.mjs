@@ -359,6 +359,21 @@ try {
 	}
 
 	// 5 sexies. Ajustements au contenu : entrées de menu, zoom, page.
+	// Vrai clic sur la liste déroulante du zoom de la barre d'outils : elle
+	// garde une référence au menu prise avant le chargement des greffons.
+	let toolbarZoomItems = [];
+	if (await page.$(".geZoomInput")) {
+		await page.click(".geZoomInput");
+		await page.waitForSelector("table.mxPopupMenu", { timeout: 3000 }).catch(() => {});
+		toolbarZoomItems = await page.evaluate(() =>
+			[...document.querySelectorAll("table.mxPopupMenu tr")]
+				.map((tr) => tr.textContent.trim()).filter((t) => t));
+		await page.evaluate(() => editorUi.hideCurrentMenu());
+		check(toolbarZoomItems.includes("Ajuster au contenu"),
+			`liste du zoom (barre d'outils) : « Ajuster au contenu » absent (${toolbarZoomItems.join(" | ")})`);
+	} else {
+		check(false, "liste du zoom absente de la barre d'outils");
+	}
 	const fit = await page.evaluate(() => {
 		const ui = editorUi;
 		const graph = ui.editor.graph;

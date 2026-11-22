@@ -103,39 +103,28 @@ Draw.loadPlugin((ui) => {
 
 	ui.actions.addAction(fitPageAction, fitPageToContent);
 
-	// Menu Zoom : insertion juste après « Ajuster à la fenêtre ». Le menu
-	// d'origine passe par `addMenuItems` : on y glisse l'entrée au vol.
-	const zoomMenu = ui.menus.get("viewZoom");
-	if (zoomMenu != null) {
-		const oldZoomFunct = zoomMenu.funct;
-		zoomMenu.funct = function (this: any) {
-			const menus = anyUi.menus;
-			const oldAdd = menus.addMenuItems;
-			let inserted = false;
-			menus.addMenuItems = function (
-				this: any,
-				menu: any,
-				keys: string[],
-				...rest: any[]
-			) {
-				const i = keys.indexOf("fitWindow");
-				if (i >= 0 && !inserted) {
-					keys = keys.slice();
-					keys.splice(i + 1, 0, fitContentAction);
-					inserted = true;
-				}
-				return oldAdd.call(this, menu, keys, ...rest);
-			};
-			try {
-				oldZoomFunct.apply(this, arguments);
-			} finally {
-				menus.addMenuItems = oldAdd;
-			}
-			if (!inserted) {
-				menus.addMenuItems(arguments[0], ["-", fitContentAction], arguments[1]);
-			}
-		};
-	}
+	// Menu Zoom : insertion juste après « Ajuster à la fenêtre ». On ne peut
+	// pas remplacer `viewZoom.funct` : la liste déroulante du zoom (barre
+	// d'outils) en garde une référence prise AVANT le chargement des greffons
+	// (`createZoomInput` → `addMenuHandler(zoomInput, zoomMenu.funct)`).
+	// On intercepte donc en permanence `addMenuItems`, appelé par ce menu
+	// avec la liste `['resetView', 'fitWindow', '-']` (Menus.js) — seule
+	// liste de Draw.io qui contienne `fitWindow`.
+	const menus = anyUi.menus;
+	const oldAdd = menus.addMenuItems;
+	menus.addMenuItems = function (
+		this: any,
+		menu: any,
+		keys: string[],
+		...rest: any[]
+	) {
+		const i = Array.isArray(keys) ? keys.indexOf("fitWindow") : -1;
+		if (i >= 0 && keys.indexOf(fitContentAction) < 0) {
+			keys = keys.slice();
+			keys.splice(i + 1, 0, fitContentAction);
+		}
+		return oldAdd.call(this, menu, keys, ...rest);
+	};
 
 	// Sous-menu de la page courante (bouton ≡ des pages).
 	const currentPageMenu = ui.menus.get("currentPage");

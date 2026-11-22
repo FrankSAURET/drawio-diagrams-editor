@@ -14,6 +14,13 @@
 12. ✅ Menu Fichier : « Exporter… » (doublon) et « Convertir… » retirés, « Exporter en tant que » renommé « Exporter » et placé après « Importer » — v2026.9.0.32.
 13. ✅ Supplément > Thème : nouveau thème « Coloré », icônes en couleur aspect 3D libres — v2026.9.0.33, **à vérifier par Frank** en clair et en sombre.
 14. ✅ Menu Zoom « Ajuster au contenu » + menu des pages / onglet « Ajuster la page au contenu » — v2026.9.0.34, **à vérifier par Frank**.
+15. ✅ « Ajuster au contenu » absent de la liste du zoom de la barre d'outils — v2026.9.0.35.
+
+# v2026.9.0.35 — « Ajuster au contenu » dans la liste du zoom
+
+1. ✅ **Cause** : `createZoomInput` (EditorUi.js) passe `viewZoom.funct` à `addMenuHandler` lors de la construction de la barre d'outils, avant le chargement des greffons ; remplacer `funct` restait sans effet sur cette liste.
+2. ✅ [fitToContent.ts](drawio-custom-plugins/src/fitToContent.ts) : `menus.addMenuItems` habillé en permanence ; `vscode.fitContent` inséré après `fitWindow` (seule liste de Draw.io qui le contient).
+3. ✅ [test-webview.mjs](scripts/test-webview.mjs) : vrai clic sur `.geZoomInput`, lecture du menu affiché. Échoue avec l'ancien code, passe avec le nouveau.
 
 # v2026.9.0.34 — Ajuster au contenu (zoom et page)
 
