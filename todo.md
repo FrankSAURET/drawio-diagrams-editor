@@ -10,7 +10,15 @@
 8. ✅ Collage Word : alignements, gras, italique et traits séparateurs des blocs perdus — v2026.9.0.29, **à vérifier par Frank** sur « Passerelle sur le Brivet ».
 9. ✅ Conversion des étiquettes HTML appliquée aussi à l'export SVG (option A, toujours) — v2026.9.0.30, **à vérifier par Frank** dans Word.
 10. ✅ Formules mathématiques à l'export SVG / copie : dessinées dans Word au lieu du texte source — v2026.9.0.31, **à vérifier par Frank**.
-11. ⏳ `.vsix` de la v2026.9.0.31 non construit : [menu-entries.ts](drawio-custom-plugins/src/menu-entries.ts) est en cours de modification par une autre session (menu « Exporter », `hiddenMenuItems` absent de `drawio-types.d.ts`, 4 erreurs de type) et bloque la construction des greffons. Construire le `.vsix` une fois ce travail terminé.
+11. ✅ `.vsix` de la v2026.9.0.31 non construit (greffons bloqués par le travail en cours sur le menu) — levé : `.vsix` construit en v2026.9.0.32.
+12. ✅ Menu Fichier : « Exporter… » (doublon) et « Convertir… » retirés, « Exporter en tant que » renommé « Exporter » et placé après « Importer » — v2026.9.0.32.
+
+# v2026.9.0.32 — Menu Fichier : un seul « Exporter »
+
+1. ✅ **Doublon confirmé** : « Exporter… » (quickpick VS Code : `.svg`, `.png`, `.drawio`) ne faisait qu'un sous-ensemble du sous-menu natif « Exporter en tant que » (PNG, JPEG, SVG, PDF, HTML, XML…), dont les téléchargements passent déjà par l'extension.
+2. ✅ [menu-entries.ts](drawio-custom-plugins/src/menu-entries.ts) : actions `vscode.export` et `vscode.convert` supprimées ; le sous-menu natif `exportAs` est masqué pendant la construction d'origine du menu (`hiddenMenuItems` temporaire), puis réinséré après « Importer » avec le libellé `export`. Types ajoutés dans [drawio-types.d.ts](drawio-custom-plugins/src/drawio-types.d.ts).
+3. ✅ Branches `invokeCommand` `export`/`convert` retirées ([DrawioEditorService.ts](src/DrawioEditorService.ts), [types.d.ts](drawio-custom-plugins/src/types.d.ts)). Les commandes de palette `export` et `convert` restent.
+4. ✅ [test-webview.mjs](scripts/test-webview.mjs) : ouverture réelle du menu Fichier, contrôle de l'ordre et de l'absence des anciennes entrées.
 
 # v2026.9.0.31 — Formules MathJax converties à l'export SVG et à la copie
 

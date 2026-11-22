@@ -11,6 +11,7 @@ New format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) — Version
 - **Mode restreint (espace de travail non approuvé)** : VS Code ignore désormais les valeurs de l'espace de travail pour `customLibraries`, `libraryFolders`, `plugins`, `offline` et `online-url`, et n'utilise que vos réglages personnels. Un dépôt téléchargé ne peut plus charger de fichiers locaux arbitraires ni changer l'application Draw.io chargée. Rien ne change dans un espace approuvé.
 - Le numéro de version affiché en haut à droite de l'éditeur inclut désormais le numéro de lot (`v2026.9.0.26`).
 - **« Copier » copie directement un SVG**, qui garde le diagramme Draw.io : recollé dans Draw.io, il reste modifiable. L'entrée « Copier en SVG », devenue inutile, disparaît des menus Édition et clic droit.
+- **Menu Fichier simplifié** : « Exporter en tant que » devient « Exporter » et se place juste après « Importer ». L'ancienne entrée « Exporter… » (doublon limité à SVG, PNG et drawio) et « Convertir… » disparaissent du menu. Les commandes « Draw.io: Export » et « Draw.io: Convert » restent disponibles dans la palette de commandes.
 
 ### Correction
 
