@@ -20,7 +20,7 @@ const htmlFile = join(root, "src/DrawioClient/webview-content.html");
 // Greffons qui doivent s'annoncer (evenement `pluginLoaded`).
 const EXPECTED_PLUGINS = [
 	"menu-entries", "version-label", "display-options", "library-storage",
-	"library-preview", "local-file-save", "copy-selection-as-svg",
+	"library-preview", "local-file-save", "svg-compat", "copy-selection-as-svg",
 	"paste-svg-text", "focus", "linkSelectedNodeWithData", "LiveShare",
 ];
 // Actions que les greffons doivent avoir enregistrees dans draw.io.
@@ -149,7 +149,25 @@ try {
 	check(probe.cells.includes("a"), "la forme chargee est absente du modele");
 	check(/value="Hello"/.test(probe.fileData), "la forme n'est pas dans le XML ecrit");
 
-	// 4. Aucune exception non rattrapee.
+	// 4. SVG lisible hors navigateur (greffon svgCompat) : ombre en vrai
+	//    <filter>, couleurs resolues au theme clair, plus de CSS adaptatif.
+	const svg = await page.evaluate(() => {
+		const graph = editorUi.editor.graph;
+		const xml = '<mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/>' +
+			'<mxCell id="s" value="Ombre" style="rounded=1;html=1;shadow=1;fillColor=#dae8fc;" vertex="1" parent="1">' +
+			'<mxGeometry x="200" y="40" width="120" height="60" as="geometry"/></mxCell></root></mxGraphModel>';
+		graph.model.beginUpdate();
+		try { editorUi.pasteXml(xml, false); } finally { graph.model.endUpdate(); }
+		const cells = graph.getSelectionCells();
+		return mxUtils.getXml(graph.getSvg(null, null, null, null, null, null,
+			null, null, null, null, null, "light", null, cells));
+	});
+	check(/<filter[^>]*>.*feGaussianBlur/.test(svg), "SVG : ombre non convertie en <filter>");
+	check(!/drop-shadow\(/.test(svg), "SVG : filtre CSS drop-shadow restant");
+	check(!/light-dark\(|var\(--ge-/.test(svg), "SVG : couleurs adaptatives non resolues");
+	check(/#dae8fc|rgb\(218, 232, 252\)/i.test(svg), "SVG : couleur de remplissage perdue");
+
+	// 5. Aucune exception non rattrapee.
 	// Bruit amont connu : le module OrgChart (Bridge.NET) est defini a la fois
 	// dans extensions.min.js et dans orgchart.min.js, charge a la volee.
 	const KNOWN_NOISE = [/OrgChart\.Annotations\.CanBeNullAttribute' is already defined/];

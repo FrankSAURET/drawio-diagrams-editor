@@ -1,6 +1,22 @@
 # À faire
-1. **Relire cette préparation puis donner l'accord de publication** — rien n'est envoyé sans un « publie » explicite. Au feu vert : `yarn build` (VSIX), puis `vsce publish` sous le compte `electropol-fr`, puis étiquette `v2026.9.0`.
 
+1. **Relire cette préparation puis donner l'accord de publication** — rien n'est envoyé sans un « publie » explicite. Au feu vert : `npm run publier` (Marketplace + Open VSX), puis étiquette de la version.
+2. ✅ Fais moi un npm run publier qui publie à la fois sur vscode marketplace et openvsx — fait en v2026.9.0.24.
+3. ✅ l'export svg marche presque (il manque l'ombre) par contre copier, le collage n'est pas fidèle, et copier en svg non plus — v2026.9.0.26, **à vérifier par Frank** dans Word / Inkscape / Kablix.
+4. ✅ Le numéro de version affiché en haut à droite incluera le numéro de build — v2026.9.0.26.
+5. Mise à jour vers dernière version de draw.io si c'est opportun — 32.6.9 fait en v2026.9.0.25 ; l'amont hediet est passé en **v32.7.4** (17/11) : `yarn update-drawio --to 32.7.4` à faire.
+6. ⬜ Amont hediet 1.19.0 (06/11) : réglage « configuration Draw.io » + dialogue Configuration (clés API en stockage secret), retrait d'un réglage de thème inutilisé — à examiner, conflit probable avec nos réglages. Dernier amont examiné : `ab3627e`.
+
+# v2026.9.0.26 — SVG lisible hors navigateur, numéro de lot affiché
+
+1. ✅ **Cause de « l'export SVG sans ombre »** : Draw.io écrit l'ombre en filtre CSS `style="filter: drop-shadow(light-dark(…) 2px 3px 2px)"`, que seul un navigateur lit. Word, Inkscape, LibreOffice l'ignorent.
+2. ✅ **Cause du collage infidèle** : couleurs écrites en `light-dark(clair, sombre)` et `var(--ge-adaptive-bg, #ffffff)` dans `style`, non comprises hors navigateur ; de plus `EditorUi.copySvg` prend le thème **sombre** dès que VS Code l'est (`Editor.isDarkMode()`), d'où `color-scheme: dark` dans le SVG copié.
+3. ✅ **Nouveau greffon [svgCompat.ts](drawio-custom-plugins/src/svgCompat.ts)**, enveloppe de `Graph.prototype.getSvg` : chaque `drop-shadow` CSS devient un `<filter>` SVG 1.1 (`feGaussianBlur` + `feOffset` + `feFlood` + `feComposite` + `feMerge`, région en `userSpaceOnUse` pour ne pas effacer les traits de hauteur nulle), partagé entre ombres identiques. Thème fixé (`light`/`dark`) : `light-dark()` résolu, `var()` résolu d'après les variables du bloc `<style>` du SVG (sinon repli), bloc `@supports` retiré. Thème `auto`/absent (fichiers `.drawio.svg`) : couleurs adaptatives conservées, seule l'ombre est convertie.
+4. ✅ **`ui.copySvg` remplacé** : même code que l'amont, thème **clair imposé**. Couvre Ctrl+C, Copier (menu, clic droit) et « Copier en SVG ».
+5. ✅ **Étiquette de version** ([Extension.ts](src/Extension.ts), `versionLabelFor`) : toujours le `buildNumber`, même en production (un VSIX installé tourne en mode Production). ℹ️ Écart volontaire avec la règle globale « 4 segments hors production seulement », sur demande de Frank : les utilisateurs publics verront aussi le numéro de lot.
+6. ✅ [test-webview.mjs](scripts/test-webview.mjs) : greffon `svg-compat` attendu + contrôle du SVG (filtre présent, plus de `drop-shadow`, `light-dark`, `var(--ge-`, couleur de remplissage conservée). Vérifié aussi en thème sombre (`#121212` / `#ffffff`).
+7. ⏳ Texte des étiquettes HTML : écrit en `<foreignObject>`, que Word et Inkscape n'affichent pas (ils prennent le `<text>` de repli, sans retour à la ligne ni mise en forme). Non traité.
+8. ⏳ `copyImage` (copie PNG) prend aussi le thème sombre de VS Code. Non traité.
 
 # v2026.9.0.25 — Reprise de l'amont hediet 1.18 : sécurité et Draw.io v32.6.9
 
@@ -36,7 +52,6 @@
 8. ✅ **L'étiquette de version de l'éditeur est conforme** ([Extension.ts:176-188](src/Extension.ts#L176-L188)) : en production l'utilisateur ne voit que `v2026.9.0` ; le numéro à quatre segments n'apparaît qu'en développement.
 9. ✅ Build extension + greffons (webpack production) et `tsc --noEmit` sur les deux projets : 0 erreur hors `node_modules`.
 10. ⏳ **Pas de VSIX et aucune publication dans ce lot.** Le paquet ne se construit que sur demande expresse, et `vsce publish` attend l'accord explicite de Frank dans la conversation — une version prête n'en tient pas lieu.
-
 
 # v2026.8.1.21 — le rechargement parasite et les cases décochées
 
@@ -157,8 +172,8 @@
 3. ✅ **Coller un SVG venu de Kablix** (nouveau greffon [pasteSvgText.ts](drawio-custom-plugins/src/pasteSvgText.ts)). Cause trouvée dans le code de Kablix : sa copie vectorielle dépose le dessin en deux exemplaires, `image/svg+xml` **et** le même SVG en `text/plain`. Or Draw.io renonce à lire l'image dès qu'une saveur texte est présente (`installImagePasteHandler` : `if (!consumed && !containsText)`), et Chromium n'expose jamais `image/svg+xml` sur l'événement `paste` lui-même. D'où la longue étiquette de texte. Inkscape marchait (aucune saveur texte), Draw.io aussi (son `text/html` porte le SVG en `data:`). Le greffon intercepte le collage **en phase de capture** sur `graph.container`, reconnaît un document SVG complet et l'importe comme image ; l'attribut `content` éventuel est relu par `importFiles`, donc un dessin venu de Draw.io reste modifiable.
 4. ℹ️ Une étiquette en cours d'édition n'est jamais interceptée : coller la source d'un SVG comme texte reste possible.
 5. ✅ **Bibliothèque supprimée puis impossible à réimporter** (« le fichier existe déjà ») — deux causes, corrigées toutes les deux :
-   1. ✅ La croix de la barre latérale (`EditorUi.closeLibrary`) ne retire que l'entrée affichée et son empreinte dans les réglages ; la **copie rangée** dans le stockage du navigateur, elle, reste. Dans un navigateur ordinaire un écran liste ces fichiers ; dans VS Code cet écran n'existe pas, donc le fichier devient introuvable mais son nom reste pris. Nouveau greffon [libraryStorage.ts](drawio-custom-plugins/src/libraryStorage.ts) : la copie rangée est effacée en même temps que l'entrée. Le bloc-notes (`.scratchpad`) est épargné, il se referme et se rouvre.
-   2. ✅ **Vrai défaut du pont de stockage** ([webview-content.html](src/DrawioClient/webview-content.html)) : le faux `localStorage` de la webview relayait les écritures vers l'extension mais **pas les suppressions** — `removeItem` effaçait la clé en mémoire seulement. Toute clé supprimée revenait au rechargement, d'où des bibliothèques fantômes. La suppression est désormais renvoyée par `updateLocalStorage`.
+    1. ✅ La croix de la barre latérale (`EditorUi.closeLibrary`) ne retire que l'entrée affichée et son empreinte dans les réglages ; la **copie rangée** dans le stockage du navigateur, elle, reste. Dans un navigateur ordinaire un écran liste ces fichiers ; dans VS Code cet écran n'existe pas, donc le fichier devient introuvable mais son nom reste pris. Nouveau greffon [libraryStorage.ts](drawio-custom-plugins/src/libraryStorage.ts) : la copie rangée est effacée en même temps que l'entrée. Le bloc-notes (`.scratchpad`) est épargné, il se referme et se rouvre.
+    2. ✅ **Vrai défaut du pont de stockage** ([webview-content.html](src/DrawioClient/webview-content.html)) : le faux `localStorage` de la webview relayait les écritures vers l'extension mais **pas les suppressions** — `removeItem` effaçait la clé en mémoire seulement. Toute clé supprimée revenait au rechargement, d'où des bibliothèques fantômes. La suppression est désormais renvoyée par `updateLocalStorage`.
 6. ⚠️ Correctif de l'item 5 établi par lecture du code (`StorageLibrary`, `StorageFile.deleteFile`, `mxSettings.removeCustomLibrary`) et non par reproduction : il suppose une bibliothèque rangée en mode **navigateur**. Si le défaut persiste avec une bibliothèque importée depuis un **fichier de l'appareil**, le dire — le chemin de code est différent.
 7. ✅ Build extension + greffons (webpack production) et `tsc --noEmit` : 0 erreur hors `node_modules`.
 8. ℹ️ Pas de VSIX construit dans ce lot (règle : artefact seulement sur demande expresse).
@@ -202,9 +217,9 @@
 # v2026.8.0.6 — préparation de la publication 2026.8.0
 
 1. ✅ Traductions passées en revue avant publication (lot unique, comme prévu) :
-   1. ✅ `package.nls.json` / `package.nls.fr.json` : les 65 clés `%…%` du manifeste sont déclarées et traduites, aucune clé morte.
-   2. ✅ [l10n/bundle.l10n.fr.json](l10n/bundle.l10n.fr.json) aligné 1:1 sur le code (36 chaînes) : ajout de « New diagram » → « Nouveau diagramme » (nom de l'onglet sans titre, item ⏳ de v2026.8.0.4), retrait de 4 clés mortes depuis la réécriture de la barre d'activité (`Create`, `Diagrams`, `Cannot create or open file "{0}"!`, `Launch Draw.io`).
-   3. ✅ Dialogue « Propriétés d'exportation » du plugin webview ([propertiesDialog.ts](drawio-custom-plugins/src/propertiesDialog.ts)) : les deux derniers libellés figés en anglais (« Export Properties », « Disable SVG 1.1 warning ») passent par un mini-dictionnaire indexé sur `mxLanguage`, avec repli anglais. Le reste du dialogue utilisait déjà `mxResources`.
+    1. ✅ `package.nls.json` / `package.nls.fr.json` : les 65 clés `%…%` du manifeste sont déclarées et traduites, aucune clé morte.
+    2. ✅ [l10n/bundle.l10n.fr.json](l10n/bundle.l10n.fr.json) aligné 1:1 sur le code (36 chaînes) : ajout de « New diagram » → « Nouveau diagramme » (nom de l'onglet sans titre, item ⏳ de v2026.8.0.4), retrait de 4 clés mortes depuis la réécriture de la barre d'activité (`Create`, `Diagrams`, `Cannot create or open file "{0}"!`, `Launch Draw.io`).
+    3. ✅ Dialogue « Propriétés d'exportation » du plugin webview ([propertiesDialog.ts](drawio-custom-plugins/src/propertiesDialog.ts)) : les deux derniers libellés figés en anglais (« Export Properties », « Disable SVG 1.1 warning ») passent par un mini-dictionnaire indexé sur `mxLanguage`, avec repli anglais. Le reste du dialogue utilisait déjà `mxResources`.
 2. ✅ [CHANGELOG.md](CHANGELOG.md) : section `[2026.8.0] - 2026-08-23` (Added / Fixed / Changed) résumant les lots 2026.7.1.1 → 2026.8.0.5, plus le lien de release.
 3. ✅ [README.md](README.md) (langue de base) : commandes « New/Open Draw.io Diagram » et « Associate .drawio Files » ajoutées au tableau, nouvelle section « Windows Explorer association », rubrique « What changed in this fork » actualisée.
 4. ✅ Build extension + plugins vérifié (webpack production, exit 0) ; `tsc --noEmit` sans erreur dans `src/` et `drawio-custom-plugins/src/`.
@@ -243,31 +258,31 @@
 1. ✅ Historique et mémoire récupérés après le déplacement du dossier (`H:/OneDrive/…/drawio-in-vscode` → `c:/- VS Code/Extensions/drawio-diagrams-editor`) : mémoire copiée dans le dossier projet Claude actuel. ℹ️ Aucun transcript de session n'a survécu à l'ancienne purge à 30 jours ; `cleanupPeriodDays` est désormais à **365** dans `~/.claude/settings.json`.
 2. ✅ Bug « Ouvrir un diagramme » corrigé ([Extension.ts](src/Extension.ts)) : la commande ajoutait le dossier parent au workspace quand le fichier était en dehors (redémarrage de l'hôte d'extensions → erreur), puis ouvrait avec `vscode.open` — donc l'éditeur texte si `workbench.editorAssociations` vaut `default`. Elle ouvre maintenant directement avec le bon viewType (`…-text` ou binaire pour `.drawio.png`), avec repli sur `vscode.open`.
 3. ✅ Association de fichiers Windows proposée à l'utilisateur ([FileAssociationFeature.ts](src/features/FileAssociationFeature.ts)) :
-   1. ✅ Proposition unique au démarrage (Oui / Plus tard / Ne plus demander), 15 s après l'activation ; `activationEvents` passe à `onStartupFinished` pour que la question arrive à l'installation comme à la mise à jour.
-   2. ✅ Écriture dans `HKEY_CURRENT_USER\Software\Classes` via un `.reg` temporaire (UTF-16 LE + BOM) importé par `reg.exe` — aucun privilège administrateur.
-   3. ✅ ProgId `ElectropolFr.DrawioDiagram` : icône `media/drawio.ico`, commande `"Code.exe" "%1"`, extensions `.drawio` et `.dio`.
-   4. ✅ Chemin d'installation re-vérifié à chaque démarrage et corrigé en silence (il change à chaque mise à jour de l'extension).
-   5. ✅ Commande manuelle « Associate .drawio Files With VS Code (Windows) », masquée de la palette hors Windows.
-   6. ✅ Traduction FR des nouvelles clés nls (faite dans le lot v2026.8.0.2).
+    1. ✅ Proposition unique au démarrage (Oui / Plus tard / Ne plus demander), 15 s après l'activation ; `activationEvents` passe à `onStartupFinished` pour que la question arrive à l'installation comme à la mise à jour.
+    2. ✅ Écriture dans `HKEY_CURRENT_USER\Software\Classes` via un `.reg` temporaire (UTF-16 LE + BOM) importé par `reg.exe` — aucun privilège administrateur.
+    3. ✅ ProgId `ElectropolFr.DrawioDiagram` : icône `media/drawio.ico`, commande `"Code.exe" "%1"`, extensions `.drawio` et `.dio`.
+    4. ✅ Chemin d'installation re-vérifié à chaque démarrage et corrigé en silence (il change à chaque mise à jour de l'extension).
+    5. ✅ Commande manuelle « Associate .drawio Files With VS Code (Windows) », masquée de la palette hors Windows.
+    6. ✅ Traduction FR des nouvelles clés nls (faite dans le lot v2026.8.0.2).
 4. ✅ Fichiers supprimables déplacés dans `A Examiner/` (arborescence d'origine conservée, rien de supprimé) : [debug.log](A%20Examiner/debug.log), [NOTES.md](A%20Examiner/NOTES.md), [README original.md](A%20Examiner/README%20original.md), [tslint.json](A%20Examiner/tslint.json), [examples/temp/](A%20Examiner/examples/temp/). `A Examiner/**` et `Archives/**` exclus du VSIX dans [.vscodeignore](.vscodeignore) mais versionnés dans git.
 5. ✅ `tslint` retiré des `devDependencies` (lint mort : le script `lint` n'est qu'un `echo`).
 
 # v2026.7.1
 
 1. ✅ Audit complet du code — 7 bugs corrigés :
-   1. ✅ Clé de contexte `experimentalFeaturesEnabled` erronée (`vscode-drawio.…` → `electropol-fr.drawio-diagrams-editor.…`) : la commande « Modifier le diagramme en texte » ne pouvait jamais s'activer ([Config.ts](src/Config.ts)).
-   2. ✅ Réglage `enableExperimentalFeatures` lu par le code mais jamais déclaré dans package.json → ajouté + nls en/fr.
-   3. ✅ `VsCodeSetting.set()` : `else` manquant → un réglage de dossier de workspace était écrasé au niveau Global ([VsCodeSetting.ts](src/vscode-utils/VsCodeSetting.ts)).
-   4. ✅ Listener `onDidChangeTextDocument` jamais disposé à la fermeture d'un diagramme (fuite + merges vers webview morte) ([DrawioEditorProviderText.ts](src/DrawioEditorProviderText.ts)).
-   5. ✅ StatusBar « Code Link » jamais disposée ([CodeLinkFeature.ts](src/features/CodeLinkFeature.ts)).
-   6. ✅ QuickPick de thème : crash possible sur un séparateur (`onSelect` non gardé) ([DrawioEditorService.ts](src/DrawioEditorService.ts)).
-   7. ✅ « Edit Diagram As Text » : `\n` manquant entre sommets mis à jour et nouveaux ([EditDiagramAsTextFeature.ts](src/features/EditDiagramAsTextFeature.ts)).
-2. ✅ `.vscodeignore` réécrit : VSIX 57 Mo → **28,5 Mo**. Webapp drawio réduit au runtime réellement chargé (exclus : js/diagramly, js/grapheditor, mxgraph/src, shapes/, integrate.min.js, viewer*.min.js, WEB-INF, templates, SDK onedrive/dropbox, service-worker/workbox, cartes .map, sources dev). Images du README non embarquées (réécrites en URLs GitHub par vsce). debug.log et « README original.md » exclus.
+    1. ✅ Clé de contexte `experimentalFeaturesEnabled` erronée (`vscode-drawio.…` → `electropol-fr.drawio-diagrams-editor.…`) : la commande « Modifier le diagramme en texte » ne pouvait jamais s'activer ([Config.ts](src/Config.ts)).
+    2. ✅ Réglage `enableExperimentalFeatures` lu par le code mais jamais déclaré dans package.json → ajouté + nls en/fr.
+    3. ✅ `VsCodeSetting.set()` : `else` manquant → un réglage de dossier de workspace était écrasé au niveau Global ([VsCodeSetting.ts](src/vscode-utils/VsCodeSetting.ts)).
+    4. ✅ Listener `onDidChangeTextDocument` jamais disposé à la fermeture d'un diagramme (fuite + merges vers webview morte) ([DrawioEditorProviderText.ts](src/DrawioEditorProviderText.ts)).
+    5. ✅ StatusBar « Code Link » jamais disposée ([CodeLinkFeature.ts](src/features/CodeLinkFeature.ts)).
+    6. ✅ QuickPick de thème : crash possible sur un séparateur (`onSelect` non gardé) ([DrawioEditorService.ts](src/DrawioEditorService.ts)).
+    7. ✅ « Edit Diagram As Text » : `\n` manquant entre sommets mis à jour et nouveaux ([EditDiagramAsTextFeature.ts](src/features/EditDiagramAsTextFeature.ts)).
+2. ✅ `.vscodeignore` réécrit : VSIX 57 Mo → **28,5 Mo**. Webapp drawio réduit au runtime réellement chargé (exclus : js/diagramly, js/grapheditor, mxgraph/src, shapes/, integrate.min.js, viewer\*.min.js, WEB-INF, templates, SDK onedrive/dropbox, service-worker/workbox, cartes .map, sources dev). Images du README non embarquées (réécrites en URLs GitHub par vsce). debug.log et « README original.md » exclus.
 3. ✅ CHANGELOG 2026.7.1 + bump version + build extension/plugins + vsix empaqueté et installé localement.
 4. ℹ️ Fichiers supprimables (RIEN n'a été supprimé) :
-   1. [debug.log](debug.log) — bruit crashpad Electron.
-   2. drawio-diagrams-editor-2026.5.1.vsix et 2026.7.0.vsix — anciens artefacts (61 Mo).
-   3. [README original.md](README%20original.md) — copie de l'ancien README hediet.
-   4. [NOTES.md](NOTES.md) — notes de dev upstream.
-   5. [examples/temp/](examples/temp/) — fichiers d'essai temporaires.
-   6. [tslint.json](tslint.json) — TSLint mort (aucun lint branché).
+    1. [debug.log](debug.log) — bruit crashpad Electron.
+    2. drawio-diagrams-editor-2026.5.1.vsix et 2026.7.0.vsix — anciens artefacts (61 Mo).
+    3. [README original.md](README%20original.md) — copie de l'ancien README hediet.
+    4. [NOTES.md](NOTES.md) — notes de dev upstream.
+    5. [examples/temp/](examples/temp/) — fichiers d'essai temporaires.
+    6. [tslint.json](tslint.json) — TSLint mort (aucun lint branché).

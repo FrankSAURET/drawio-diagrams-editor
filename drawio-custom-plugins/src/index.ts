@@ -3,6 +3,7 @@ import "./liveshare";
 import "./focus";
 import "./menu-entries";
 import "./localFileSave";
+import "./svgCompat";
 import "./copySelectionAsSvg";
 import "./pasteSvgText";
 import "./libraryStorage";

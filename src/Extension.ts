@@ -169,20 +169,16 @@ export class Extension {
 /**
  * Numéro affiché dans la barre de menus de l'éditeur.
  *
- * En production l'utilisateur ne voit que la version publique (`v2026.8.1`).
- * Hors production (développement, tests) le numéro de lot est ajouté :
- * `v2026.8.1.17` se lit « version 2026.8.1, lot 17 ».
+ * Toujours le numéro de lot (`buildNumber`), y compris en production :
+ * `v2026.8.1.17` se lit « version 2026.8.1, lot 17 ». Demande de Frank :
+ * un VSIX installé tourne en mode Production, il doit pourtant voir le lot.
+ * Repli sur la version publique si le manifeste n'a pas de `buildNumber`.
  */
 function versionLabelFor(context: vscode.ExtensionContext): string {
 	const manifest = context.extension.packageJSON as {
 		version?: string;
 		buildNumber?: string;
 	};
-	const isProduction =
-		context.extensionMode === vscode.ExtensionMode.Production;
-	const version =
-		(isProduction ? manifest.version : manifest.buildNumber) ??
-		manifest.version ??
-		"";
+	const version = manifest.buildNumber ?? manifest.version ?? "";
 	return version ? `v${version}` : "";
 }
