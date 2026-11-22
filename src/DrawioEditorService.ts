@@ -463,7 +463,7 @@ export class DrawioEditor {
 			});
 			for (const theme of availableThemes) {
 				availableOptions.push({
-					label: `${theme} - ${appearance}`,
+					label: `${theme === "colore" ? l10n.t("Colorful") : theme} - ${appearance}`,
 					onSelect: () => {
 						this.config.setTheme(theme);
 						this.config.setAppearance(appearance);

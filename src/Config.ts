@@ -494,6 +494,11 @@ export class DiagramConfig {
 			resolvedAppearance = this.config.vscodeTheme.kind;
 		}
 
+		// « colore » : interface Kennedy, icônes remplacées par le jeu coloré
+		if (themeName === "colore") {
+			return new ResolvedDrawioTheme("kennedy", resolvedAppearance, "colore");
+		}
+
 		return new ResolvedDrawioTheme(themeName, resolvedAppearance);
 	}
 
@@ -985,12 +990,16 @@ export class ResolvedDrawioTheme {
 		return [
 			"min",
 			"kennedy",
+			"colore",
 		];
 	}
 
 	constructor(
+		/** Thème transmis à Draw.io (`ui=`). */
 		public readonly themeName: string,
 		public readonly appearance: ColorThemeKind,
+		/** Jeu d'icônes : celui de Draw.io, ou le jeu coloré de l'extension. */
+		public readonly iconSet: "default" | "colore" = "default",
 	) { }
 
 	getAppearanceDrawioValue(): string {
@@ -1007,10 +1016,11 @@ export class ResolvedDrawioTheme {
 	}
 
 	toString(): string {
+		const name = this.iconSet === "colore" ? "colore" : this.themeName;
 		if (this.appearance === ColorThemeKind.Light) {
-			return this.themeName;
+			return name;
 		}
-		return `${this.themeName} - ${this.getAppearanceStringValue()}`;
+		return `${name} - ${this.getAppearanceStringValue()}`;
 	}
 }
 

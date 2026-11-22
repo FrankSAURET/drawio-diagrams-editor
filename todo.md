@@ -12,6 +12,15 @@
 10. ✅ Formules mathématiques à l'export SVG / copie : dessinées dans Word au lieu du texte source — v2026.9.0.31, **à vérifier par Frank**.
 11. ✅ `.vsix` de la v2026.9.0.31 non construit (greffons bloqués par le travail en cours sur le menu) — levé : `.vsix` construit en v2026.9.0.32.
 12. ✅ Menu Fichier : « Exporter… » (doublon) et « Convertir… » retirés, « Exporter en tant que » renommé « Exporter » et placé après « Importer » — v2026.9.0.32.
+13. ✅ Supplément > Thème : nouveau thème « Coloré », icônes en couleur aspect 3D libres — v2026.9.0.33, **à vérifier par Frank** en clair et en sombre.
+
+# v2026.9.0.33 — Thème « Coloré »
+
+1. ✅ **Nouveau [coloredIcons.ts](src/DrawioClient/coloredIcons.ts)** : 69 icônes SVG maison (dégradé, reflet, ombre portée), une par clé `Editor.xxxImage` (barre d'outils, texte, Format > Disposer, tableaux, édition). Adresses `data:` non base64, parenthèses encodées (lues dans `url(...)` sans guillemets), marqueur `vscolore` lisible.
+2. ✅ [Config.ts](src/Config.ts) : valeur `colore` → `ResolvedDrawioTheme("kennedy", apparence, "colore")` ; Draw.io reçoit `ui=kennedy`, la barre d'état affiche `colore`. Ajoutée au sélecteur (libellé « Coloré » via `l10n.t("Colorful")`) et à l'énumération du réglage.
+3. ✅ [webview-content.html](src/DrawioClient/webview-content.html) : `$$coloredIcons$$` substitué dans `Editor` juste avant `App.main()` (Draw.io lit ces images à la construction de l'interface) ; règle CSS `filter:none` sur tout élément marqué `vscolore` en mode sombre (Draw.io inverse les boutons).
+4. ℹ️ Mode en ligne (`offline=false`) : interface Kennedy sans icônes colorées (pas d'accès au code de la page distante).
+5. ⏳ Libellé « Colorful » : traductions autres que le français avant publication.
 
 # v2026.9.0.32 — Menu Fichier : un seul « Exporter »
 

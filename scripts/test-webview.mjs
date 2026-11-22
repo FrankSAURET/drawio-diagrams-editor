@@ -10,6 +10,7 @@ import { createServer } from "node:http";
 import { readFileSync, writeFileSync, existsSync, statSync } from "node:fs";
 import { extname, join, normalize, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { createRequire } from "node:module";
 import { chromium } from "playwright-core";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -49,11 +50,21 @@ const MIME = {
 };
 
 /** Meme remplacement de marqueurs que DrawioClientFactory.getOfflineHtml. */
+// COLORE=1 : thème « Coloré » en apparence sombre (icônes lues dans les sources TS).
+const colore = process.env.COLORE === "1";
+let coloredIcons = null;
+if (colore) {
+	const require = createRequire(join(root, "package.json"));
+	require("ts-node").register({ transpileOnly: true, compilerOptions: { module: "commonjs" } });
+	coloredIcons = require(join(root, "src/DrawioClient/coloredIcons.ts")).getColoredIconUris();
+}
+
 function buildHtml(origin) {
 	return readFileSync(htmlFile, "utf8")
 		.replace(/\$\$literal-vsuri\$\$/g, `${origin}/webapp`)
 		.replace("$$theme$$", JSON.stringify("kennedy"))
-		.replace("$$appearance$$", JSON.stringify(0))
+		.replace("$$appearance$$", JSON.stringify(colore ? 1 : 0))
+		.replace("$$coloredIcons$$", () => JSON.stringify(coloredIcons))
 		.replace("$$lang$$", JSON.stringify("fr"))
 		.replace("$$versionLabel$$", JSON.stringify("2000.1.0"))
 		.replace("$$chrome$$", JSON.stringify("1"))
@@ -168,6 +179,25 @@ try {
 	check(probe.versionLabel?.includes("2000.1.0"), `etiquette de version absente (${probe.versionLabel})`);
 
 	// 3. Aller-retour du diagramme.
+	// 2 bis. Thème « Coloré » (COLORE=1, apparence sombre) : icônes substituées
+	// avant la construction de la barre d'outils, sans inversion sombre.
+	if (colore) {
+		const c = await page.evaluate(() => {
+			const btn = [...document.querySelectorAll(".geToolbar .geButton")]
+				.find((b) => (b.getAttribute("style") || "").includes("vscolore"));
+			return {
+				editor: String(Editor.undoImage).includes("vscolore"),
+				dark: document.body.classList.contains("geDarkMode") || document.documentElement.classList.contains("geDarkMode") || !!document.querySelector(".geDarkMode"),
+				button: !!btn,
+				filter: btn ? getComputedStyle(btn).filter : null,
+			};
+		});
+		check(c.editor, "Coloré : Editor.undoImage non remplacée");
+		check(c.button, "Coloré : aucun bouton de la barre d'outils avec icône colorée");
+		check(!c.dark || c.filter === "none", `Coloré : bouton inversé en sombre (${c.filter})`);
+		if (process.env.COLORE_SHOT) await page.screenshot({ path: process.env.COLORE_SHOT });
+	}
+
 	check(probe.cells.includes("a"), "la forme chargee est absente du modele");
 	check(/value="Hello"/.test(probe.fileData), "la forme n'est pas dans le XML ecrit");
 

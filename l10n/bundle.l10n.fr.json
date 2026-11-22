@@ -16,6 +16,7 @@
 	"Exports the diagram to a png file": "Exporte le diagramme vers un fichier png",
 	"Exports the diagram to a drawio file": "Exporte le diagramme vers un fichier drawio",
 	"always match VS Code theme '{0}'": "toujours suivre le thème VS Code « {0} »",
+	"Colorful": "Coloré",
 	"No active drawio instance.": "Aucune instance drawio active.",
 	"No text editor active.": "Aucun éditeur de texte actif.",
 	"Nothing selected.": "Aucune sélection.",

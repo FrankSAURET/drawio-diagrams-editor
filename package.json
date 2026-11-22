@@ -4,7 +4,7 @@
 	"description": "%description%",
 	"private": true,
 	"version": "2026.9.0",
-	"buildNumber": "2026.9.0.32",
+	"buildNumber": "2026.9.0.33",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"publisher": "electropol-fr",
 	"keywords": [
@@ -512,7 +512,8 @@
 						"default": "kennedy",
 						"enum": [
 							"kennedy",
-							"min"
+							"min",
+							"colore"
 						],
 						"description": "%configuration.theme.description%"
 					},

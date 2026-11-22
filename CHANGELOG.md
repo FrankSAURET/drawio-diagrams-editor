@@ -5,6 +5,10 @@ New format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) — Version
 
 ## 2026.11.0 (prochaine publication)
 
+### Nouveauté
+
+- **Thème « Coloré »** (Supplément > Thème, ou réglage `theme` = `colore`) : l'interface classique de Draw.io avec des icônes en couleur, en relief (barre d'outils, mise en forme du texte, panneau Format). Les icônes gardent leurs couleurs en apparence sombre. Icônes dessinées pour l'extension, libres de droits.
+
 ### Modification
 
 - **Draw.io passe de la v31.4.2 à la v32.7.4.** Tous les greffons de l'extension fonctionnent à l'identique.

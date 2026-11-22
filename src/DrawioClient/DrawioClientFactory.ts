@@ -14,6 +14,7 @@ import {
 } from ".";
 import { Config, DiagramConfig } from "../Config";
 import html from "./webview-content.html";
+import { getColoredIconUris } from "./coloredIcons";
 import { formatValue } from "../utils/formatValue";
 import { autorun, observable, runInAction, untracked } from "mobx";
 import { sha256 } from "js-sha256";
@@ -262,6 +263,10 @@ export class DrawioClientFactory {
 			.replace(/\$\$literal-vsuri\$\$/g, vsuri.toString())
 			.replace("$$theme$$", JSON.stringify(config.resolvedTheme.themeName))
 			.replace("$$appearance$$", JSON.stringify(config.resolvedTheme.getAppearanceDrawioValue()))
+			.replace(
+				"$$coloredIcons$$",
+				JSON.stringify(config.resolvedTheme.iconSet === "colore" ? getColoredIconUris() : null)
+			)
 			.replace("$$lang$$", JSON.stringify(config.drawioLanguage))
 			.replace("$$versionLabel$$", JSON.stringify(this.versionLabel))
 			.replace("$$simpleLabels$$", JSON.stringify(config.simpleLabels))

@@ -297,6 +297,14 @@
 			background-color: rgba(0, 0, 0, 0.4);
 		}
 
+		/* Thème « Coloré » : pas d'inversion sombre sur les icônes colorées
+		   (marqueur « vscolore » dans leur adresse data:). */
+		.geDarkMode .geButton[style*="vscolore"],
+		.geDarkMode [style*="vscolore"],
+		.geDarkMode img[src*="vscolore"] {
+			filter: none !important;
+		}
+
 		.geTemplate {
 			border: 1px solid transparent;
 			display: inline-block;
@@ -572,6 +580,15 @@
 					return xml;
 				};
 			});
+
+			// Thème « Coloré » : Draw.io lit Editor.*Image en construisant
+			// l'interface, la substitution doit donc précéder App.main().
+			const coloredIcons = $$coloredIcons$$;
+			if (coloredIcons) {
+				for (const key in coloredIcons) {
+					Editor[key] = coloredIcons[key];
+				}
+			}
 
 			App.main();
 
