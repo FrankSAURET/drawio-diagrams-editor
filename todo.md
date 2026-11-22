@@ -8,7 +8,14 @@
 6. ⬜ Amont hediet 1.19.0 (06/11) : réglage « configuration Draw.io » + dialogue Configuration (clés API en stockage secret), retrait d'un réglage de thème inutilisé — à examiner, conflit probable avec nos réglages. **Attend l'accord de Frank** (rien fusionné). Dernier amont examiné : `ab3627e`.
 7. ✅ Copier / copier en SVG ne donnait plus rien dans Word ; copier = SVG par défaut, « Copier en SVG » retiré — v2026.9.0.28, **à vérifier par Frank** dans Word.
 8. ✅ Collage Word : alignements, gras, italique et traits séparateurs des blocs perdus — v2026.9.0.29, **à vérifier par Frank** sur « Passerelle sur le Brivet ».
-9. ⬜ Appliquer aussi la conversion des étiquettes HTML à l'export SVG (option ?) : **à décider par Frank**. Aujourd'hui l'export garde le `<foreignObject>` (fidèle en navigateur, texte brut dans Word).
+9. ✅ Conversion des étiquettes HTML appliquée aussi à l'export SVG (option A, toujours) — v2026.9.0.30, **à vérifier par Frank** dans Word.
+
+# v2026.9.0.30 — Export SVG : étiquettes HTML en texte SVG natif
+
+1. ✅ **Nouveau greffon [exportSvgText.ts](drawio-custom-plugins/src/exportSvgText.ts)** : `ui.exportSvg` habillé d'un drapeau ; pendant l'appel (synchrone jusqu'à `Graph.getSvg`), `getSvg` neutralise l'avertissement « Text is not SVG » et passe le résultat à `convertHtmlLabels`. Chargé juste après svgCompat : couleurs déjà résolues au moment de la conversion.
+2. ✅ **`.drawio.svg` non touchés** : l'extension les obtient par le protocole embed (`xmlsvg` → `getEmbeddedSvg`), hors `exportSvg`. Vérifié dans le code de Draw.io et par test.
+3. ℹ️ Diagramme avec formules (`mathEnabled`) : pas de conversion, MathJax compose après coup dans le HTML.
+4. ✅ [test-webview.mjs](scripts/test-webview.mjs) : greffon `export-svg-text` attendu ; **recollage** par vrai Ctrl+V après vidage de `mxClipboard` (presse-papiers système seul) → cellules modifiables, pas une image ; **export** via `saveFn` → plus de `foreignObject` ni d'avertissement, gras présent, `content` embarqué ; **`getEmbeddedSvg`** garde ses `foreignObject`.
 
 # v2026.9.0.29 — Copie : étiquettes HTML en texte SVG natif
 

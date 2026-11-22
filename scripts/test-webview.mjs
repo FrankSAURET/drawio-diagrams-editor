@@ -20,7 +20,7 @@ const htmlFile = join(root, "src/DrawioClient/webview-content.html");
 // Greffons qui doivent s'annoncer (evenement `pluginLoaded`).
 const EXPECTED_PLUGINS = [
 	"menu-entries", "version-label", "display-options", "library-storage",
-	"library-preview", "local-file-save", "svg-compat", "copy-selection-as-svg",
+	"library-preview", "local-file-save", "svg-compat", "export-svg-text", "copy-selection-as-svg",
 	"paste-svg-text", "focus", "linkSelectedNodeWithData", "LiveShare",
 ];
 // Actions que les greffons doivent avoir enregistrees dans draw.io.
@@ -221,6 +221,59 @@ try {
 	check(/<text[^>]*font-style="italic"[^>]*>«block»<\/text>/.test(clip.svg), "copie : italique perdu («block»)");
 	check(/<text[^>]*>Ombre<\/text>/.test(clip.svg), "copie : texte simple perdu (Ombre)");
 	check(clip.copyAsSvgVisible === false, "« Copier en SVG » encore visible dans les menus");
+
+	// 5 bis. Retour dans Draw.io : Ctrl+V réel (événement de confiance) du
+	//        presse-papiers écrit ci-dessus → cellules modifiables, pas une image.
+	await page.evaluate(() => {
+		const graph = editorUi.editor.graph;
+		graph.clearSelection();
+		window.__cellsBefore = Object.keys(graph.model.cells).length;
+		// Presse-papiers interne vidé : comme un collage dans un autre onglet
+		// (autre webview), seul le presse-papiers système compte.
+		mxClipboard.setCells(null);
+		graph.container.focus();
+		editorUi.clipboardElt?.focus?.();
+	});
+	await page.keyboard.press("Control+V");
+	await page.waitForTimeout(2000);
+	const pasted = await page.evaluate(() => {
+		const graph = editorUi.editor.graph;
+		const added = Object.values(graph.model.cells).slice(window.__cellsBefore);
+		return added.map((c) => ({
+			value: typeof c.value === "string" ? c.value : "",
+			style: c.style || "",
+		}));
+	});
+	check(pasted.some((c) => /Usager/.test(c.value)), `recollage : bloc « Usager » non retrouve comme cellule (${pasted.length} cellule(s) : ${pasted.map((c) => c.style.slice(0, 40)).join(" | ")})`);
+	check(!pasted.some((c) => /shape=image|image=data:image\/svg/.test(c.style)), "recollage : arrive en image au lieu de cellules");
+
+	// 5 ter. Export SVG (Fichier → Exporter) : étiquettes en texte SVG natif,
+	//        diagramme toujours embarqué quand « modifiable » est demandé.
+	const exported = await page.evaluate(() => new Promise((ok) => {
+		const timer = setTimeout(() => ok(null), 15000);
+		editorUi.editor.graph.clearSelection();
+		// scale, transparent, ignoreSelection, shadow, editable, embedImages,
+		// border, noCrop, currentPage, linkTarget, theme, exportType,
+		// embedFonts, saveFn
+		editorUi.exportSvg(1, false, true, false, true, true, 0, false, false,
+			null, "light", "diagram", false, (svg) => { clearTimeout(timer); ok(svg); });
+	}));
+	check(exported != null, "export SVG : rien recu");
+	if (exported != null) {
+		check(!/<foreignObject/.test(exported), "export SVG : foreignObject restant");
+		check(!/Text is not SVG/.test(exported), "export SVG : avertissement « Text is not SVG » present");
+		check(/<text[^>]*font-weight="bold"[^>]*>Usager<\/text>/.test(exported), "export SVG : gras perdu (Usager)");
+		check(/<svg[^>]*\scontent="/.test(exported), "export SVG : diagramme non embarque (content)");
+	}
+
+	// 5 quater. Fichier .drawio.svg (protocole embed, `xmlsvg` → getEmbeddedSvg) :
+	//           non converti, il reste le diagramme lui-même.
+	const embedded = await page.evaluate(() => new Promise((ok) => {
+		const timer = setTimeout(() => ok(null), 15000);
+		editorUi.getEmbeddedSvg(editorUi.getFileData(true), editorUi.editor.graph,
+			null, true, (svg) => { clearTimeout(timer); ok(svg); });
+	}));
+	check(embedded != null && /<foreignObject/.test(embedded), ".drawio.svg : etiquettes HTML converties a tort");
 
 	// 6. Aucune exception non rattrapee.
 	// Bruit amont connu : le module OrgChart (Bridge.NET) est defini a la fois
