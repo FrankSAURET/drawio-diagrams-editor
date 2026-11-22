@@ -215,11 +215,7 @@ export class DrawioEditor {
 		);
 
 		drawioClient.onInvokeCommand.sub(({ command }) => {
-			if (command === "convert") {
-				this.handleConvertCommand();
-			} else if (command === "export") {
-				this.handleExportCommand();
-			} else if (command === "save") {
+			if (command === "save") {
 				this.drawioClient.triggerOnSave();
 			} else if (command === "open") {
 				commands.executeCommand(

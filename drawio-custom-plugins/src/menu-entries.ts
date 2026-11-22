@@ -22,18 +22,6 @@ Draw.loadPlugin((ui) => {
 	mxResources.parse(`${importActionName}=${label("import", "Import")}...`);
 	ui.actions.addAction(importActionName, () => ui.importLocalFile(true));
 
-	const exportActionName = "vscode.export";
-	mxResources.parse(`${exportActionName}=${label("export", "Export")}...`);
-	ui.actions.addAction(exportActionName, () => {
-		sendEvent({ event: "invokeCommand", command: "export" });
-	});
-
-	const convertActionName = "vscode.convert";
-	mxResources.parse(`${convertActionName}=${label("convert", "Convert")}...`);
-	ui.actions.addAction(convertActionName, () => {
-		sendEvent({ event: "invokeCommand", command: "convert" });
-	});
-
 	const saveActionName = "vscode.save";
 	mxResources.parse(`${saveActionName}=${label("save", "Save")}`);
 	ui.actions.addAction(saveActionName, () => {
@@ -91,22 +79,24 @@ Draw.loadPlugin((ui) => {
 	const fileMenu = ui.menus.get("file");
 	const oldFileFunct = fileMenu.funct;
 	fileMenu.funct = function (menu: any, parent: any) {
-		oldFileFunct.apply(this, arguments);
+		// Le sous-menu natif « Exporter en tant que » est masqué ici puis
+		// remis plus bas, sous le nom « Exporter », juste après « Importer ».
+		const menus = ui.menus;
+		const hidden = menus.hiddenMenuItems;
+		menus.hiddenMenuItems = { ...(hidden || {}), exportAs: true };
+		try {
+			oldFileFunct.apply(this, arguments);
+		} finally {
+			menus.hiddenMenuItems = hidden;
+		}
 		ui.menus.addMenuItems(
 			menu,
-			[
-				"-",
-				propertiesActionName,
-				"-",
-				openActionName,
-				importActionName,
-				exportActionName,
-				convertActionName,
-			],
+			["-", propertiesActionName, "-", openActionName, importActionName],
 			parent
 		);
 		// Un sous-menu ne peut pas figurer dans `addMenuItems` : il s'ajoute
-		// a part, d'ou la liste coupee en deux pour garder l'ordre voulu.
+		// a part, d'ou la liste coupee en morceaux pour garder l'ordre voulu.
+		ui.menus.addSubmenu("exportAs", menu, parent, label("export", "Export"));
 		ui.menus.addSubmenu(openLibraryMenuName, menu, parent);
 		ui.menus.addMenuItems(
 			menu,

@@ -40,7 +40,7 @@ declare interface LibraryFilePickedAction {
 
 declare interface InvokeCommandEvent {
     event: "invokeCommand";
-    command: "export" | "save" | "convert" | "open" | "saveAs" | "changeTheme";
+    command: "save" | "open" | "saveAs" | "changeTheme";
 }
 
 /**

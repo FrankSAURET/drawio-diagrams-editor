@@ -148,6 +148,23 @@ try {
 	}), EXPECTED_ACTIONS);
 	for (const [name, ok] of probe.actions) check(ok, `action absente : ${name}`);
 	check(probe.fileMenu, "menu Fichier absent");
+	// « Exporter » (sous-menu natif renommé) entre « Importer » et la
+	// bibliothèque ; plus de « Exporter en tant que » ni de « Convertir ».
+	{
+		// Vrai clic sur « Fichier » dans la barre de menus, lecture des lignes
+		// du menu affiché, puis fermeture.
+		await page.click(".geMenubar a:has-text('Fichier')");
+		await page.waitForSelector("table.mxPopupMenu");
+		const items = await page.evaluate(() =>
+			[...document.querySelectorAll("table.mxPopupMenu tr")]
+				.map((tr) => tr.textContent.trim()).filter((t) => t));
+		await page.evaluate(() => editorUi.hideCurrentMenu());
+		const imp = items.findIndex((t) => /^Importer/.test(t));
+		check(imp >= 0 && /^Exporter$/.test(items[imp + 1] ?? ""),
+			`menu Fichier : « Exporter » attendu après « Importer » (${items.join(" | ")})`);
+		check(!items.some((t) => /Exporter en|Exporter\.\.\.|Convert/.test(t)),
+			`menu Fichier : entrée d'export ou de conversion en trop (${items.join(" | ")})`);
+	}
 	check(probe.versionLabel?.includes("2000.1.0"), `etiquette de version absente (${probe.versionLabel})`);
 
 	// 3. Aller-retour du diagramme.

@@ -163,7 +163,10 @@ interface DrawioMenus {
     /** Enregistre un menu (ou sous-menu) sous ce nom. */
     put(name: string, menu: any): any;
     addMenuItems(menu: any, arg: any, arg2: any): void;
-    addSubmenu(name: string, menu: any, parent: any): void;
+    /** `label` remplace le libellé tiré de `mxResources`. */
+    addSubmenu(name: string, menu: any, parent: any, label?: string): void;
+    /** Entrées masquées : `addSubmenu` les saute. */
+    hiddenMenuItems?: Record<string, boolean> | null;
 }
 
 interface DrawioActions {
