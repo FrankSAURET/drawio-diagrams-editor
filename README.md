@@ -172,7 +172,7 @@ Only Draw.io-generated SVGs can be edited this way — arbitrary SVG files are n
 - Version number shown in the editor menu bar
 - SVG export fix
 - Three display options (link icons, tooltip icons, connect handle) as settings and as live check boxes in the format panel
-- Updated to Draw.io v32.6.9 (libavoid auto-routing, built-in ELK layouts, offline PlantUML rendering)
+- Updated to Draw.io v32.7.4 (libavoid auto-routing, built-in ELK layouts, offline PlantUML rendering)
 - Restricted Mode: workspace settings cannot load local libraries or plugins, nor change the Draw.io app; online mode only talks to the configured app's origin
 - Ongoing bug fixes not yet merged in the original project
 

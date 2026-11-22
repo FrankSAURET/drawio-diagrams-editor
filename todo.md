@@ -4,8 +4,14 @@
 2. ✅ Fais moi un npm run publier qui publie à la fois sur vscode marketplace et openvsx — fait en v2026.9.0.24.
 3. ✅ l'export svg marche presque (il manque l'ombre) par contre copier, le collage n'est pas fidèle, et copier en svg non plus — v2026.9.0.26, **à vérifier par Frank** dans Word / Inkscape / Kablix.
 4. ✅ Le numéro de version affiché en haut à droite incluera le numéro de build — v2026.9.0.26.
-5. Mise à jour vers dernière version de draw.io si c'est opportun — 32.6.9 fait en v2026.9.0.25 ; l'amont hediet est passé en **v32.7.4** (17/11) : `yarn update-drawio --to 32.7.4` à faire.
-6. ⬜ Amont hediet 1.19.0 (06/11) : réglage « configuration Draw.io » + dialogue Configuration (clés API en stockage secret), retrait d'un réglage de thème inutilisé — à examiner, conflit probable avec nos réglages. Dernier amont examiné : `ab3627e`.
+5. ✅ Mise à jour vers dernière version de draw.io si c'est opportun — v32.7.4 en v2026.9.0.27.
+6. ⬜ Amont hediet 1.19.0 (06/11) : réglage « configuration Draw.io » + dialogue Configuration (clés API en stockage secret), retrait d'un réglage de thème inutilisé — à examiner, conflit probable avec nos réglages. **Attend l'accord de Frank** (rien fusionné). Dernier amont examiné : `ab3627e`.
+
+# v2026.9.0.27 — Draw.io v32.7.4
+
+1. ✅ **Sous-module Draw.io v32.6.9 → v32.7.4** (`yarn update-drawio --to 32.7.4`), même version que l'amont hediet (`51ef13e`, qui ne touche que le sous-module). Ressources OK.
+2. ✅ Points d'accroche vérifiés dans `app.min.js` : `getSvg` (17 paramètres, `theme` toujours 12e), `copySvg` (toujours `isDarkMode()`), `writeImageToClipboard`, `DiagramFormatPanel.addOptions`, `createFileData`, `addEmbedButtons`, `isEntryVisible`, `closeLibrary`, `enableNativeClipboard`.
+3. ✅ `yarn build-extension`, `yarn build-plugins`, `yarn test-webview` (contrôle SVG compris) : OK.
 
 # v2026.9.0.26 — SVG lisible hors navigateur, numéro de lot affiché
 

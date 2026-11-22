@@ -7,7 +7,7 @@ New format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) — Version
 
 ### Modification
 
-- **Draw.io passe de la v31.4.2 à la v32.6.9.** Tous les greffons de l'extension fonctionnent à l'identique.
+- **Draw.io passe de la v31.4.2 à la v32.7.4.** Tous les greffons de l'extension fonctionnent à l'identique.
 - **Mode restreint (espace de travail non approuvé)** : VS Code ignore désormais les valeurs de l'espace de travail pour `customLibraries`, `libraryFolders`, `plugins`, `offline` et `online-url`, et n'utilise que vos réglages personnels. Un dépôt téléchargé ne peut plus charger de fichiers locaux arbitraires ni changer l'application Draw.io chargée. Rien ne change dans un espace approuvé.
 - Le numéro de version affiché en haut à droite de l'éditeur inclut désormais le numéro de lot (`v2026.9.0.26`).
 
