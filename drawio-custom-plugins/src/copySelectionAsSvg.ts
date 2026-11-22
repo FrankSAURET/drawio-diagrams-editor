@@ -1,4 +1,5 @@
 import { sendEvent } from "./vscode";
+import { convertHtmlLabels } from "./htmlLabelsToSvg";
 
 /**
  * Copier une sélection produit un SVG, avec le XML Draw.io dedans.
@@ -62,6 +63,9 @@ Draw.loadPlugin((ui) => {
 				null, scale, null, null, null, null, null, null, null, null,
 				null, "light", null, cells.length > 0 ? cells : null
 			);
+			// Gras, italique, centrage, traits `<hr>` : hors navigateur, seul
+			// du texte SVG natif les conserve.
+			convertHtmlLabels(svgRoot);
 			if (xml != null) {
 				svgRoot.setAttribute("content", xml);
 			}

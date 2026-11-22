@@ -7,6 +7,16 @@
 5. ✅ Mise à jour vers dernière version de draw.io si c'est opportun — v32.7.4 en v2026.9.0.27.
 6. ⬜ Amont hediet 1.19.0 (06/11) : réglage « configuration Draw.io » + dialogue Configuration (clés API en stockage secret), retrait d'un réglage de thème inutilisé — à examiner, conflit probable avec nos réglages. **Attend l'accord de Frank** (rien fusionné). Dernier amont examiné : `ab3627e`.
 7. ✅ Copier / copier en SVG ne donnait plus rien dans Word ; copier = SVG par défaut, « Copier en SVG » retiré — v2026.9.0.28, **à vérifier par Frank** dans Word.
+8. ✅ Collage Word : alignements, gras, italique et traits séparateurs des blocs perdus — v2026.9.0.29, **à vérifier par Frank** sur « Passerelle sur le Brivet ».
+9. ⬜ Appliquer aussi la conversion des étiquettes HTML à l'export SVG (option ?) : **à décider par Frank**. Aujourd'hui l'export garde le `<foreignObject>` (fidèle en navigateur, texte brut dans Word).
+
+# v2026.9.0.29 — Copie : étiquettes HTML en texte SVG natif
+
+1. ✅ **Cause** : Draw.io écrit les étiquettes HTML dans un `<foreignObject>` ; Word, PowerPoint, Inkscape ne le lisent pas et affichent le `<text>` de secours (brut, à gauche, sans `<hr>`).
+2. ✅ **Nouveau [htmlLabelsToSvg.ts](drawio-custom-plugins/src/htmlLabelsToSvg.ts)** : chaque étiquette est rendue dans un conteneur invisible (Shadow DOM + `all:initial`, sinon les styles de l'éditeur — règles sur `p`, `box-sizing` — faussent couleur et position), relevée caractère par caractère (`Range.getClientRects`), puis remplacée par des `<text>` positionnés (police, taille, gras, italique, soulignement, couleur, ligne de base via `measureText`), des `<rect>` pour fonds et bordures (dont `<hr>`) et des `<image>` pour les `<img>`. Le groupe remplace le `<switch>`, dans le même parent : rotations et décalages conservés.
+3. ✅ Branché dans `createSvg` de [copySelectionAsSvg.ts](drawio-custom-plugins/src/copySelectionAsSvg.ts) : copie seulement, l'export n'est pas touché.
+4. ✅ [test-webview.mjs](scripts/test-webview.mjs) : bloc SysML (italique, gras, centré, `<hr>`) ajouté à la copie ; plus de `foreignObject`, `<text>` gras et italique présents. Vérifié dans Word (collage par automatisation → PDF) : rendu conforme.
+5. ⏳ Limites : retour à la ligne figé (police de remplacement → fins de ligne possiblement décalées), puces de liste et rognage `overflow=hidden` non reproduits.
 
 # v2026.9.0.28 — Copier = SVG, collage Word rétabli
 

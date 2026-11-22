@@ -179,6 +179,17 @@ try {
 			errors.push(String(e && (e.message || e)));
 			return oldHandleError.apply(this, arguments);
 		};
+		// Bloc SysML : étiquette HTML avec italique, gras, centrage et <hr>.
+		const graph = editorUi.editor.graph;
+		const label = '<p style="margin:0px;margin-top:4px;text-align:center;"><i>«block»</i><br><b>Usager</b></p>' +
+			'<hr size="1" style="border-style:solid;"><p style="margin:0px;margin-left:4px;"><i>values</i><br>piéton, cycliste</p>';
+		const block = '<mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/>' +
+			'<mxCell id="b" value="' + mxUtils.htmlEntities(label) + '" style="verticalAlign=top;align=left;overflow=fill;html=1;whiteSpace=wrap;fillColor=#dae8fc;" vertex="1" parent="1">' +
+			'<mxGeometry x="200" y="140" width="140" height="80" as="geometry"/></mxCell></root></mxGraphModel>';
+		const shadowCells = graph.getSelectionCells();
+		graph.model.beginUpdate();
+		try { editorUi.pasteXml(block, false); } finally { graph.model.endUpdate(); }
+		graph.addSelectionCells(shadowCells);
 		await navigator.clipboard.writeText("vide");
 		editorUi.actions.get("copy").funct();
 		await new Promise((ok) => setTimeout(ok, 1500));
@@ -204,6 +215,11 @@ try {
 	check(/^<svg[\s>]/.test(clip.text), "copie : text/plain n'est pas la source SVG");
 	check(/<svg[^>]*\scontent="/.test(clip.svg), "copie : SVG sans le XML Draw.io (attribut content)");
 	check(!/Text is not SVG/.test(clip.svg), "copie : avertissement « Text is not SVG » present");
+	// Étiquettes HTML converties en texte SVG natif (Word ignore foreignObject).
+	check(!/<foreignObject/.test(clip.svg), "copie : foreignObject restant");
+	check(/<text[^>]*font-weight="bold"[^>]*>Usager<\/text>/.test(clip.svg), "copie : gras perdu (Usager)");
+	check(/<text[^>]*font-style="italic"[^>]*>«block»<\/text>/.test(clip.svg), "copie : italique perdu («block»)");
+	check(/<text[^>]*>Ombre<\/text>/.test(clip.svg), "copie : texte simple perdu (Ombre)");
 	check(clip.copyAsSvgVisible === false, "« Copier en SVG » encore visible dans les menus");
 
 	// 6. Aucune exception non rattrapee.
