@@ -9,6 +9,15 @@
 7. ✅ Copier / copier en SVG ne donnait plus rien dans Word ; copier = SVG par défaut, « Copier en SVG » retiré — v2026.9.0.28, **à vérifier par Frank** dans Word.
 8. ✅ Collage Word : alignements, gras, italique et traits séparateurs des blocs perdus — v2026.9.0.29, **à vérifier par Frank** sur « Passerelle sur le Brivet ».
 9. ✅ Conversion des étiquettes HTML appliquée aussi à l'export SVG (option A, toujours) — v2026.9.0.30, **à vérifier par Frank** dans Word.
+10. ✅ Formules mathématiques à l'export SVG / copie : dessinées dans Word au lieu du texte source — v2026.9.0.31, **à vérifier par Frank**.
+11. ⏳ `.vsix` de la v2026.9.0.31 non construit : [menu-entries.ts](drawio-custom-plugins/src/menu-entries.ts) est en cours de modification par une autre session (menu « Exporter », `hiddenMenuItems` absent de `drawio-types.d.ts`, 4 erreurs de type) et bloque la construction des greffons. Construire le `.vsix` une fois ce travail terminé.
+
+# v2026.9.0.31 — Formules MathJax converties à l'export SVG et à la copie
+
+1. ✅ [htmlLabelsToSvg.ts](drawio-custom-plugins/src/htmlLabelsToSvg.ts) : `flattenMath` transforme chaque `mjx-container > svg` en `<g transform="translate scale">` d'après `viewBox` et la boîte à l'écran ; `<use>` remplacés par une copie du glyphe (sans `id`), `currentColor` remplacé par la couleur calculée. Texte et fonds à l'intérieur des `mjx-container` ignorés par les étapes 1 et 2.
+2. ✅ Feuille de style MathJax (`mjx-…`, copiée par Draw.io dans les `<defs>`) reprise dans chaque Shadow DOM : formules « display » toujours en bloc centré.
+3. ✅ [exportSvgText.ts](drawio-custom-plugins/src/exportSvgText.ts) : l'exclusion `mathEnabled` est levée. Draw.io compose MathJax de façon synchrone dans `getSvg` (Editor.js). Seul cas laissé tel quel : bundle MathJax pas encore chargé.
+4. ✅ [test-webview.mjs](scripts/test-webview.mjs) 5 quinquies : maths activées, étiquette `<b>Aire</b> : \`x^2+1\`` → plus de `foreignObject`, gras conservé, plus de source `x^2`, ni `use` ni `mjx`. Variable `PLUGIN_FILE` pour tester une construction isolée. Vérifié aussi en image (Chrome) et dans Word (COM → PDF).
 
 # v2026.9.0.30 — Export SVG : étiquettes HTML en texte SVG natif
 

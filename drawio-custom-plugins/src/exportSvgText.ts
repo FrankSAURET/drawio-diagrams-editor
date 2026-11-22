@@ -13,8 +13,9 @@ import { convertHtmlLabels } from "./htmlLabelsToSvg";
  * attente des contours rappelle `this.exportSvg`, donc ce même habillage) :
  * un drapeau posé pendant l'appel suffit à reconnaître l'export.
  *
- * Diagramme avec formules (MathJax) : non converti, les formules se
- * composent après coup dans le HTML des étiquettes.
+ * Diagramme avec formules : Draw.io compose MathJax (sortie SVG) dans
+ * `getSvg` même, de façon synchrone ; la conversion reprend ces formules.
+ * Seul cas laissé tel quel : MathJax pas encore chargé (formules en source).
  */
 Draw.loadPlugin((ui) => {
 	sendEvent({ event: "pluginLoaded", pluginId: "export-svg-text" });
@@ -37,7 +38,10 @@ Draw.loadPlugin((ui) => {
 	// voit des couleurs déjà résolues pour le thème demandé.
 	const oldGetSvg = Graph.prototype.getSvg;
 	Graph.prototype.getSvg = function (...args: any[]) {
-		if (exporting === 0 || this.mathEnabled) {
+		const w = window as any;
+		const mathPending = this.mathEnabled &&
+			!(typeof w.DrawioMathJax !== "undefined" && typeof w.DrawioMathJax.typeset === "function");
+		if (exporting === 0 || mathPending) {
 			return oldGetSvg.apply(this, args);
 		}
 		// Plus aucun foreignObject à la sortie : le lien « Text is not SVG -

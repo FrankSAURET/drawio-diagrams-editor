@@ -112,6 +112,68 @@ function transformText(text: string, cs: CSSStyleDeclaration): string {
 	}
 }
 
+const XLINK_NS = "http://www.w3.org/1999/xlink";
+
+/**
+ * Formule MathJax (`<mjx-container>` contenant un `<svg>`) → groupe SVG simple,
+ * placé et mis à l'échelle à la position de la formule. Les `<use>` vers les
+ * glyphes (`<defs>` locales) sont remplacés par une copie du tracé : Word et
+ * consorts gèrent mal les `<svg>` imbriqués et les références internes.
+ */
+function flattenMath(
+	doc: Document,
+	svg: SVGSVGElement,
+	X: (x: number) => number,
+	Y: (y: number) => number,
+): Element | null {
+	const rc = svg.getBoundingClientRect();
+	const vb = (svg.getAttribute("viewBox") || "").trim().split(/[\s,]+/).map(parseFloat);
+	if (vb.length !== 4 || vb.some(isNaN) || vb[2] <= 0 || vb[3] <= 0 || rc.width <= 0 || rc.height <= 0) {
+		return null;
+	}
+	const sx = rc.width / vb[2];
+	const sy = rc.height / vb[3];
+	const color = parseColor(getComputedStyle(svg).color) ?? { color: "#000000", opacity: 1 };
+
+	const g = svgEl(doc, "g", {
+		transform: `translate(${r2(X(rc.left) - vb[0] * sx)} ${r2(Y(rc.top) - vb[1] * sy)}) scale(${sx} ${sy})`,
+	});
+	for (const child of Array.from(svg.childNodes)) {
+		if ((child as Element).localName === "defs") continue;
+		g.appendChild(doc.importNode(child, true));
+	}
+
+	// `<use>` → copie du glyphe référencé (décalage x/y conservé).
+	for (const use of Array.from(g.getElementsByTagNameNS(SVG_NS, "use"))) {
+		const href = use.getAttribute("href") || use.getAttributeNS(XLINK_NS, "href") || "";
+		const ref = href.startsWith("#") ? svg.querySelector(`[id="${CSS.escape(href.slice(1))}"]`) : null;
+		if (ref == null || use.parentNode == null) {
+			use.parentNode?.removeChild(use);
+			continue;
+		}
+		const wrap = svgEl(doc, "g", {});
+		const x = parseFloat(use.getAttribute("x") || "0") || 0;
+		const y = parseFloat(use.getAttribute("y") || "0") || 0;
+		const t = [use.getAttribute("transform") || "", x || y ? `translate(${x} ${y})` : ""].join(" ").trim();
+		if (t) wrap.setAttribute("transform", t);
+		const copy = doc.importNode(ref, true) as Element;
+		copy.removeAttribute("id");
+		wrap.appendChild(copy);
+		use.parentNode.replaceChild(wrap, use);
+	}
+
+	// `currentColor` → couleur réelle ; identifiants retirés (doublons possibles).
+	const all = [g, ...Array.from(g.getElementsByTagName("*"))];
+	for (const e of all) {
+		e.removeAttribute("id");
+		for (const a of ["fill", "stroke"]) {
+			if (e.getAttribute(a) === "currentColor") e.setAttribute(a, color.color);
+		}
+	}
+	setFill(g, color);
+	return g;
+}
+
 /** Convertit une étiquette déjà posée dans `host` ; renvoie le groupe SVG. */
 function convertLabel(doc: Document, host: HTMLElement, dx: number, dy: number): Element {
 	const g = svgEl(doc, "g", {});
@@ -126,6 +188,8 @@ function convertLabel(doc: Document, host: HTMLElement, dx: number, dy: number):
 
 	// 1. Fonds, bordures, images.
 	for (const el of Array.from(host.querySelectorAll("*")) as HTMLElement[]) {
+		// Formules : traitées à part (étape 3).
+		if (el.closest("mjx-container") != null) continue;
 		const cs = getComputedStyle(el);
 		const rects = Array.from(el.getClientRects());
 		if (rects.length === 0) continue;
@@ -178,7 +242,7 @@ function convertLabel(doc: Document, host: HTMLElement, dx: number, dy: number):
 	for (let n = walker.nextNode(); n != null; n = walker.nextNode()) {
 		const node = n as Text;
 		const parent = node.parentElement;
-		if (parent == null || node.data.trim() === "") continue;
+		if (parent == null || node.data.trim() === "" || parent.closest("mjx-container") != null) continue;
 		const cs = getComputedStyle(parent);
 		const color = parseColor(cs.color);
 		if (color == null) continue;
@@ -203,6 +267,12 @@ function convertLabel(doc: Document, host: HTMLElement, dx: number, dy: number):
 		}
 	}
 	range.detach();
+
+	// 3. Formules MathJax (diagrammes avec maths activées).
+	for (const svg of Array.from(host.querySelectorAll("mjx-container > svg")) as SVGSVGElement[]) {
+		const m = flattenMath(doc, svg, X, Y);
+		if (m != null) texts.appendChild(m);
+	}
 	return g;
 }
 
@@ -225,6 +295,14 @@ export function convertHtmlLabels(root: Element): void {
 		"position:fixed;left:0;top:0;opacity:0;pointer-events:none;" +
 		`overflow:hidden;z-index:-1;margin:0;padding:0;border:0;width:${w}px;height:${h}px;`;
 	document.body.appendChild(box);
+
+	// Feuille de style MathJax (copiée par Draw.io dans les `<defs>`) : à
+	// reprendre dans chaque Shadow DOM, sinon les formules « display » perdent
+	// leur centrage et leur mise en bloc.
+	const mathCss = Array.from(root.getElementsByTagNameNS(SVG_NS, "style"))
+		.map((s) => s.textContent || "")
+		.filter((css) => css.includes("mjx-"))
+		.join("\n");
 
 	try {
 		for (const fo of fos) {
@@ -250,7 +328,13 @@ export function convertHtmlLabels(root: Element): void {
 				for (const child of Array.from(fo.childNodes)) {
 					host.appendChild(document.importNode(child, true));
 				}
-				shadowHost.attachShadow({ mode: "open" }).appendChild(host);
+				const shadow = shadowHost.attachShadow({ mode: "open" });
+				if (mathCss !== "") {
+					const style = document.createElement("style");
+					style.textContent = mathCss;
+					shadow.appendChild(style);
+				}
+				shadow.appendChild(host);
 				box.appendChild(shadowHost);
 				const dx = parseFloat(fo.getAttribute("x") || "0") || 0;
 				const dy = parseFloat(fo.getAttribute("y") || "0") || 0;

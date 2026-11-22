@@ -7,14 +7,15 @@
 // Usage : yarn test-webview   (apres `yarn build-plugins`)
 // Navigateur : Chrome installe (local) ou Chromium de Playwright (CI).
 import { createServer } from "node:http";
-import { readFileSync, existsSync, statSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, statSync } from "node:fs";
 import { extname, join, normalize, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright-core";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const webapp = join(root, "drawio/src/main/webapp");
-const pluginFile = join(root, "dist/custom-drawio-plugins/index.js");
+// PLUGIN_FILE : greffons construits ailleurs (construction isolée).
+const pluginFile = process.env.PLUGIN_FILE || join(root, "dist/custom-drawio-plugins/index.js");
 const htmlFile = join(root, "src/DrawioClient/webview-content.html");
 
 // Greffons qui doivent s'annoncer (evenement `pluginLoaded`).
@@ -274,6 +275,40 @@ try {
 			null, true, (svg) => { clearTimeout(timer); ok(svg); });
 	}));
 	check(embedded != null && /<foreignObject/.test(embedded), ".drawio.svg : etiquettes HTML converties a tort");
+
+	// 5 quinquies. Diagramme avec formules : MathJax compose les formules en SVG
+	//              dans l'étiquette ; elles doivent survivre à la conversion.
+	const mathSvg = await page.evaluate(() => new Promise((ok) => {
+		const timer = setTimeout(() => ok(null), 30000);
+		const graph = editorUi.editor.graph;
+		Editor.loadMath(() => {
+			editorUi.setMathEnabled(true);
+			graph.model.beginUpdate();
+			try {
+				window.__mathCell = graph.insertVertex(graph.getDefaultParent(), null,
+					"<b>Aire</b> : `x^2+1`", 400, 300, 160, 60, "text;html=1;align=center;");
+			} finally {
+				graph.model.endUpdate();
+			}
+			graph.clearSelection();
+			setTimeout(() => editorUi.exportSvg(1, false, true, false, true, true, 0, false, false,
+				null, "light", "diagram", false, (svg) => {
+					clearTimeout(timer);
+					graph.removeCells([window.__mathCell]);
+					editorUi.setMathEnabled(false);
+					ok(svg);
+				}), 1000);
+		});
+	}));
+	if (process.env.DUMP_MATH) writeFileSync(process.env.DUMP_MATH, mathSvg ?? "");
+	check(mathSvg != null, "export SVG maths : rien recu");
+	if (mathSvg != null) {
+		check(!/<foreignObject/.test(mathSvg), "export SVG maths : foreignObject restant");
+		check(/<text[^>]*font-weight="bold"[^>]*>Aire<\/text>/.test(mathSvg), "export SVG maths : texte autour de la formule perdu");
+		check(!/x\^2/.test(mathSvg.replace(/\scontent="[^"]*"/, "")), "export SVG maths : formule restee en source");
+		check(!/<use\b/.test(mathSvg) && !/mjx-/.test(mathSvg.replace(/<style[\s\S]*?<\/style>/g, "").replace(/\scontent="[^"]*"/, "")), "export SVG maths : formule non aplatie (use / mjx)");
+		check(/<path[^>]*\sd="/.test(mathSvg), "export SVG maths : traces de la formule absents");
+	}
 
 	// 6. Aucune exception non rattrapee.
 	// Bruit amont connu : le module OrgChart (Bridge.NET) est defini a la fois
