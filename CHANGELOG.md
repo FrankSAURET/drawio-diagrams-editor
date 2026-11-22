@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.  
 New format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) — Versioning: [CalVer](https://calver.org/) (`YYYY.M.micro`).
 
-## 2026.11.0 (prochaine publication)
+## [2026.11.0](https://github.com/FrankSAURET/drawio-diagrams-editor/releases/tag/v2026.11.0) - 2026-11-22
 
 ### Nouveauté
 
