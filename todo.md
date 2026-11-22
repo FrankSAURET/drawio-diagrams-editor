@@ -13,6 +13,15 @@
 11. ✅ `.vsix` de la v2026.9.0.31 non construit (greffons bloqués par le travail en cours sur le menu) — levé : `.vsix` construit en v2026.9.0.32.
 12. ✅ Menu Fichier : « Exporter… » (doublon) et « Convertir… » retirés, « Exporter en tant que » renommé « Exporter » et placé après « Importer » — v2026.9.0.32.
 13. ✅ Supplément > Thème : nouveau thème « Coloré », icônes en couleur aspect 3D libres — v2026.9.0.33, **à vérifier par Frank** en clair et en sombre.
+14. ✅ Menu Zoom « Ajuster au contenu » + menu des pages / onglet « Ajuster la page au contenu » — v2026.9.0.34, **à vérifier par Frank**.
+
+# v2026.9.0.34 — Ajuster au contenu (zoom et page)
+
+1. ✅ **Nouveau greffon [fitToContent.ts](drawio-custom-plugins/src/fitToContent.ts)** : action `vscode.fitContent` = `fitDiagramToWindow(null, null, false, true)` (boîte des cellules, sélection et pages ignorées, zoom sans plafond), insérée après `fitWindow` dans `viewZoom` (habillage temporaire de `menus.addMenuItems`).
+2. ✅ Action `vscode.fitPageToContent` : boîte du contenu arrondie à l'entier, toutes les cellules de tous les calques déplacées à (0, 0) (Draw.io aligne les pages sur des multiples de leur taille), `ChangePageSetup` (format / `pageScale`), le tout dans un seul `beginUpdate` → une annulation. Puis `fitPage`. Marge nulle.
+3. ✅ Ajoutée au sous-menu `currentPage` (bouton ≡) et au clic droit d'onglet (`createPageMenu` habillé ; la page visée est sélectionnée d'abord).
+4. ✅ [test-webview.mjs](scripts/test-webview.mjs) 5 sexies : ordre dans le menu Zoom, présence dans les deux menus de page, zoom modifié, contenu à l'origine, format = contenu, une seule page, annulation.
+5. ⏳ Libellés EN par défaut ; autres langues que le français avant publication.
 
 # v2026.9.0.33 — Thème « Coloré »
 

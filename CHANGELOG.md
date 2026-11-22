@@ -8,6 +8,8 @@ New format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) — Version
 ### Nouveauté
 
 - **Thème « Coloré »** (Supplément > Thème, ou réglage `theme` = `colore`) : l'interface classique de Draw.io avec des icônes en couleur, en relief (barre d'outils, mise en forme du texte, panneau Format). Les icônes gardent leurs couleurs en apparence sombre. Icônes dessinées pour l'extension, libres de droits.
+- **Zoom > « Ajuster au contenu »** : zoom maximal sur les formes dessinées, même quand la vue des pages est active (« Ajuster à la fenêtre » cadre alors la page entière).
+- **« Ajuster la page au contenu »** (bouton des pages en bas à gauche, sous-menu de la page courante, ou clic droit sur un onglet) : la page prend exactement la taille du dessin, qui est ramené en haut à gauche. Une seule annulation remet tout comme avant.
 
 ### Modification
 

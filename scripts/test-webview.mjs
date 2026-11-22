@@ -23,10 +23,11 @@ const htmlFile = join(root, "src/DrawioClient/webview-content.html");
 const EXPECTED_PLUGINS = [
 	"menu-entries", "version-label", "display-options", "library-storage",
 	"library-preview", "local-file-save", "svg-compat", "export-svg-text", "copy-selection-as-svg",
-	"paste-svg-text", "focus", "linkSelectedNodeWithData", "LiveShare",
+	"paste-svg-text", "focus", "linkSelectedNodeWithData", "LiveShare", "fit-to-content",
 ];
 // Actions que les greffons doivent avoir enregistrees dans draw.io.
-const EXPECTED_ACTIONS = ["vscode.open", "vscode.theme", "properties"];
+const EXPECTED_ACTIONS = ["vscode.open", "vscode.theme", "properties",
+	"vscode.fitContent", "vscode.fitPageToContent"];
 
 const DIAGRAM =
 	'<mxfile><diagram id="t" name="Page-1"><mxGraphModel><root><mxCell id="0"/>' +
@@ -49,7 +50,6 @@ const MIME = {
 	".gif": "image/gif", ".xml": "application/xml", ".txt": "text/plain",
 };
 
-/** Meme remplacement de marqueurs que DrawioClientFactory.getOfflineHtml. */
 // COLORE=1 : thème « Coloré » en apparence sombre (icônes lues dans les sources TS).
 const colore = process.env.COLORE === "1";
 let coloredIcons = null;
@@ -59,6 +59,7 @@ if (colore) {
 	coloredIcons = require(join(root, "src/DrawioClient/coloredIcons.ts")).getColoredIconUris();
 }
 
+/** Meme remplacement de marqueurs que DrawioClientFactory.getOfflineHtml. */
 function buildHtml(origin) {
 	return readFileSync(htmlFile, "utf8")
 		.replace(/\$\$literal-vsuri\$\$/g, `${origin}/webapp`)
@@ -178,7 +179,6 @@ try {
 	}
 	check(probe.versionLabel?.includes("2000.1.0"), `etiquette de version absente (${probe.versionLabel})`);
 
-	// 3. Aller-retour du diagramme.
 	// 2 bis. Thème « Coloré » (COLORE=1, apparence sombre) : icônes substituées
 	// avant la construction de la barre d'outils, sans inversion sombre.
 	if (colore) {
@@ -198,6 +198,7 @@ try {
 		if (process.env.COLORE_SHOT) await page.screenshot({ path: process.env.COLORE_SHOT });
 	}
 
+	// 3. Aller-retour du diagramme.
 	check(probe.cells.includes("a"), "la forme chargee est absente du modele");
 	check(/value="Hello"/.test(probe.fileData), "la forme n'est pas dans le XML ecrit");
 
@@ -355,6 +356,68 @@ try {
 		check(!/x\^2/.test(mathSvg.replace(/\scontent="[^"]*"/, "")), "export SVG maths : formule restee en source");
 		check(!/<use\b/.test(mathSvg) && !/mjx-/.test(mathSvg.replace(/<style[\s\S]*?<\/style>/g, "").replace(/\scontent="[^"]*"/, "")), "export SVG maths : formule non aplatie (use / mjx)");
 		check(/<path[^>]*\sd="/.test(mathSvg), "export SVG maths : traces de la formule absents");
+	}
+
+	// 5 sexies. Ajustements au contenu : entrées de menu, zoom, page.
+	const fit = await page.evaluate(() => {
+		const ui = editorUi;
+		const graph = ui.editor.graph;
+		const model = graph.getModel();
+		// Lignes d'un menu construit hors écran.
+		const rows = (build) => {
+			const menu = new mxPopupMenu(build);
+			build(menu, null);
+			const labels = [...menu.tbody.querySelectorAll("tr")]
+				.map((tr) => tr.textContent.trim()).filter((l) => l);
+			menu.destroy();
+			return labels;
+		};
+		const zoomItems = rows((m, p) => ui.menus.get("viewZoom").funct(m, p));
+		const pageItems = rows((m, p) => ui.menus.get("currentPage").funct(m, p));
+		const tabItems = rows(ui.createPageMenu(ui.currentPage));
+
+		// Contenu loin de l'origine, zoom puis page ajustés.
+		graph.model.beginUpdate();
+		try { ui.pasteXml('<mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/>' +
+			'<mxCell id="far" value="Loin" style="rounded=0;" vertex="1" parent="1">' +
+			'<mxGeometry x="2000" y="1500" width="100" height="50" as="geometry"/></mxCell></root></mxGraphModel>', false); }
+		finally { graph.model.endUpdate(); }
+		graph.clearSelection();
+		const before = graph.view.scale;
+		ui.actions.get("vscode.fitContent").funct();
+		const zoomed = graph.view.scale;
+		const b0 = graph.getGraphBounds();
+		ui.actions.get("vscode.fitPageToContent").funct();
+		const pf = graph.pageFormat;
+		const s = graph.view.scale, t = graph.view.translate;
+		const b = graph.getGraphBounds();
+		const res = {
+			zoomItems, pageItems, tabItems, before, zoomed,
+			pf: [pf.width, pf.height],
+			minX: b.x / s - t.x, minY: b.y / s - t.y,
+			w: b.width / s, h: b.height / s,
+			layout: graph.getPageLayout(),
+		};
+		ui.editor.undoManager.undo();
+		res.undoPf = [graph.pageFormat.width, graph.pageFormat.height];
+		return res;
+	});
+	{
+		const fw = fit.zoomItems.findIndex((l) => /Ajuster à la fenêtre/.test(l));
+		check(fw >= 0 && fit.zoomItems[fw + 1] === "Ajuster au contenu",
+			`menu Zoom : « Ajuster au contenu » attendu après « Ajuster à la fenêtre » (${fit.zoomItems.join(" | ")})`);
+		check(fit.pageItems.includes("Ajuster la page au contenu"),
+			`menu page courante : entrée absente (${fit.pageItems.join(" | ")})`);
+		check(fit.tabItems.includes("Ajuster la page au contenu"),
+			`clic droit sur onglet : entrée absente (${fit.tabItems.join(" | ")})`);
+		check(fit.zoomed !== fit.before, `ajuster au contenu : zoom inchangé (${fit.before})`);
+		check(Math.abs(fit.minX) < 1 && Math.abs(fit.minY) < 1,
+			`page au contenu : contenu non ramené à l'origine (${fit.minX}, ${fit.minY})`);
+		check(fit.pf[0] >= fit.w && fit.pf[0] <= fit.w + 2 && fit.pf[1] >= fit.h && fit.pf[1] <= fit.h + 2,
+			`page au contenu : format ${fit.pf} pour un contenu ${fit.w} x ${fit.h}`);
+		check(fit.layout.width === 1 && fit.layout.height === 1,
+			`page au contenu : ${fit.layout.width} x ${fit.layout.height} pages au lieu d'une`);
+		check(fit.undoPf[0] !== fit.pf[0], "page au contenu : annulation sans effet sur le format");
 	}
 
 	// 6. Aucune exception non rattrapee.
