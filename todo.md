@@ -1,6 +1,6 @@
 # À faire
 
-1. **Relire cette préparation puis donner l'accord de publication** — rien n'est envoyé sans un « publie » explicite. Au feu vert : `npm run publier` (Marketplace + Open VSX), puis étiquette de la version.
+1. ✅ Publication 2026.11.0 (22/11/2026) sur le Marketplace et Open VSX, étiquette `v2026.11.0` — v2026.11.0.36.
 2. ✅ Fais moi un npm run publier qui publie à la fois sur vscode marketplace et openvsx — fait en v2026.9.0.24.
 3. ✅ l'export svg marche presque (il manque l'ombre) par contre copier, le collage n'est pas fidèle, et copier en svg non plus — v2026.9.0.26, **à vérifier par Frank** dans Word / Inkscape / Kablix.
 4. ✅ Le numéro de version affiché en haut à droite incluera le numéro de build — v2026.9.0.26.
@@ -15,6 +15,13 @@
 13. ✅ Supplément > Thème : nouveau thème « Coloré », icônes en couleur aspect 3D libres — v2026.9.0.33, **à vérifier par Frank** en clair et en sombre.
 14. ✅ Menu Zoom « Ajuster au contenu » + menu des pages / onglet « Ajuster la page au contenu » — v2026.9.0.34, **à vérifier par Frank**.
 15. ✅ « Ajuster au contenu » absent de la liste du zoom de la barre d'outils — v2026.9.0.35.
+
+# v2026.11.0.36 — Publication 2026.11.0
+
+1. ✅ CHANGELOG daté (22/11/2026), `version` = `2026.11.0`, `buildNumber` = `2026.11.0.36`.
+2. ✅ `test-webview` OK, `.vsix` construit, publié sur Open VSX et le Marketplace (par Frank : le jeton du Marketplace n'était pas visible depuis la session Claude).
+3. ✅ Étiquette `v2026.11.0` ; section `2026.11.1 (prochaine publication)` ouverte dans le CHANGELOG.
+4. ℹ️ Langues : EN (base) et FR seulement, aucune traduction en attente. Amont : rien de neuf depuis `ab3627e`.
 
 # v2026.9.0.35 — « Ajuster au contenu » dans la liste du zoom
 
