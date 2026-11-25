@@ -10,12 +10,8 @@ env:
 
 jobs:
   build:
-    strategy:
-      # Chaque OS va au bout : un échec sur l'un n'annule plus les autres.
-      fail-fast: false
-      matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+    # Code portable sur les 3 OS, mais testé sur la plateforme de développement seule (Windows).
+    runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5

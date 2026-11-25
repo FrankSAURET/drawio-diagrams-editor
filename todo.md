@@ -16,6 +16,13 @@
 14. ✅ Menu Zoom « Ajuster au contenu » + menu des pages / onglet « Ajuster la page au contenu » — v2026.9.0.34, **à vérifier par Frank**.
 15. ✅ « Ajuster au contenu » absent de la liste du zoom de la barre d'outils — v2026.9.0.35.
 16. ✅ Intégration continue GitHub en échec à chaque envoi (macOS) — v2026.11.0.37.
+17. ✅ Intégration continue ramenée à Windows seul (règle globale « tests multiplateforme ») — v2026.11.0.38.
+
+# v2026.11.0.38 — Intégration continue : Windows seul
+
+1. ✅ [test.yml](.github/workflows/test.yml) : matrice 3 OS retirée, `runs-on: windows-latest`. Règle globale `~/.claude/rules/tests-multiplateforme.md` : code portable sur les 3 OS, tests sur la plateforme de Frank.
+2. ℹ️ Le collage est natif au navigateur, aucun code de l'extension ne dépend de `Ctrl`/`Cmd` : rien de propre à macOS à simuler. `ControlOrMeta+V` reste dans le test.
+3. ℹ️ Lot sans code d'extension : pas de `.vsix`, pas d'entrée CHANGELOG.
 
 # v2026.11.0.37 — Intégration continue GitHub : échec macOS
 
