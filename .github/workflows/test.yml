@@ -11,6 +11,8 @@ env:
 jobs:
   build:
     strategy:
+      # Chaque OS va au bout : un échec sur l'un n'annule plus les autres.
+      fail-fast: false
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}

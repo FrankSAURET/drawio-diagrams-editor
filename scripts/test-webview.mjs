@@ -283,7 +283,8 @@ try {
 		graph.container.focus();
 		editorUi.clipboardElt?.focus?.();
 	});
-	await page.keyboard.press("Control+V");
+	// Cmd+V sur macOS (Ctrl+V n'y colle rien), Ctrl+V ailleurs.
+	await page.keyboard.press("ControlOrMeta+V");
 	await page.waitForTimeout(2000);
 	const pasted = await page.evaluate(() => {
 		const graph = editorUi.editor.graph;

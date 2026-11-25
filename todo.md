@@ -15,6 +15,13 @@
 13. ✅ Supplément > Thème : nouveau thème « Coloré », icônes en couleur aspect 3D libres — v2026.9.0.33, **à vérifier par Frank** en clair et en sombre.
 14. ✅ Menu Zoom « Ajuster au contenu » + menu des pages / onglet « Ajuster la page au contenu » — v2026.9.0.34, **à vérifier par Frank**.
 15. ✅ « Ajuster au contenu » absent de la liste du zoom de la barre d'outils — v2026.9.0.35.
+16. ✅ Intégration continue GitHub en échec à chaque envoi (macOS) — v2026.11.0.37.
+
+# v2026.11.0.37 — Intégration continue GitHub : échec macOS
+
+1. ✅ **Cause** : [test-webview.mjs](scripts/test-webview.mjs) collait avec `Control+V` ; sur macOS le collage est `Cmd+V`, rien n'était collé → « bloc Usager non retrouvé ». Windows apparaissait « annulé » par l'échec macOS (fail-fast).
+2. ✅ Collage via `ControlOrMeta+V` (Playwright) ; `fail-fast: false` dans [test.yml](.github/workflows/test.yml).
+3. ℹ️ Lot sans code d'extension : pas de `.vsix`, pas d'entrée CHANGELOG. Amont : rien de neuf depuis `ab3627e`.
 
 # v2026.11.0.36 — Publication 2026.11.0
 

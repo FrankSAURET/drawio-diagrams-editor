@@ -4,7 +4,7 @@
 	"description": "%description%",
 	"private": true,
 	"version": "2026.11.0",
-	"buildNumber": "2026.11.0.36",
+	"buildNumber": "2026.11.0.37",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"publisher": "electropol-fr",
 	"keywords": [
