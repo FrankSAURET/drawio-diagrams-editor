@@ -17,6 +17,13 @@
 15. ✅ « Ajuster au contenu » absent de la liste du zoom de la barre d'outils — v2026.9.0.35.
 16. ✅ Intégration continue GitHub en échec à chaque envoi (macOS) — v2026.11.0.37.
 17. ✅ Intégration continue ramenée à Windows seul (règle globale « tests multiplateforme ») — v2026.11.0.38.
+18. ✅ Matrice 3 OS rétablie sur GitHub ; tests locaux sur Windows seul — v2026.11.0.39.
+
+# v2026.11.0.39 — Intégration continue : retour aux 3 OS
+
+1. ✅ [test.yml](.github/workflows/test.yml) : matrice Windows + macOS + Linux, `fail-fast: false`. La v.38 avait mal lu la consigne.
+2. ✅ Règle globale `~/.claude/rules/tests-multiplateforme.md` corrigée : tests locaux sur la machine de Frank (Windows), GitHub teste les 3 OS.
+3. ℹ️ Lot sans code d'extension : pas de `.vsix`, pas d'entrée CHANGELOG.
 
 # v2026.11.0.38 — Intégration continue : Windows seul
 
